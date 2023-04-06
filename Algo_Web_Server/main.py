@@ -12,7 +12,7 @@ from video_downloader import Video_Downloader
 from audios_downloader import Audio_Downloader
 from whisper_model import Whisper_Model
 from images_downloader import Image_Downloader
-from Models import *
+from models import *
 from text_dataset import dataset
 
 content_path = os.getcwd()

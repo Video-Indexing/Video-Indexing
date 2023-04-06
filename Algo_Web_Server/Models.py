@@ -61,6 +61,7 @@ class SVM_Text_Model:
           # get the top 3 classes with the highest predicted probabilities
           # top_3_classes = probs.argsort()[0][-3:][::-1]
           print('Single pred result is:',predicted_label)
+          return predicted_label
           
 class SVC_Text_Model:
       def __init__(self, df):
