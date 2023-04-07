@@ -1,5 +1,6 @@
 import subprocess
 import os
+from sys import platform
 
 class Audio_Downloader:
     def __init__(self,file_name,main_path,audio_path,seconds):
@@ -10,7 +11,10 @@ class Audio_Downloader:
     
     def split_audio(self):
         input_file_name = self.file_name
-        current_audio_path = self.audio_path + '\\'
+        if platform == "win32":
+            current_audio_path = self.audio_path + '\\'
+        else:
+            current_audio_path = self.audio_path + '/'
 
         # the location of the input file
         output_directory = self.main_path + input_file_name

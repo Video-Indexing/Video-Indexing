@@ -1,7 +1,8 @@
-whisper
+openai-whisper
 moviepy
 opencv-python
-sklearn
+scikit-learn
+nltk
 numpy
 pandas
 pytube
