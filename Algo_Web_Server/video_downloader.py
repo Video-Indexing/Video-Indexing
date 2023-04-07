@@ -1,6 +1,7 @@
 import math
 from pytube import YouTube
 
+
 class Video_Downloader:
     def __init__(self,link,path,video_name):
         self.link = link

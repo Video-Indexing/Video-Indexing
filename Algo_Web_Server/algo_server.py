@@ -6,6 +6,7 @@ import json
 
 PORT = 8080
 
+
 class MyHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urllib.parse.urlparse(self.path)
@@ -30,7 +31,7 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(b'<html><body><h1>Goodbye, world!</h1></body></html>')
         else:
             self.send_error(404)
-            
+
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
@@ -42,6 +43,7 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps(index_results).encode('utf-8'))
+
 
 with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
     print("serving at port", PORT)
