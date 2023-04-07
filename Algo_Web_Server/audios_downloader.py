@@ -1,13 +1,5 @@
-import os
-import whisper
 import subprocess
-import math
-import glob
-import time
-from pytube import YouTube
 import os
-from moviepy.video.io.VideoFileClip import VideoFileClip
-import cv2
 
 class Audio_Downloader:
     def __init__(self,file_name,main_path,audio_path,seconds):

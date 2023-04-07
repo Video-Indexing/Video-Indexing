@@ -3,7 +3,6 @@ from audios_downloader import Audio_Downloader
 from whisper_model import Whisper_Model
 from images_downloader import Image_Downloader
 from models import *
-from text_dataset import dataset
 import os
 
 content_path = os.getcwd()
@@ -31,8 +30,8 @@ def index_video(link):
     results = whisper_results()
     dic_results = model_results(results)
     print(dic_results)
-    return dic_results
     # images_download()
+    return dic_results
 
 def split_audio():
     seconds = 120
@@ -57,8 +56,9 @@ def images_download():
     
 def model_results(whisper_results):
     dic_results = {}
-    df = create_database(dataset,subject_list)
-    SVM = SVM_Text_Model(df)
+    # df = create_database(dataset,subject_list)
+    # SVM = SVM_Text_Model(df)
+    SVM = SVM_Text_Model()
     i = 0
     for chunk in whisper_results:
         print('Chunk start from:',i,' end in:',i + seconds)

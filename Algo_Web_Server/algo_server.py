@@ -9,7 +9,6 @@ PORT = 8080
 class MyHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urllib.parse.urlparse(self.path)
-        # /index_video/url
         
         if parsed_url.path == '/index_video':
             self.send_response(200)
@@ -37,10 +36,12 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         data_dict = json.loads(post_data.decode('utf-8'))
         response_data = {'message': 'Received data successfully', 'data': data_dict}
+        my_url = data_dict['link']
+        index_results = index_video(my_url)
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps(response_data).encode('utf-8'))
+        self.wfile.write(json.dumps(index_results).encode('utf-8'))
 
 with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
     print("serving at port", PORT)
