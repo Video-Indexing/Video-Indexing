@@ -1,0 +1,7 @@
+whisper
+moviepy
+opencv-python
+sklearn
+numpy
+pandas
+pytube

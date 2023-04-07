@@ -12,18 +12,23 @@ from video_downloader import Video_Downloader
 from audios_downloader import Audio_Downloader
 from whisper_model import Whisper_Model
 from images_downloader import Image_Downloader
-from Models import *
+from models import *
 from text_dataset import dataset
+import pickle
 
 content_path = os.getcwd()
 images_path = content_path + '\Images'
 audios_path = content_path + '\Audios'
+models_path = content_path + '\Model_dir'
 
 if not os.path.exists('Images'):
     os.makedirs('Images')
 
 if not os.path.exists('Audios'):
     os.makedirs('Audios')
+    
+if not os.path.exists('Model_dir'):
+    os.makedirs('Model_dir')
 
 # Download the mp4 file    
 # link = 'https://www.youtube.com/watch?v=zfiSAzpy9NM'
@@ -58,9 +63,20 @@ The perceptron was intended to be a machine, rather than a program, and while it
 subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'Extension beyond sigmoid neurons', 'Gradient descent - general', 'Network’s hyper-parameters', 'Overfitting and regularization', 'Perceptrons', 'Sigmoid', 'Softmax', 'Stochastic gradient descent', 'The architecture of neural networks', 'The vanishing gradient problem', 'Weight initialization','KNN']
 # subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'Network’s hyper-parameters', 'Overfitting and regularization', 'Perceptrons', 'Sigmoid', 'Softmax', 'Stochastic gradient descent', 'The architecture of neural networks','Weight initialization']
 
-df = create_database(dataset,subject_list)
+# df = create_database(dataset,subject_list)
 # SVM = SVM_Text_Model(dataset,subject_list)
 # SVM = SVM_Text_Model(df)
+
+#################################################################
+# SVM = SVM_Text_Model()
+# SVM.SVM_Single_Pred(text)
+#################################################################
+
+
+# svm_model = SVM.svm
+# with open('Model_dir/svm_model.pkl', 'wb') as f:
+#     pickle.dump(svm_model, f)
+
 # i = 0
 # for chunk in results:
 #     print('Chunk start from:',i,' end in:',i + seconds)
@@ -93,11 +109,11 @@ df = create_database(dataset,subject_list)
 # ADB.AdaBoost_Single_Pred(text)
 
 # print('SVM:')
-SVM = SVM_Text_Model(df)
-# for i in range(10):
-#     # SVM = SVM_Text_Model(dataset,subject_list)
-#     SVM = SVM_Text_Model(df)
-SVM.SVM_Single_Pred(text)
+# SVM = SVM_Text_Model(df)
+# # for i in range(10):
+# #     # SVM = SVM_Text_Model(dataset,subject_list)
+# #     SVM = SVM_Text_Model(df)
+# SVM.SVM_Single_Pred(text)
 
 # print('SVC:')
 # for i in range(5):
