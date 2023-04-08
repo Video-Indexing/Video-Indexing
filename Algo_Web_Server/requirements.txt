@@ -6,3 +6,6 @@ nltk
 numpy
 pandas
 pytube
+tensorflow
+Keras-Applications
+Keras-Preprocessing

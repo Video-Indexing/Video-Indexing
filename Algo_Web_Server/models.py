@@ -54,10 +54,10 @@ class SVM_Text_Model:
         #   pickle.dump(svm, f)
         # with open('Model_dir/tfidf_vectorizer.pkl', 'wb') as f:
         #   pickle.dump(vectorizer, f)
-        with open('/Users/skozenyuk/Documents/study/Video-Indexing/Model_dir/svm_model.pkl', 'rb') as f:
+        with open('Model_dir/svm_model.pkl', 'rb') as f:
             svm = pickle.load(f)
             
-        with open('/Users/skozenyuk/Documents/study/Video-Indexing/Model_dir/tfidf_vectorizer.pkl', 'rb') as f:
+        with open('Model_dir/tfidf_vectorizer.pkl', 'rb') as f:
           vectorizer = pickle.load(f)
         self.svm = svm
         self.vectorizer = vectorizer
