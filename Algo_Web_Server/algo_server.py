@@ -1,7 +1,7 @@
 import http.server
 import socketserver
 import urllib.parse
-from functions import *
+from functions import index_video
 import json
 
 PORT = 8080
