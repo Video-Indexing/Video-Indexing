@@ -48,16 +48,10 @@ def majority_voting(prediction_label_arr):
     return label
 
 
-def recognize_new_image(df_path, img_to_rec):
-    df = pd.read_csv(df_path)
+def recognize_new_image(df, img_to_rec):
     model = ConvNeXtBase(include_top=False, weights='imagenet', pooling='avg')
     k = 5
     prediction = predict_single_img_knn(model, img_to_rec, df, k)
     return prediction
 
-
-if __name__ == "__main__":
-    content_path = os.getcwd()
-    pred = recognize_new_image(content_path + "\Model_dir\embedding_ConvNeXtBase_ex2.csv", content_path + "\Support-Vector-Machines1.jpg")
-    print(pred)
 

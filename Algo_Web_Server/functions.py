@@ -7,11 +7,11 @@ import os
 from sys import platform
 from images_reco import recognize_new_image
 
+
 content_path = os.getcwd()
 if platform == "win32":
     images_path = content_path + '\Images'
     audios_path = content_path + '\Audios'
-
 else:
     images_path = content_path + '/Images'
     audios_path = content_path + '/Audios'
@@ -38,13 +38,13 @@ def download_vid(link):
 
 def index_video(link):
     download_vid(link)
-    # split_audio()
-    # results = whisper_results()
-    # dic_results = model_results(results)
-    # print(dic_results)
-    images_download()
+    split_audio()
+    results = whisper_results()
+    audio_results = model_results(results)
+    print(audio_results)
     images_results = recognize_images()
-    return images_results
+    ret_dic = {"audio results": audio_results, "images results": images_results}
+    return ret_dic
 
 
 def split_audio():
@@ -65,12 +65,6 @@ def whisper_results():
     return results
 
 
-def images_download():
-    ImageDownloader = Image_Downloader(vid_name, content_path, images_path, 30)
-    ImageDownloader.Download_Images()
-    # ImageDownloader.Delete_Images()
-
-
 def model_results(whisper_results):
     dic_results = {}
     # df = create_database(dataset,subject_list)
@@ -89,20 +83,25 @@ def model_results(whisper_results):
 
 
 def recognize_images():
+    ImageDownloader = Image_Downloader(vid_name, content_path, images_path, 20)
+    ImageDownloader.Download_Images()
     prediction = {}
     i = 0
     if platform == "win32":
         df_path = os.getcwd() + "\Model_dir\embedding_ConvNeXtBase_ex2.csv"
     else:
         df_path = os.getcwd() + "/Model_dir/embedding_ConvNeXtBase_ex2.csv"
+    df = pd.read_csv(df_path)
     for image in os.listdir(images_path):
         if platform == "win32":
             img_path = images_path + f"\{image}"
         else:
             img_path = images_path + f"/{image}"
-        prediction[str(i)] = recognize_new_image(df_path, img_path)
+        prediction[str(i)] = recognize_new_image(df, img_path)
         i += 1
 
+    ImageDownloader.Delete_Images()
     return prediction
+
 
 
