@@ -2,6 +2,7 @@ import React from 'react';
 import { NavContainer } from './Navbar.styled';
 import Gear from '../../assets/icons/settings/settings.png';
 import GearAnimation from '../../assets/icons/settings/settings.gif';
+import Profile from '../../assets/icons/profile.png';
 import '../../assets/icons/settings/settings.css';
 
 function Navbar() {
@@ -9,6 +10,13 @@ function Navbar() {
     <NavContainer>
       <div className='nav-left'></div>
       <div className='nav-right'>
+        <img
+          className='nav-profile'
+          src={Profile}
+          alt='profile'
+          width={35}
+          height={35}
+        />
         <SettingsGear width={35} height={35} />
       </div>
     </NavContainer>
