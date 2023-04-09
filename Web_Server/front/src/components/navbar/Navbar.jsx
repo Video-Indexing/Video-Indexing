@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavContainer } from './Navbar.styled';
-import Gear from '../../assets/icons/settings/settings.png';
-import GearAnimation from '../../assets/icons/settings/settings.gif';
+import Gear from '../../assets/icons/settings.png';
 import Profile from '../../assets/icons/profile.png';
-import '../../assets/icons/settings/settings.css';
+import Logo from '../../assets/icons/logo.png';
 
 function Navbar() {
   return (
     <NavContainer>
-      <div className='nav-left'></div>
+      <div className='nav-left'>
+        <img className='nav-logo' src={Logo} alt='logo' height={45} />
+      </div>
       <div className='nav-right'>
         <img
           className='nav-profile'
@@ -17,30 +18,15 @@ function Navbar() {
           width={35}
           height={35}
         />
-        <SettingsGear width={35} height={35} />
+        <img
+          className='nav-gear'
+          src={Gear}
+          alt='profile'
+          width={35}
+          height={35}
+        />
       </div>
     </NavContainer>
-  );
-}
-
-function SettingsGear({ width, height }) {
-  return (
-    <>
-      <img
-        src={Gear}
-        alt='settings'
-        className='static'
-        width={width}
-        height={height}
-      />
-      <img
-        src={GearAnimation}
-        alt='settings'
-        className='active'
-        width={width}
-        height={height}
-      />
-    </>
   );
 }
 

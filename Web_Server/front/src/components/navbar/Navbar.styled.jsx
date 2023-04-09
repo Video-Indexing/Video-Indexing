@@ -6,7 +6,7 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #434343;
   & * {
     margin: 0 0.25rem;
     cursor: pointer;
@@ -16,6 +16,15 @@ const NavContainer = styled.div`
   }
   & .nav-profile:hover {
     transform: scale(1.1);
+  }
+  & .nav-gear {
+    transition: 0.25s ease-in-out;
+  }
+  & .nav-gear:hover {
+    transform: scale(1.1) rotate(90deg);
+  }
+  & .nav-logo {
+    margin: 0.25rem;
   }
 `;
 
