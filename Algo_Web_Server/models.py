@@ -53,16 +53,18 @@ class SVM_Text_Model:
         # y_pred = svm.predict(X_test)
         # accuracy = accuracy_score(y_test, y_pred)
         # print("Training Accuracy:", accuracy)
-        # with open('Model_dir/svm_model.pkl', 'wb') as f:
+        # with open('Algo_Web_Server/Model_dir/svm_clean_model.pkl', 'wb') as f:
         #   pickle.dump(svm, f)
-        # with open('Model_dir/tfidf_vectorizer.pkl', 'wb') as f:
+        # with open('Algo_Web_Server/Model_dir/tfidf_clean_vectorizer.pkl', 'wb') as f:
         #   pickle.dump(vectorizer, f)
+        
+        # Algo_Web_Server
         if platform == "win32":
-            svm_path = "Model_dir/svm_model.pkl"
-            tfidf_path = "Model_dir/tfidf_vectorizer.pkl"
+            svm_path = "Algo_Web_Server/Model_dir/svm_clean_model.pkl"
+            tfidf_path = "Algo_Web_Server/Model_dir/tfidf_clean_vectorizer.pkl"
         else:
-            svm_path = "Model_dir\svm_model.pkl"
-            tfidf_path = "Model_dir\\tfidf_vectorizer.pkl"
+            svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
+            tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
         with open(svm_path, 'rb') as f:
             svm = pickle.load(f)
 
@@ -71,7 +73,7 @@ class SVM_Text_Model:
         self.svm = svm
         self.vectorizer = vectorizer
 
-    def SVM_Single_Pred(self, text):
+    def svm_single_pred(self, text):
         new_text_transformed = self.vectorizer.transform([text])
         predicted_label = self.svm.predict(new_text_transformed)[0]
         decision_scores = self.svm.decision_function(new_text_transformed)
