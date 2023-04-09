@@ -1,0 +1,9 @@
+.static {
+  display: inline-block;
+  position: absolute;
+  background: white;
+  cursor: pointer;
+}
+.static:hover {
+  opacity: 0;
+}
