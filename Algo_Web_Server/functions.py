@@ -9,20 +9,33 @@ from images_reco import recognize_new_image
 
 
 content_path = os.getcwd()
+
 if platform == "win32":
+    last_dirs = content_path.split('\\')[-1]
+    if last_dirs != 'Algo_Web_Server':
+        content_path += '\Algo_Web_Server'
+    
     images_path = content_path + '\Images'
     audios_path = content_path + '\Audios'
+    video_path = content_path + '\\video.mp4'
 else:
+    last_dirs = content_path.split('/')[-1]
+    if last_dirs != 'Algo_Web_Server':
+        content_path += '/Algo_Web_Server'
+        
     images_path = content_path + '/Images'
     audios_path = content_path + '/Audios'
+    video_path = content_path + '/video.mp4'
+        
+    
 vid_name = 'video.mp4'
 seconds = 120
 
-if not os.path.exists('Images'):
-    os.makedirs('Images')
+if not os.path.exists(images_path):
+    os.makedirs(images_path)
 
-if not os.path.exists('Audios'):
-    os.makedirs('Audios')
+if not os.path.exists(audios_path):
+    os.makedirs(audios_path)
 
 subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'Extension beyond sigmoid neurons',
                 'Gradient descent - general', 'Network’s hyper-parameters', 'Overfitting and regularization',
@@ -41,9 +54,12 @@ def index_video(link):
     split_audio()
     results = whisper_results()
     audio_results = model_results(results)
-    print(audio_results)
+    # print(audio_results)
     images_results = recognize_images()
     ret_dic = {"audio results": audio_results, "images results": images_results}
+    # ret_dic = {"audio results": audio_results} # audio tests
+    # ret_dic = {"images results": images_results} # images tests.
+    os.remove(video_path)
     return ret_dic
 
 
@@ -57,10 +73,10 @@ def split_audio():
 def whisper_results():
     # Use whisper model to transcripte the mp3 audios
     WhisperModel = Whisper_Model('base', audios_path)
-    results = WhisperModel.Text_To_Speech()
+    results = WhisperModel.text_to_speech()
     AudioDownloader = Audio_Downloader(vid_name, content_path, audios_path, seconds)
     AudioDownloader.delete_audios()
-    WhisperModel.Print_Results()
+    WhisperModel.print_results()
 
     return results
 
@@ -73,7 +89,7 @@ def model_results(whisper_results):
     i = 0
     for chunk in whisper_results:
         print('Chunk start from:', i, ' end in:', i + seconds)
-        result = SVM.SVM_Single_Pred(chunk)
+        result = SVM.svm_single_pred(chunk)
         print("*" * 50)
         key = f'{i}-{i + seconds}'
         dic_results[key] = result
@@ -84,7 +100,7 @@ def model_results(whisper_results):
 
 def recognize_images():
     ImageDownloader = Image_Downloader(vid_name, content_path, images_path, 20)
-    ImageDownloader.Download_Images()
+    ImageDownloader.download_images()
     prediction = {}
     i = 0
     if platform == "win32":
@@ -100,8 +116,6 @@ def recognize_images():
         prediction[str(i)] = recognize_new_image(df, img_path)
         i += 1
 
-    ImageDownloader.Delete_Images()
+    ImageDownloader.delete_images()
     return prediction
-
-
 

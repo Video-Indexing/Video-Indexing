@@ -13,8 +13,10 @@ class Audio_Downloader:
         input_file_name = self.file_name
         if platform == "win32":
             current_audio_path = self.audio_path + '\\'
+            vid_path = self.main_path + '\\' + self.file_name 
         else:
             current_audio_path = self.audio_path + '/'
+            vid_path = self.main_path + '/' + self.file_name 
 
         # the location of the input file
         output_directory = self.main_path + input_file_name
@@ -28,7 +30,7 @@ class Audio_Downloader:
         # cmd = f"ffmpeg -i {self.file_name} -f segment -segment_time {self.seconds} -vn -acodec libmp3lame '{current_audio_path}audio_%03d.mp3'"
         # os.system(cmd)
         
-        command = ["ffmpeg", "-i", self.file_name, "-f", "segment", "-segment_time", str(self.seconds), "-vn", "-acodec", "libmp3lame", f"{current_audio_path}audio_%03d.mp3"]
+        command = ["ffmpeg", "-i", vid_path, "-f", "segment", "-segment_time", str(self.seconds), "-vn", "-acodec", "libmp3lame", f"{current_audio_path}audio_%03d.mp3"]
         subprocess.run(command)
         
         print('Split finished')
