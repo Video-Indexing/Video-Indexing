@@ -9,24 +9,27 @@ import {
   FormSubmit,
 } from './Upload.stlyed';
 import FormDropDownList from './components/FormDropDownList';
+import FormCheckbox from './components/FormCheckbox';
 import Navbar from '../../components/navbar/Navbar';
 
 function Upload() {
-  const [titleName, setTitleName] = useState();
-  const [subjectName, setSubjectName] = useState();
-  const [link, setLink] = useState();
-
-  function onSubmit() {
-    console.log(
-      `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}`
-    );
-  }
-  const changeSubject = (value) => setSubjectName(value);
-
   const options = [
     { label: 'Optimizers', value: 'optimizers' },
     { label: 'Embedding', value: 'embedding' },
   ];
+  const [titleName, setTitleName] = useState();
+  const [subjectName, setSubjectName] = useState(options[0]);
+  const [link, setLink] = useState();
+  const [useOriginalTitle, setUseOriginalTitle] = useState(false);
+  function onSubmit() {
+    console.log(
+      `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
+    );
+  }
+  const changeSubject = (value) => setSubjectName(value);
+  const ytTitle = (value) => {
+    setUseOriginalTitle(value);
+  };
 
   return (
     <>
@@ -39,6 +42,9 @@ function Upload() {
         <FormDropDownList options={options} onOptionChange={changeSubject} />
         <FormLabel>Title</FormLabel>
         <FormInput onBlur={(e) => setTitleName(e.target.value)} />
+        <FormCheckbox onStateChange={ytTitle}>
+          use youtube link title
+        </FormCheckbox>
         <FormLabel>Youtube Video Link</FormLabel>
         <FormInput
           className='yt-link'

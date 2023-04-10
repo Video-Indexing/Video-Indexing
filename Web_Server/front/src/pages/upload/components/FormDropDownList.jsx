@@ -11,8 +11,10 @@ function FormDropDownList({ options, onOptionChange }) {
 
   return (
     <FormSelect value={value} onChange={handleChange}>
-      {options.map((option) => (
-        <option value={option.value}>{option.label}</option>
+      {options.map((option, index) => (
+        <option value={option.value} key={index}>
+          {option.label}
+        </option>
       ))}
     </FormSelect>
   );
