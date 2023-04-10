@@ -8,6 +8,7 @@ import {
   FormInput,
   FormSubmit,
 } from './Upload.stlyed';
+import FormDropDownList from './components/FormDropDownList';
 import Navbar from '../../components/navbar/Navbar';
 
 function Upload() {
@@ -20,6 +21,12 @@ function Upload() {
       `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}`
     );
   }
+  const changeSubject = (value) => setSubjectName(value);
+
+  const options = [
+    { label: 'Optimizers', value: 'optimizers' },
+    { label: 'Embedding', value: 'embedding' },
+  ];
 
   return (
     <>
@@ -28,10 +35,10 @@ function Upload() {
         <FormTitle>Submit A Video</FormTitle>
         <FormSubTitle>Submit your video for evaluation</FormSubTitle>
         <FormDivider />
+        <FormLabel>Subject</FormLabel>
+        <FormDropDownList options={options} onOptionChange={changeSubject} />
         <FormLabel>Title</FormLabel>
         <FormInput onBlur={(e) => setTitleName(e.target.value)} />
-        <FormLabel>Subject</FormLabel>
-        <FormInput onBlur={(e) => setSubjectName(e.target.value)} />
         <FormLabel>Youtube Video Link</FormLabel>
         <FormInput
           className='yt-link'

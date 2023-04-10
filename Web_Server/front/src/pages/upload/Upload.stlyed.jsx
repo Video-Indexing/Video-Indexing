@@ -10,6 +10,7 @@ const FormContainer = styled.div`
 `;
 
 const FormTitle = styled.div`
+  margin: 0.5rem 0;
   font-size: 1.5rem;
   font-weight: 500;
 `;
@@ -49,11 +50,19 @@ const FormInput = styled.input`
   }
 `;
 
+const FormSelect = styled.select`
+  border-radius: 5px;
+  height: 1.5rem;
+  border: 0.5px solid #cccccc;
+  width: 150px;
+  max-width: 100%;
+`;
+
 const FormSubmit = styled.button`
   border-radius: 5px;
   border: 0.5px solid #cccccc;
   display: block;
-  margin: 2rem auto 0.25rem auto;
+  margin: 1rem auto 0.25rem auto;
   width: 100px;
   height: 25px;
   cursor: pointer;
@@ -72,4 +81,5 @@ export {
   FormLabel,
   FormInput,
   FormSubmit,
+  FormSelect,
 };
