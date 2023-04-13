@@ -1,0 +1,31 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media screen and (max-width: 600px) {
+  .page-container {
+    width: 100%;
+  }
+}
+.section {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 25%;
+  width: 100%;
+}
+.section-1 {
+  background-image: url("../../../assets/backgrounds/sec1.jpg");
+}
+.section-2 {
+  background-image: url("../../../assets/backgrounds/sec2.png");
+}
+.section-3 {
+  background-image: url("../../../assets/backgrounds/sec3.png");
+}
+.section-4 {
+  background-image: url("../../../assets/backgrounds/sec4.png");
+}
