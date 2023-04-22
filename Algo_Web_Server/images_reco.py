@@ -6,6 +6,7 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
+import cv2
 
 
 def return_image_embedding(model, img_path, label=None):
@@ -53,5 +54,19 @@ def recognize_new_image(df, img_to_rec):
     k = 5
     prediction = predict_single_img_knn(model, img_to_rec, df, k)
     return prediction
+
+def mse(image1, image2):
+    img1 = cv2.imread(image1)
+    img2 = cv2.imread(image2)
+
+    img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+    h, w = img1.shape
+    diff = cv2.subtract(img1, img2)
+    err = np.sum(diff ** 2)
+    mse = err / (float(h * w))
+    return mse, diff
+
 
 

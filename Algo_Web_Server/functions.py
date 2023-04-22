@@ -45,9 +45,7 @@ subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'E
 
 def download_vid(link):
     VideoDownloader = Video_Downloader(link, content_path, vid_name)
-    audio_lenght = VideoDownloader.download_video()
-    return audio_lenght
-
+    VideoDownloader.download_video()
 
 def index_video(link):
     download_vid(link)

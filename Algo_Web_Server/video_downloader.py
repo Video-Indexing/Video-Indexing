@@ -11,7 +11,7 @@ class Video_Downloader:
     def download_video(self):
         # Step 1: Create a YouTube object
         yt = YouTube(self.link)
-        audio_lenght = yt.length
+        # audio_lenght = yt.length
 
         # Step 2: Get all available streams
         streams = yt.streams.all()
@@ -26,5 +26,3 @@ class Video_Downloader:
         stream.download(output_path=self.path,filename = self.video_name)
         
         print('Download finished')
-
-        return math.ceil(audio_lenght / 60)
