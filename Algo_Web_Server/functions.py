@@ -29,7 +29,7 @@ else:
         
     
 vid_name = 'video.mp4'
-seconds = 120
+seconds = 40
 
 if not os.path.exists(images_path):
     os.makedirs(images_path)
@@ -53,16 +53,16 @@ def index_video(link):
     results = whisper_results()
     audio_results = model_results(results)
     # print(audio_results)
-    images_results = recognize_images()
-    ret_dic = {"audio results": audio_results, "images results": images_results}
-    # ret_dic = {"audio results": audio_results} # audio tests
+    # images_results = recognize_images()
+    # ret_dic = {"audio results": audio_results, "images results": images_results}
+    ret_dic = {"audio results": audio_results} # audio tests
     # ret_dic = {"images results": images_results} # images tests.
     os.remove(video_path)
     return ret_dic
 
 
 def split_audio():
-    seconds = 120
+    seconds = 40
     AudioDownloader = Audio_Downloader(vid_name, content_path, audios_path, seconds)
     AudioDownloader.split_audio()
     # AudioDownloader.delete_audios()
