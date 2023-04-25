@@ -5,7 +5,8 @@ from images_downloader import Image_Downloader
 from models import *
 import os
 from sys import platform
-from images_reco import recognize_new_image
+from images_reco import recognize_new_image, mse
+import cv2
 
 
 content_path = os.getcwd()
@@ -30,6 +31,7 @@ else:
     
 vid_name = 'video.mp4'
 seconds = 120
+image_taker_pace = 15
 
 if not os.path.exists(images_path):
     os.makedirs(images_path)
@@ -52,7 +54,7 @@ def index_video(link):
     split_audio()
     results = whisper_results()
     audio_results = model_results(results)
-    # print(audio_results)
+    print(audio_results)
     images_results = recognize_images()
     ret_dic = {"audio results": audio_results, "images results": images_results}
     # ret_dic = {"audio results": audio_results} # audio tests
@@ -97,7 +99,7 @@ def model_results(whisper_results):
 
 
 def recognize_images():
-    ImageDownloader = Image_Downloader(vid_name, content_path, images_path, 20)
+    ImageDownloader = Image_Downloader(vid_name, content_path, images_path, image_taker_pace)
     ImageDownloader.download_images()
     prediction = {}
     i = 0
@@ -106,13 +108,48 @@ def recognize_images():
     else:
         df_path = os.getcwd() + "/Model_dir/embedding_ConvNeXtBase_ex2.csv"
     df = pd.read_csv(df_path)
+
+    paths_list = []
+    threshold = 7
+
     for image in os.listdir(images_path):
         if platform == "win32":
             img_path = images_path + f"\{image}"
         else:
             img_path = images_path + f"/{image}"
-        prediction[str(i)] = recognize_new_image(df, img_path)
-        i += 1
+        paths_list.append(img_path)
+
+    start_time = 0
+    end_time = image_taker_pace
+    if len(paths_list) == 1:
+        prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+    elif len(paths_list) == 2:
+        img1 = paths_list[0]
+        img2 = paths_list[1]
+        error, _ = mse(img1, img2)
+        if error < threshold:
+            end_time = image_taker_pace * 2
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+        else:
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+            end_time += image_taker_pace
+            start_time += image_taker_pace
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[1])
+    else:
+        for i in range(len(paths_list)-1):
+            img1 = paths_list[i]
+            img2 = paths_list[i + 1]
+            error, _ = mse(img1, img2)
+            print("Image matching Error between the two images:", error)
+            if error < threshold:
+                end_time += image_taker_pace
+                if i == (len(paths_list) - 2):
+                    prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, img1)
+
+            else:
+                prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, img1)
+                start_time = end_time
+                end_time += image_taker_pace
 
     ImageDownloader.delete_images()
     return prediction

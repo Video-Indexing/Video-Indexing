@@ -55,6 +55,7 @@ def recognize_new_image(df, img_to_rec):
     prediction = predict_single_img_knn(model, img_to_rec, df, k)
     return prediction
 
+
 def mse(image1, image2):
     img1 = cv2.imread(image1)
     img2 = cv2.imread(image2)
@@ -67,6 +68,7 @@ def mse(image1, image2):
     err = np.sum(diff ** 2)
     mse = err / (float(h * w))
     return mse, diff
+
 
 
 
