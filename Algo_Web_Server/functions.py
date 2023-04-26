@@ -51,14 +51,14 @@ def download_vid(link):
 
 def index_video(link):
     download_vid(link)
-    split_audio()
-    results = whisper_results()
-    audio_results = model_results(results)
-    print(audio_results)
+    # split_audio()
+    # results = whisper_results()
+    # audio_results = model_results(results)
+    # print(audio_results)
     images_results = recognize_images()
-    ret_dic = {"audio results": audio_results, "images results": images_results}
+    # ret_dic = {"audio results": audio_results, "images results": images_results}
     # ret_dic = {"audio results": audio_results} # audio tests
-    # ret_dic = {"images results": images_results} # images tests.
+    ret_dic = {"images results": images_results} # images tests.
     os.remove(video_path)
     return ret_dic
 
@@ -153,4 +153,5 @@ def recognize_images():
 
     ImageDownloader.delete_images()
     return prediction
+
 
