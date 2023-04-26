@@ -52,7 +52,7 @@ def index_video(link):
     split_audio()
     results = whisper_results()
     audio_results = model_results(results)
-    print(audio_results)
+    # print(audio_results)
     images_results = recognize_images()
     ret_dic = {"audio results": audio_results, "images results": images_results}
     # ret_dic = {"audio results": audio_results} # audio tests
