@@ -154,3 +154,4 @@ def recognize_images():
     ImageDownloader.delete_images()
     return prediction
 
+
