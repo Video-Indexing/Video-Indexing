@@ -20,7 +20,8 @@ app.post("/signUp", (req, res) => {
 });
 
 app.post("/uploadVideo",(req, res) => {
-    httpPostAsyncResponse(algoServerIP+"/uploadVideo?link=" + req.query.link + "?name=" + req.query.name,"",handleUplaodVideo,res);
+    // const obj = {link: req.query.link, age: req.query.name};
+    httpPostAsyncResponse(algoServerIP+"/uploadVideo" , req.body, handleUplaodVideo, res);
 });
 
 app.get("/videoStatus", (req, res) => {
