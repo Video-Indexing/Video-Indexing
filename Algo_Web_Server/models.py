@@ -30,32 +30,19 @@ def create_database(data, data_labels):
 
 
 class SVM_Text_Model:
-    # def __init__(self, df):
-    def __init__(self):
-        # df = create_database(data,data_labels)
-        # random_number = random.randint(1, 150)
-        # X_train, X_test, y_train, y_test = train_test_split(df['sentence'], df['class'], test_size=0.2, random_state=random_number)
-        # vectorizer = TfidfVectorizer()
-        # X_train = vectorizer.fit_transform(X_train)
-        # X_test = vectorizer.transform(X_test)
-        # svm = LinearSVC()
-        # # svm = LinearSVC(multi_class='crammer_singer',penalty='l1',dual=False,tol=0.005)
-        # svm.fit(X_train, y_train)
-        # y_pred = svm.predict(X_test)
-        # accuracy = accuracy_score(y_test, y_pred)
-        # print("Training Accuracy:", accuracy)
-        # with open('Algo_Web_Server/Model_dir/svm_clean_model.pkl', 'wb') as f:
-        #   pickle.dump(svm, f)
-        # with open('Algo_Web_Server/Model_dir/tfidf_clean_vectorizer.pkl', 'wb') as f:
-        #   pickle.dump(vectorizer, f)
-        
+    def _init_(self):
+
         # Algo_Web_Server
         if platform == "win32":
-            svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
-            tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
-        else:
+            # svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
+            # tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
             svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
             tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
+        else:
+            svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
+            tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
+            # svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
+            # tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
         with open(svm_path, 'rb') as f:
             svm = pickle.load(f)
 
@@ -63,19 +50,43 @@ class SVM_Text_Model:
             vectorizer = pickle.load(f)
         self.svm = svm
         self.vectorizer = vectorizer
+        self.previous_result = 'None'
+        self.prev_list = []
 
     def svm_single_pred(self, text):
+        multiplier = 1.35
+        size = 3
+        labels = self.svm.classes_
+
         new_text_transformed = self.vectorizer.transform([text])
         predicted_label = self.svm.predict(new_text_transformed)[0]
         decision_scores = self.svm.decision_function(new_text_transformed)
 
         # convert decision function scores to probabilities using softmax function
         probs = np.exp(decision_scores) / np.sum(np.exp(decision_scores), axis=1)
+        if self.previous_result == 'None':
+            max_index = np.argmax(probs)
+            output = labels[max_index]
+            self.previous_result = output
+            self.prev_list.append(output)
+        else:
+            for prev in self.prev_list:
+                prev_output_index = np.argwhere(labels == prev)[0][0]
+                probs[0][prev_output_index] *= multiplier
+            max_index = np.argmax(probs)
+            output = labels[max_index]
+            self.previous_result = output
+            if len(self.prev_list) == size:
+                self.prev_list.pop(0)
+                self.prev_list.append(output)
+            else:
+                self.prev_list.append(output)
 
-        # get the top 3 classes with the highest predicted probabilities
-        # top_3_classes = probs.argsort()[0][-3:][::-1]
-        print('Single pred result is:', predicted_label)
-        return predicted_label
+        print('Single pred result is:', output)
+        return output
+
+        # print('Single pred result is:', predicted_label)
+        # return predicted_label
 
 
 class SVC_Text_Model:

@@ -32,8 +32,9 @@ def predict_single_img_knn(model, image, df, num_of_neigh):
     for idx in res[1]:
         s = y.iloc[idx]
         neigh_label_arr = list(s)
-    desicion = majority_voting(neigh_label_arr)
-    return desicion
+    dist = distribution(neigh_label_arr)
+    majority = majority_voting(neigh_label_arr)
+    return dist, majority
 
 
 def majority_voting(prediction_label_arr):
@@ -49,11 +50,25 @@ def majority_voting(prediction_label_arr):
     return label
 
 
+def distribution(prediction_label_arr):
+    dist_dict = {}
+    for element in prediction_label_arr:
+        if element not in dist_dict:
+            dist_dict[element] = 1
+        else:
+            curr_dist = dist_dict[element]
+            dist_dict[element] = (curr_dist + 1)
+    for element in dist_dict:
+        dist_dict[element] = float(dist_dict[element]/len(prediction_label_arr))
+    return dist_dict
+
+
 def recognize_new_image(df, img_to_rec):
     model = ConvNeXtBase(include_top=False, weights='imagenet', pooling='avg')
     k = 5
     prediction = predict_single_img_knn(model, img_to_rec, df, k)
     return prediction
+
 
 def mse(image1, image2):
     img1 = cv2.imread(image1)
@@ -67,6 +82,7 @@ def mse(image1, image2):
     err = np.sum(diff ** 2)
     mse = err / (float(h * w))
     return mse, diff
+
 
 
 
