@@ -30,8 +30,8 @@ def create_database(data, data_labels):
 
 
 class SVM_Text_Model:
-    def _init_(self):
-
+    def __init__(self):
+        
         # Algo_Web_Server
         if platform == "win32":
             # svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
@@ -52,11 +52,12 @@ class SVM_Text_Model:
         self.vectorizer = vectorizer
         self.previous_result = 'None'
         self.prev_list = []
+        self.classes = self.svm.classes_
 
     def svm_single_pred(self, text):
-        multiplier = 1.35
+        multiplier = 1.2
         size = 3
-        labels = self.svm.classes_
+        labels = self.classes
 
         new_text_transformed = self.vectorizer.transform([text])
         predicted_label = self.svm.predict(new_text_transformed)[0]
@@ -83,11 +84,12 @@ class SVM_Text_Model:
                 self.prev_list.append(output)
 
         print('Single pred result is:', output)
-        return output
+        # return output
+        return probs[0]
 
         # print('Single pred result is:', predicted_label)
         # return predicted_label
-
+        
 
 class SVC_Text_Model:
     def __init__(self, df):
