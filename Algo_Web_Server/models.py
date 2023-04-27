@@ -212,3 +212,5 @@ class AdaBoost_Text_Model():
         new_text_transformed = self.vectorizer.transform([text])
         predicted_label = self.clf.predict(new_text_transformed)[0]
         print('Single pred result is:', predicted_label)
+
+SVM = SVM_Text_Model()

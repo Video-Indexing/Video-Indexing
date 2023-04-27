@@ -328,3 +328,60 @@ def update_dict(original_dict, time_slice_duration):
 # fuckthis(L1,L2,1)
 
 # print(5)
+
+aud_results = {'0-15': [0.14499112, 0.16047066, 0.14389441, 0.17997161, 0.1279295 ,0.24274269], 
+'15-30': ([0.14499112, 0.16047066, 0.14389441, 0.17997161, 0.1279295 ,0.24274269]), 
+'30-45': ([0.12014917, 0.25416801, 0.21534828, 0.18420216, 0.11746209,0.13040437]), 
+'45-60': ([0.12014917, 0.25416801, 0.21534828, 0.18420216, 0.11746209,0.13040437]), 
+'60-75': ([0.12304353, 0.23889946, 0.21251456, 0.22041768, 0.11640289,0.15424615]), 
+'75-90': ([0.12304353, 0.23889946, 0.21251456, 0.22041768, 0.11640289,0.15424615]), 
+'90-105': ([0.05884588, 0.25608406, 0.08287367, 0.10652841, 0.0824263 ,0.5897875 ]), 
+'105-120': ([0.05884588, 0.25608406, 0.08287367, 0.10652841, 0.0824263 ,0.5897875 ]), 
+'120-135': ([0.10176695, 0.43418821, 0.16273598, 0.14808715, 0.12885513,0.18844224]), 
+'135-150': ([0.10176695, 0.43418821, 0.16273598, 0.14808715, 0.12885513,0.18844224]), 
+'150-165': ([0.11198476, 0.32485882, 0.09789513, 0.16098216, 0.11614548,0.34487529]), 
+'165-180': ([0.11198476, 0.32485882, 0.09789513, 0.16098216, 0.11614548,
+       0.34487529]), '180-195': ([0.12878937, 0.18676728, 0.21793358, 0.2410805 , 0.1065969 ,
+       0.21594278]), '195-210': ([0.12878937, 0.18676728, 0.21793358, 0.2410805 , 0.1065969 ,
+       0.21594278])}
+
+img_results = {'0-15': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '15-30': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '30-45': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '45-60': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '60-75': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '75-90': {'K-nearest-neighbors': 0.4, 'Logistic-Regression': 0.4, 'Linear-Regression': 0.2}, '90-105': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '105-120': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '120-135': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '135-150': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '150-165': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '165-180': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}, '180-195': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}, '195-210': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}}
+
+clas = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network', 'Support vector machine', 'K-nearest-neighbors']
+    
+def another_help(aud_dict,imgs_dict,classes):
+    final_dict = {}
+    for key1, key2 in zip(aud_dict.keys(), imgs_dict.keys()):
+        audio_array = aud_dict[key1]
+        image_array = imgs_dict[key2]
+        for key in image_array:
+            index = clas.index(key)
+            val = image_array[key]
+            audio_array[index] *= (1 + val + 0.2)
+        # print(key2, value2)
+        max_index = audio_array.index(max(audio_array))
+        final_dict[key1] = clas[max_index]
+        
+    return final_dict
+
+def connect_time_slices(final_dict):
+    new_dict = {}
+    current_subject = None
+    current_range = None
+
+    for key, value in final_dict.items():
+        if value != current_subject:
+            current_subject = value
+            current_range = key
+            new_dict[key] = [value]
+        else:
+            new_dict[current_range] += [value]
+    
+    return new_dict
+    
+    
+final_dict = another_help(aud_results,img_results,clas)
+new_dict = connect_time_slices(final_dict)
+print(final_dict)
+print(new_dict)
+x = 5
