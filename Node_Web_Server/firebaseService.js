@@ -1,17 +1,17 @@
 import { initializeApp} from 'firebase/app'
 import { getFirestore, collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore/lite'
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCBfJ5QsytSQqkipNUqk7cbHl5chQ9A-hk",
-    authDomain: "video-indexing-project.firebaseapp.com",
-    projectId: "video-indexing-project",
-    storageBucket: "video-indexing-project.appspot.com",
-    messagingSenderId: "135604416968",
-    appId: "1:135604416968:web:b03e6d36113324991f10fd"
-  };
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCBfJ5QsytSQqkipNUqk7cbHl5chQ9A-hk",
+//     authDomain: "video-indexing-project.firebaseapp.com",
+//     projectId: "video-indexing-project",
+//     storageBucket: "video-indexing-project.appspot.com",
+//     messagingSenderId: "135604416968",
+//     appId: "1:135604416968:web:b03e6d36113324991f10fd"
+//   };
   
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(process.env.FIREBASE_CONFIG);
 const db = getFirestore(app)
 
 async function getAllVideos(){
