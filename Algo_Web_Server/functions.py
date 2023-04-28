@@ -30,7 +30,7 @@ else:
         
     
 vid_name = 'video.mp4'
-seconds = 30
+seconds = 120
 image_taker_pace = 15
 
 if not os.path.exists(images_path):
@@ -56,16 +56,17 @@ def index_video(link):
     audio_results,classes = model_results(results)
     print(audio_results)
     images_results = recognize_images()
-    final_indexing(audio_results,classes,images_results)
+    final_index = final_indexing(audio_results,classes,images_results)
     # ret_dic = {"audio results": audio_results, "images results": images_results}
-    ret_dic = {"audio results": audio_results} # audio tests
+    # ret_dic = {"audio results": audio_results} # audio tests
     # ret_dic = {"images results": images_results} # images tests.
+    ret_dic = {"Final indexing": final_index} # final indexing tests
     os.remove(video_path)
     return ret_dic
 
 
 def split_audio():
-    seconds = 30
+    seconds = 60
     AudioDownloader = Audio_Downloader(vid_name, content_path, audios_path, seconds)
     AudioDownloader.split_audio()
     # AudioDownloader.delete_audios()
@@ -157,147 +158,12 @@ def recognize_images():
 
 
 def final_indexing(audio_results,classes,images_results):
-    # for key in audio_results:
-    #     audio_splitted = key.split('-')
-    #     audio_start = int(audio_splitted[0])
-    #     audio_end = int(audio_splitted[1])
-    #     for img_key in images_results:
-    #         img_splitted = img_key.split('-')
-    #         img_start = int(img_splitted[0])    
-    #         img_end = int(img_splitted[1])
-            
-    #         if img_start >= audio_start and img_end <= audio_end:
-    #             pass  
+    class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network', 'Support-Vector-Machines', 'K-nearest-neighbors']
     audio_results = update_dict(audio_results,15)
     images_results = update_dict(images_results,15)
-    print(5)
-# x = '0-60'
-# y = '30-45'
-# res = x.split('-')
-# print(res)
-# print(type(res))
-
-
-# def helper(L1,L2):
-#     start = 0
-#     end = None
-#     val = 1
-#     for l1_key in L1:
-#         l1_splitted = l1_key.split('-')
-#         l1_start = int(l1_splitted[0])
-#         l1_end = int(l1_splitted[1])
-#         for l2_key in L2:
-#             l2_splitted = l2_key.split('-')
-#             l2_start = int(l2_splitted[0])
-#             l2_end = int(l2_splitted[1])
-#             end = min(l1_end,l2_end)
-#             if start <= l1_start and end <= l1_end:
-#                 val *= L1[l1_key]
-#             if start <= l2_start and end <= l2_end:
-#                 val *= L1[l2_key]
-                
-#             start = end
-#             end = max(l1_end,l2_end)
-
-# def helper(L1,L2):
-#     L1_keys = sorted(L1.keys(), key=lambda x: int(x.split('-')[0]))
-#     L2_keys = sorted(L2.keys(), key=lambda x: int(x.split('-')[0]))
-    
-
-#     # Initialize the start and end times to the first key in each dictionary
-#     start_time_L1, end_time_L1 = L1_keys[0].split('-')
-#     start_time_L2, end_time_L2 = L2_keys[0].split('-')
-
-#     # Loop over the keys of both dictionaries and find the overlapping time slices
-#     overlapping_times = []
-#     for i in range(0, len(L1_keys)):
-#         # Get the start and end times of the current time slice in L1
-#         current_start_L1, current_end_L1 = L1_keys[i].split('-')
-        
-#         # Check if the current time slice in L1 overlaps with the current time slice in L2
-#         if int(current_start_L1) <= int(end_time_L2) and int(start_time_L2) <= int(current_end_L1):
-#             # Calculate the start and end times of the overlapping time slice
-#             overlapping_start = max(int(start_time_L1), int(start_time_L2))
-#             overlapping_end = min(int(end_time_L1), int(end_time_L2))
-            
-#             # Add the overlapping time slice to the list
-#             overlapping_times.append(f"{overlapping_start}-{overlapping_end}")
-        
-#         # Update the start and end times of L1 for the next iteration
-#         start_time_L1, end_time_L1 = current_start_L1, current_end_L1
-        
-#         # Check if we need to update the start and end times of L2 for the next iteration
-#         if int(current_end_L1) > int(end_time_L2):
-#             L2_keys.pop(0)
-#             L2_first = L2_keys[0]
-#             start_time_L2, end_time_L2 = L2_first.split('-')
-
-#     print(overlapping_times)
-    
-L1 = {'0-30':2,
-      '30-60':1.5,
-      '60-90':1.75,
-      '90-120':1.5,
-      '120-150':2}
-
-L2 = {'0-15':1.5,
-      '15-75':2,
-      '75-120':1.5,
-      '120-135':2,
-      '135-150':1.5}
-
-# helper(L1,L2)
-
-# Get the sorted keys of both dictionaries
-# L1_keys = sorted(L1.keys(), key=lambda x: int(x.split('-')[0]))
-# L2_keys = sorted(L2.keys(), key=lambda x: int(x.split('-')[0]))
-
-# # Initialize the start and end times to the first key in each dictionary
-# start_time_L1, end_time_L1 = L1_keys[0].split('-')
-# start_time_L2, end_time_L2 = L2_keys[0].split('-')
-
-# # Loop over the keys of both dictionaries and find the overlapping time slices
-# overlapping_times = []
-# for i in range(0, len(L1_keys)):
-#     # Get the start and end times of the current time slice in L1
-#     current_start_L1, current_end_L1 = L1_keys[i].split('-')
-    
-#     # Check if the current time slice in L1 overlaps with the current time slice in L2
-#     if int(current_start_L1) <= int(end_time_L2) and int(start_time_L2) <= int(current_end_L1):
-#         # Calculate the start and end times of the overlapping time slice
-#         overlapping_start = max(int(start_time_L1), int(start_time_L2))
-#         overlapping_end = min(int(end_time_L1), int(end_time_L2))
-        
-#         # Add the overlapping time slice to the list
-#         overlapping_times.append(f"{overlapping_start}-{overlapping_end}")
-    
-#     # Update the start and end times of L1 for the next iteration
-#     start_time_L1, end_time_L1 = current_start_L1, current_end_L1
-    
-#     # Check if we need to update the start and end times of L2 for the next iteration
-#     if int(current_end_L1) > int(end_time_L2):
-#         start_time_L2, end_time_L2 = L2_keys.pop(0).split('-')
-
-# print(overlapping_times)
-
-# helper(L1,L2)
-
-# def helper2(L1,L2):
-#     L1_keys = sorted(L1.keys(), key=lambda x: int(x.split('-')[0]))
-#     L2_keys = sorted(L2.keys(), key=lambda x: int(x.split('-')[0]))
-    
-#     final_end = L1_keys[-1].split('-')[1]
-#     current_end = L1_keys[0].split('-')[1]
-#     current_start = 0
-#     start_time_L1, end_time_L1 = L1_keys[0].split('-')
-#     start_time_L2, end_time_L2 = L2_keys[0].split('-')
-#     while current_end != final_end:
-#         if int(end_time_L1) < int(start_time_L2) or int(end_time_L2) < int(start_time_L1):
-#             break
-#         else:
-#             overlap_start = max(start_time_L1, start_time_L2)
-#             overlap_end = min(end_time_L1, end_time_L2)
-# # helper2(L1,L2)
+    final_dict = calculate_new_results(audio_results,images_results,class_renamed)
+    final_dict = connect_time_slices(final_dict)
+    return final_dict
 
 def update_dict(original_dict, time_slice_duration):
     new_dict = {}
@@ -310,78 +176,48 @@ def update_dict(original_dict, time_slice_duration):
             new_dict[new_key] = value
             start += time_slice_duration
     return new_dict
-
-# L1 = {'0-30':2, '30-60':1.5, '60-90':1.75, '90-120':1.5, '120-150':2}
-# L1 = update_dict(L1, 15)
-# L2 = update_dict(L2, 15)
-
-# def fuckthis(L1,L2,val):
-#     new_dict = {}
-#     for key in L1:
-#         val *= L1[key]
-#         val *= L2[key]
-#         new_dict[key] = val
-        
-#     print(val)
-        
-# # print(L1)
-# fuckthis(L1,L2,1)
-
-# print(5)
-
-aud_results = {'0-15': [0.14499112, 0.16047066, 0.14389441, 0.17997161, 0.1279295 ,0.24274269], 
-'15-30': ([0.14499112, 0.16047066, 0.14389441, 0.17997161, 0.1279295 ,0.24274269]), 
-'30-45': ([0.12014917, 0.25416801, 0.21534828, 0.18420216, 0.11746209,0.13040437]), 
-'45-60': ([0.12014917, 0.25416801, 0.21534828, 0.18420216, 0.11746209,0.13040437]), 
-'60-75': ([0.12304353, 0.23889946, 0.21251456, 0.22041768, 0.11640289,0.15424615]), 
-'75-90': ([0.12304353, 0.23889946, 0.21251456, 0.22041768, 0.11640289,0.15424615]), 
-'90-105': ([0.05884588, 0.25608406, 0.08287367, 0.10652841, 0.0824263 ,0.5897875 ]), 
-'105-120': ([0.05884588, 0.25608406, 0.08287367, 0.10652841, 0.0824263 ,0.5897875 ]), 
-'120-135': ([0.10176695, 0.43418821, 0.16273598, 0.14808715, 0.12885513,0.18844224]), 
-'135-150': ([0.10176695, 0.43418821, 0.16273598, 0.14808715, 0.12885513,0.18844224]), 
-'150-165': ([0.11198476, 0.32485882, 0.09789513, 0.16098216, 0.11614548,0.34487529]), 
-'165-180': ([0.11198476, 0.32485882, 0.09789513, 0.16098216, 0.11614548,
-       0.34487529]), '180-195': ([0.12878937, 0.18676728, 0.21793358, 0.2410805 , 0.1065969 ,
-       0.21594278]), '195-210': ([0.12878937, 0.18676728, 0.21793358, 0.2410805 , 0.1065969 ,
-       0.21594278])}
-
-img_results = {'0-15': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '15-30': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '30-45': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '45-60': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '60-75': {'Decision-Trees': 0.4, 'neural-network': 0.2, 'Logistic-Regression': 0.2, 'K-nearest-neighbors': 0.2}, '75-90': {'K-nearest-neighbors': 0.4, 'Logistic-Regression': 0.4, 'Linear-Regression': 0.2}, '90-105': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '105-120': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '120-135': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '135-150': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '150-165': {'Linear-Regression': 0.6, 'Logistic-Regression': 0.4}, '165-180': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}, '180-195': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}, '195-210': {'Linear-Regression': 0.2, 'Logistic-Regression': 0.6, 'K-nearest-neighbors': 0.2}}
-
-clas = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network', 'Support vector machine', 'K-nearest-neighbors']
     
-def another_help(aud_dict,imgs_dict,classes):
+def calculate_new_results(aud_dict,imgs_dict,classes):
     final_dict = {}
+    multiplier = 0.2
     for key1, key2 in zip(aud_dict.keys(), imgs_dict.keys()):
         audio_array = aud_dict[key1]
         image_array = imgs_dict[key2]
         for key in image_array:
-            index = clas.index(key)
+            index = classes.index(key)
             val = image_array[key]
-            audio_array[index] *= (1 + val + 0.2)
+            audio_array[index] *= (1 + (val * multiplier))
         # print(key2, value2)
-        max_index = audio_array.index(max(audio_array))
-        final_dict[key1] = clas[max_index]
+        # max_index = audio_array.index(max(audio_array))
+        max_index = audio_array.argmax()
+        final_dict[key1] = classes[max_index]
         
     return final_dict
-
+    
 def connect_time_slices(final_dict):
     new_dict = {}
-    current_subject = None
-    current_range = None
-
-    for key, value in final_dict.items():
-        if value != current_subject:
-            current_subject = value
-            current_range = key
-            new_dict[key] = [value]
+    counter = 0
+    start = 0
+    end = 0
+    last_subject = None
+    for time in final_dict:
+        counter += 1
+        start_time, end_time = time.split('-')
+        subject = final_dict[time]
+        if last_subject == None:
+            last_subject = subject
+        if final_dict[time] == last_subject:
+           end = end_time
+           if counter == len(final_dict):
+                key = f'{start}-{end}'
+                new_dict[key] = last_subject
+           continue
         else:
-            new_dict[current_range] += [value]
-    
+            key = f'{start}-{end}'
+            new_dict[key] = last_subject
+            last_subject = final_dict[time]
+            start = start_time
+            end = end_time
+            
     return new_dict
     
-    
-final_dict = another_help(aud_results,img_results,clas)
-new_dict = connect_time_slices(final_dict)
-print(final_dict)
-print(new_dict)
-x = 5
