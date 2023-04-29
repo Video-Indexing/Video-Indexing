@@ -12,7 +12,7 @@ class Video_Downloader:
         # Step 1: Create a YouTube object
         # yt = YouTube(self.link)
         yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
-        # audio_lenght = yt.length
+        video_lenght = yt.length
 
         # Step 2: Get all available streams
         streams = yt.streams.all()
@@ -28,6 +28,9 @@ class Video_Downloader:
         stream.download(output_path=self.path,filename = self.video_name)
         
         print('Download finished')
+
+        return video_lenght
+
         
         
 # yt = YouTube("https://www.youtube.com/watch?v=0p0o5cmgLdE",use_oauth=True,allow_oauth_cache=True)
