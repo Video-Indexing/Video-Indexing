@@ -53,18 +53,20 @@ def index_video(link):
     download_vid(link)
     split_audio()
     results = whisper_results()
-    audio_results = model_results(results)
+    audio_results,classes = model_results(results)
     print(audio_results)
     images_results = recognize_images()
-    ret_dic = {"audio results": audio_results, "images results": images_results}
+    final_index = final_indexing(audio_results,classes,images_results)
+    # ret_dic = {"audio results": audio_results, "images results": images_results}
     # ret_dic = {"audio results": audio_results} # audio tests
     # ret_dic = {"images results": images_results} # images tests.
+    ret_dic = {"Final indexing": final_index} # final indexing tests
     os.remove(video_path)
     return ret_dic
 
 
 def split_audio():
-    seconds = 120
+    seconds = 60
     AudioDownloader = Audio_Downloader(vid_name, content_path, audios_path, seconds)
     AudioDownloader.split_audio()
     # AudioDownloader.delete_audios()
@@ -95,7 +97,7 @@ def model_results(whisper_results):
         dic_results[key] = result
         i += seconds
 
-    return dic_results
+    return dic_results,SVM.classes
 
 
 def recognize_images():
@@ -155,3 +157,67 @@ def recognize_images():
     return prediction
 
 
+def final_indexing(audio_results,classes,images_results):
+    class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network', 'Support-Vector-Machines', 'K-nearest-neighbors']
+    audio_results = update_dict(audio_results,15)
+    images_results = update_dict(images_results,15)
+    final_dict = calculate_new_results(audio_results,images_results,class_renamed)
+    final_dict = connect_time_slices(final_dict)
+    return final_dict
+
+def update_dict(original_dict, time_slice_duration):
+    new_dict = {}
+    for key, value in original_dict.items():
+        start, end = key.split('-')
+        start = int(start)
+        end = int(end)
+        while start < end:
+            new_key = f"{start}-{start+time_slice_duration}"
+            new_dict[new_key] = value
+            start += time_slice_duration
+    return new_dict
+    
+def calculate_new_results(aud_dict,imgs_dict,classes):
+    final_dict = {}
+    multiplier = 0.2
+    for key1, key2 in zip(aud_dict.keys(), imgs_dict.keys()):
+        audio_array = aud_dict[key1]
+        image_array = imgs_dict[key2]
+        for key in image_array:
+            index = classes.index(key)
+            val = image_array[key]
+            audio_array[index] *= (1 + (val * multiplier))
+        # print(key2, value2)
+        # max_index = audio_array.index(max(audio_array))
+        max_index = audio_array.argmax()
+        final_dict[key1] = classes[max_index]
+        
+    return final_dict
+    
+def connect_time_slices(final_dict):
+    new_dict = {}
+    counter = 0
+    start = 0
+    end = 0
+    last_subject = None
+    for time in final_dict:
+        counter += 1
+        start_time, end_time = time.split('-')
+        subject = final_dict[time]
+        if last_subject == None:
+            last_subject = subject
+        if final_dict[time] == last_subject:
+           end = end_time
+           if counter == len(final_dict):
+                key = f'{start}-{end}'
+                new_dict[key] = last_subject
+           continue
+        else:
+            key = f'{start}-{end}'
+            new_dict[key] = last_subject
+            last_subject = final_dict[time]
+            start = start_time
+            end = end_time
+            
+    return new_dict
+    
