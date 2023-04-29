@@ -34,7 +34,8 @@ def predict_single_img_knn(model, image, df, num_of_neigh):
         neigh_label_arr = list(s)
     dist = distribution(neigh_label_arr)
     majority = majority_voting(neigh_label_arr)
-    return dist, majority
+    # return dist, majority
+    return dist
 
 
 def majority_voting(prediction_label_arr):
