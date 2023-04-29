@@ -152,6 +152,7 @@ def recognize_images():
     return prediction
 
 
+
 def final_indexing(audio_results, images_results):
     class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network',
                      'Support-Vector-Machines', 'K-nearest-neighbors']
