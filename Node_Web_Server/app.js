@@ -1,10 +1,19 @@
 const express = require('express');
-require('dotenv').config()
+// const { test } = require('node:test');
+// var firebaseService = import('./firebaseService.mjs');
+// import { test } from './firebaseService.mjs'
+// firebaseService.test();
+var httpService = require('./httpService');
+const cors = require('cors');
+const firebaseService = require('./firebaseConfig');
 
-console.log(process.env)
+require('dotenv').config()
+// console.log(process.env)
+// const path = require('path')
 const app = express();
 const PORT = 3000;
 app.use(express.json());
+
 algoServerIP = '';
 algoPort = '';
 if(process.env.STATUS == "production"){
@@ -16,9 +25,22 @@ else{
     algoServerIP = process.env.ALGO_DEV_URL;
 }
 
+
 app.listen(PORT, (error) =>{
-    if(!error)
-        console.log(`Server is Successfully Running in ${process.env.STATUS} mode, and App is listening on port ` + PORT)
+    if(!error){
+        console.log(`Server is Successfully Running in ${process.env.STATUS} mode, and App is listening on port ` + PORT);
+        // test();
+        var obj = { name : "welcome" , link : "", indexing : ""}
+        var json = JSON.stringify(obj);
+        console.log(json);
+        var obj2 = JSON.parse(json);
+        // firebaseService.pushVideo(JSON.stringify(obj));
+        // console.log(firebaseService.videoCollection);
+        firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
+        firebaseService.searchVideo(firebaseService.videoCollection,"test").then(
+            vids => console.log(vids)
+        );
+    }
     else 
         console.log("Error occurred, server can't start", error);
     }
@@ -29,9 +51,16 @@ app.post("/user", (req, res) => {
     // createUser(req.query.userName, req.query.password, res);
 });
 
+//request from front to algo
 app.post("/uploadVideo",(req, res) => {
-    // const obj = {link: req.query.link, age: req.query.name};
     httpPostAsyncResponse(algoServerIP+":"+algoPort+"/uploadVideo" , req.body, handleUplaodVideo, res);
+});
+
+//algo response
+app.get("/uploadVideo",(req, res) => {
+    const obj = JSON.parse(req.body);
+    firebaseService.createVideo(obj);
+    res.status(200).send();
 });
 
 app.get("/videoStatus", (req, res) => {
