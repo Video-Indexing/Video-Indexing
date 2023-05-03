@@ -54,7 +54,8 @@ app.post("/uploadVideo",(req, res) => {
 });
 
 //algo response
-app.get("/uploadVideo",(req, res) => {
+app.post("/uploadVideoAlgo",(req, res) => {
+    console.log(req.body);
     const obj = JSON.parse(req.body);
     firebaseService.createVideo(obj);
     res.status(200).send();
