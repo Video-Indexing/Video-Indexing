@@ -12,6 +12,7 @@ class Video_Downloader:
         # Step 1: Create a YouTube object
         # yt = YouTube(self.link)
         yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
+        
         # audio_lenght = yt.length
 
         # Step 2: Get all available streams
@@ -43,4 +44,3 @@ class Video_Downloader:
 
 
 # print('Download finished')
-
