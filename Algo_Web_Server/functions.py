@@ -6,8 +6,6 @@ from models import *
 import os
 from sys import platform
 from images_reco import recognize_new_image, mse
-import cv2
-
 
 content_path = os.getcwd()
 
@@ -15,7 +13,7 @@ if platform == "win32":
     last_dirs = content_path.split('\\')[-1]
     if last_dirs != 'Algo_Web_Server':
         content_path += '\Algo_Web_Server'
-    
+
     images_path = content_path + '\Images'
     audios_path = content_path + '\Audios'
     video_path = content_path + '\\video.mp4'
@@ -23,12 +21,11 @@ else:
     last_dirs = content_path.split('/')[-1]
     if last_dirs != 'Algo_Web_Server':
         content_path += '/Algo_Web_Server'
-        
+
     images_path = content_path + '/Images'
     audios_path = content_path + '/Audios'
     video_path = content_path + '/video.mp4'
-        
-    
+
 vid_name = 'video.mp4'
 seconds = 120
 image_taker_pace = 15
@@ -46,27 +43,25 @@ subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'E
 
 
 def download_vid(link):
+    global video_len
     VideoDownloader = Video_Downloader(link, content_path, vid_name)
-    VideoDownloader.download_video()
+    video_len = VideoDownloader.download_video()
+
 
 def index_video(link):
     download_vid(link)
     split_audio()
     results = whisper_results()
-    audio_results,classes = model_results(results)
+    audio_results, classes = model_results(results)
     print(audio_results)
     images_results = recognize_images()
-    final_index = final_indexing(audio_results,classes,images_results)
-    # ret_dic = {"audio results": audio_results, "images results": images_results}
-    # ret_dic = {"audio results": audio_results} # audio tests
-    # ret_dic = {"images results": images_results} # images tests.
-    ret_dic = {"Final indexing": final_index} # final indexing tests
+    final_index = final_indexing(audio_results, images_results)
+    ret_dic = {"Final indexing": final_index}  # final indexing tests
     os.remove(video_path)
     return ret_dic
 
 
 def split_audio():
-    seconds = 60
     AudioDownloader = Audio_Downloader(vid_name, content_path, audios_path, seconds)
     AudioDownloader.split_audio()
     # AudioDownloader.delete_audios()
@@ -97,7 +92,7 @@ def model_results(whisper_results):
         dic_results[key] = result
         i += seconds
 
-    return dic_results,SVM.classes
+    return dic_results, SVM.classes
 
 
 def recognize_images():
@@ -138,7 +133,7 @@ def recognize_images():
             start_time += image_taker_pace
             prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[1])
     else:
-        for i in range(len(paths_list)-1):
+        for i in range(len(paths_list) - 1):
             img1 = paths_list[i]
             img2 = paths_list[i + 1]
             error, _ = mse(img1, img2)
@@ -157,14 +152,21 @@ def recognize_images():
     return prediction
 
 
-def final_indexing(audio_results,classes,images_results):
-    class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network', 'Support-Vector-Machines', 'K-nearest-neighbors']
-    audio_results = update_dict(audio_results,15)
-    images_results = update_dict(images_results,15)
-    final_dict = calculate_new_results(audio_results,images_results,class_renamed)
+
+def final_indexing(audio_results, images_results):
+    class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network',
+                     'Support-Vector-Machines', 'K-nearest-neighbors']
+    split_time = min(image_taker_pace, seconds)
+    audio_results = update_dict(audio_results, split_time)
+    images_results = update_dict(images_results, split_time)
+    final_dict = calculate_new_results(audio_results, images_results, class_renamed)
     final_dict = connect_time_slices(final_dict)
-    final_dict = convert_final_indexing(final_dict)
+    final_time_slice = list(final_dict.keys())[-1]
+    new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
+    final_dict[new_final_time_slice] = final_dict[final_time_slice]
+    final_dict.pop(final_time_slice, None)
     return final_dict
+
 
 def update_dict(original_dict, time_slice_duration):
     new_dict = {}
@@ -173,28 +175,41 @@ def update_dict(original_dict, time_slice_duration):
         start = int(start)
         end = int(end)
         while start < end:
-            new_key = f"{start}-{start+time_slice_duration}"
+            new_key = f"{start}-{start + time_slice_duration}"
             new_dict[new_key] = value
             start += time_slice_duration
     return new_dict
-    
-def calculate_new_results(aud_dict,imgs_dict,classes):
+
+
+def calculate_new_results(aud_dict, imgs_dict, classes):
     final_dict = {}
-    multiplier = 0.2
-    for key1, key2 in zip(aud_dict.keys(), imgs_dict.keys()):
-        audio_array = aud_dict[key1]
-        image_array = imgs_dict[key2]
-        for key in image_array:
-            index = classes.index(key)
-            val = image_array[key]
-            audio_array[index] *= (1 + (val * multiplier))
-        # print(key2, value2)
-        # max_index = audio_array.index(max(audio_array))
-        max_index = audio_array.argmax()
-        final_dict[key1] = classes[max_index]
-        
+    multiplier = 0.35
+    if len(aud_dict.keys()) > len(imgs_dict.keys()):
+        keys = aud_dict.keys()
+    else:
+        keys = imgs_dict.keys()
+    for key in keys:
+        if key not in aud_dict.keys():
+            max_idx = imgs_dict[key].argmax()
+            final_dict[key] = classes[max_idx]
+            break
+        if key not in imgs_dict.keys():
+            max_idx = aud_dict[key].argmax()
+            final_dict[key] = classes[max_idx]
+            break
+
+        audio_dist_array = aud_dict[key]
+        image_dist_array = imgs_dict[key]
+        for img in image_dist_array:
+            index = classes.index(img)
+            img_dist_val = image_dist_array[img]
+            audio_dist_array[index] *= (1 + (img_dist_val * multiplier))
+        max_index = audio_dist_array.argmax()
+        final_dict[key] = classes[max_index]
+
     return final_dict
-    
+
+
 def connect_time_slices(final_dict):
     new_dict = {}
     counter = 0
@@ -208,36 +223,19 @@ def connect_time_slices(final_dict):
         if last_subject == None:
             last_subject = subject
         if final_dict[time] == last_subject:
-           end = end_time
-           if counter == len(final_dict):
+            end = end_time
+            if counter == len(final_dict):
                 key = f'{start}-{end}'
                 new_dict[key] = last_subject
-           continue
+            continue
         else:
             key = f'{start}-{end}'
             new_dict[key] = last_subject
             last_subject = final_dict[time]
             start = start_time
             end = end_time
-            
+            if counter == len(final_dict):
+                key = f'{start}-{end}'
+                new_dict[key] = subject
+
     return new_dict
-    
-
-def convert_seconds_to_minutes(seconds):
-    minutes = seconds // 60
-    remaining_seconds = seconds % 60
-    return f"{minutes}:{remaining_seconds:02d}"
-
-def convert_final_indexing(final_indexing):
-    keys = list(final_indexing.keys())
-    for key in keys:
-        start,end = key.split('-')
-        start = int(start)
-        end = int(end)
-        start = convert_seconds_to_minutes(start)
-        end = convert_seconds_to_minutes(end)
-        new_key = f'{start}-{end}'
-        final_indexing[new_key] = final_indexing.pop(key)
-        # del final_indexing[key]
-        
-    return final_indexing

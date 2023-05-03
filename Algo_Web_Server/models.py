@@ -34,10 +34,10 @@ class SVM_Text_Model:
         
         # Algo_Web_Server
         if platform == "win32":
-            # svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
-            # tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
-            svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
-            tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
+            svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
+            tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
+            # svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
+            # tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
         else:
             svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
             tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
@@ -212,5 +212,3 @@ class AdaBoost_Text_Model():
         new_text_transformed = self.vectorizer.transform([text])
         predicted_label = self.clf.predict(new_text_transformed)[0]
         print('Single pred result is:', predicted_label)
-
-SVM = SVM_Text_Model()
