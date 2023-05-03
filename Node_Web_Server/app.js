@@ -11,7 +11,7 @@ require('dotenv').config()
 // console.log(process.env)
 // const path = require('path')
 const app = express();
-const PORT = 3000;
+const PORT = 5050;
 app.use(express.json());
 
 algoServerIP = '';
@@ -29,17 +29,14 @@ else{
 app.listen(PORT, (error) =>{
     if(!error){
         console.log(`Server is Successfully Running in ${process.env.STATUS} mode, and App is listening on port ` + PORT);
-        // test();
-        var obj = { name : "welcome" , link : "", indexing : ""}
-        var json = JSON.stringify(obj);
-        console.log(json);
-        var obj2 = JSON.parse(json);
-        // firebaseService.pushVideo(JSON.stringify(obj));
-        // console.log(firebaseService.videoCollection);
-        firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
-        firebaseService.searchVideo(firebaseService.videoCollection,"test").then(
-            vids => console.log(vids)
-        );
+        // var obj = { name : "welcome" , link : "", indexing : ""}
+        // var json = JSON.stringify(obj);
+        // console.log(json);
+        // var obj2 = JSON.parse(json);
+        // firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
+        // firebaseService.searchVideo(firebaseService.videoCollection,"test").then(
+        //     vids => console.log(vids)
+        // );
     }
     else 
         console.log("Error occurred, server can't start", error);
