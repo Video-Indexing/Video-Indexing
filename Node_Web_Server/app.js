@@ -6,6 +6,7 @@ const express = require('express');
 var httpService = require('./httpService');
 const cors = require('cors');
 const firebaseService = require('./firebaseConfig');
+const bodyParser = require('body-parser');
 
 require('dotenv').config()
 // console.log(process.env)
@@ -13,6 +14,7 @@ require('dotenv').config()
 const app = express();
 const PORT = 5050;
 app.use(express.json());
+app.use(bodyParser.json());
 
 algoServerIP = '';
 algoPort = '';
@@ -34,8 +36,8 @@ app.listen(PORT, (error) =>{
         // console.log(json);
         // var obj2 = JSON.parse(json);
         // firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
-        // firebaseService.searchVideo(firebaseService.videoCollection,"test").then(
-        //     vids => console.log(vids)
+        // firebaseService.searchVideo(firebaseService.videoCollection,"shahar").then(
+        //     vids => console.log(JSON.stringify(vids))
         // );
     }
     else 
@@ -55,9 +57,9 @@ app.post("/uploadVideo",(req, res) => {
 
 //algo response
 app.post("/uploadVideoAlgo",(req, res) => {
-    console.log(req.body);
-    const obj = JSON.parse(req.body);
-    firebaseService.createVideo(obj);
+    const data = JSON.stringify(req.body); // Get JSON data from request body
+    const obj = JSON.parse(data);
+    firebaseService.createVideo(firebaseService.videoCollection, obj);
     res.status(200).send();
 });
 

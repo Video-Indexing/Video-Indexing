@@ -47,7 +47,7 @@ async function searchVideo(videoCollection,queryText){
 
 
 async function createVideo(videoCollection,videoObj){
-    return await videoCollection.doc()
+  return await videoCollection.doc()
     .set(videoObj);
 }
 // module.exports = book;
