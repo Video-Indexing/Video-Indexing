@@ -15,7 +15,7 @@ function FormCheckbox({ children, onStateChange }) {
       ></input>
       <label
         htmlFor='form-checkbox'
-        style={{ color: '#838383', fontSize: '0.75rem', margin: '0 5px' }}
+        style={{ fontSize: '0.75rem', margin: '0 5px' }}
       >
         {children}
       </label>
