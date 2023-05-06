@@ -165,6 +165,7 @@ def final_indexing(audio_results, images_results):
     new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
     final_dict[new_final_time_slice] = final_dict[final_time_slice]
     final_dict.pop(final_time_slice, None)
+    final_dict = convert_final_indexing(final_dict)
     return final_dict
 
 
@@ -239,3 +240,22 @@ def connect_time_slices(final_dict):
                 new_dict[key] = subject
 
     return new_dict
+
+def convert_seconds_to_minutes(seconds):
+    minutes = seconds // 60
+    remaining_seconds = seconds % 60
+    return f"{minutes}:{remaining_seconds:02d}"
+
+def convert_final_indexing(final_indexing):
+    keys = list(final_indexing.keys())
+    for key in keys:
+        start,end = key.split('-')
+        start = int(start)
+        end = int(end)
+        start = convert_seconds_to_minutes(start)
+        end = convert_seconds_to_minutes(end)
+        new_key = f'{start}-{end}'
+        final_indexing[new_key] = final_indexing.pop(key)
+        # del final_indexing[key]
+        
+    return final_indexing
