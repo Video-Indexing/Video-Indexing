@@ -7,10 +7,9 @@ import {
   FormLabel,
   FormInput,
   FormSubmit,
-} from './Upload.stlyed';
+} from '../../utils/Form.styled';
 import FormDropDownList from './components/FormDropDownList';
 import FormCheckbox from './components/FormCheckbox';
-import Navbar from '../../components/navbar/Navbar';
 
 function Upload() {
   const options = [
@@ -33,7 +32,6 @@ function Upload() {
 
   return (
     <>
-      <Navbar />
       <FormContainer>
         <FormTitle>Submit A Video</FormTitle>
         <FormSubTitle>Submit your video for evaluation</FormSubTitle>
@@ -46,10 +44,7 @@ function Upload() {
           use youtube link title
         </FormCheckbox>
         <FormLabel>Youtube Video Link</FormLabel>
-        <FormInput
-          className='yt-link'
-          onBlur={(e) => setLink(e.target.value)}
-        />
+        <FormInput className='large' onBlur={(e) => setLink(e.target.value)} />
         <FormSubmit onClick={onSubmit}>Submit</FormSubmit>
       </FormContainer>
     </>

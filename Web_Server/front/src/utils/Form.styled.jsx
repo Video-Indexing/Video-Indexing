@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const FormContainer = styled.div`
   background: #f9f9f9;
@@ -45,7 +45,7 @@ const FormInput = styled.input`
   border: 0.5px solid #cccccc;
   width: 150px;
   max-width: 100%;
-  &.yt-link {
+  &.large {
     width: 300px;
   }
 `;

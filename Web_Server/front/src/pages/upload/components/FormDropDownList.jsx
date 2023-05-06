@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormSelect } from '../Upload.stlyed';
+import { FormSelect } from '../../../utils/Form.styled';
 
 function FormDropDownList({ options, onOptionChange }) {
   const [value, setValue] = React.useState();
