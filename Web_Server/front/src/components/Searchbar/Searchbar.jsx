@@ -3,13 +3,22 @@ import { Bar, SearchInput } from './Searchbar.styled';
 import Search from '../../assets/icons/search.png';
 import Cancel from '../../assets/icons/cancel.png';
 
-function Searchbar() {
+function Searchbar({ setResults }) {
   const [search, setSearch] = useState();
-  const clear = () => (document.getElementById('search').value = '');
+  const clear = () => {
+    document.getElementById('search').value = '';
+    setSearch(null);
+  };
+  const query = (e) => {
+    const searchQuery = document.getElementById('search').value;
+    console.log(`query: ${searchQuery}\nkey words: ${searchQuery.split(' ')}`);
+    const searchResults = searchQuery.split(' '); // make firebase fetch request
+    setResults(searchResults);
+  };
   return (
     <>
       <Bar>
-        <img className='action' src={Search} height={18} />
+        <img className='action' src={Search} height={18} onClick={query} />
         <SearchInput
           id='search'
           type='text'
