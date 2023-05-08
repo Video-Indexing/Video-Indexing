@@ -20,17 +20,11 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         response_data = {'message': 'Received data successfully', 'data': data_dict}
         my_url = data_dict['link']
         vid_name = data_dict['name']
-        # index_results = index_video(my_url)
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        # self.wfile.write(json.dumps(index_results).encode('utf-8'))
-        
-        
         self.send_results_to_web_server(my_url,vid_name)
-        
-        # self.test()
-        
+
     def send_results_to_web_server(self,url,name):
         indexing = index_video(url)
         params = {"url": url, "name": name, "indexing": indexing}
