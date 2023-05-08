@@ -56,9 +56,8 @@ def index_video(link):
     print(audio_results)
     images_results = recognize_images()
     final_index = final_indexing(audio_results, images_results)
-    ret_dic = {"Final indexing": final_index}  # final indexing tests
     os.remove(video_path)
-    return ret_dic
+    return final_index
 
 
 def split_audio():

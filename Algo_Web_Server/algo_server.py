@@ -9,7 +9,7 @@ PORT = 8080
 
 WEB_SERVER_PORT = 5050
 WEB_SERVER_IP = '127.0.0.1'
-WEB_SERVER_FULL_URL = f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}"
+WEB_SERVER_FULL_URL = f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}/uploadVideoAlgo"
 
 
 class MyHandler(http.server.BaseHTTPRequestHandler):
@@ -20,17 +20,17 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         response_data = {'message': 'Received data successfully', 'data': data_dict}
         my_url = data_dict['link']
         vid_name = data_dict['name']
-        # index_results = index_video(my_url)
         self.send_response(200)
-        # self.send_header('Content-type', 'application/json')
         self.end_headers()
-        # self.wfile.write(json.dumps(index_results).encode('utf-8'))
         self.send_results_to_web_server(my_url,vid_name)
-        
-    def send_results_to_web_server(url,name):
+
+    def send_results_to_web_server(self, url, name):
         indexing = index_video(url)
-        params = {"url": url, "vid_name": name, "indexing": indexing}
-        response = requests.post(WEB_SERVER_FULL_URL, data=params)
+        params = {"url": url, "name": name, "indexing": indexing}
+        json_data = json.dumps(params)
+        headers = {"Content-type": "application/json"}
+        print(params)
+        response = requests.post(WEB_SERVER_FULL_URL, data=json_data, headers=headers)
         
 
 
