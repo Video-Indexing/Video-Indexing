@@ -36,7 +36,7 @@ app.listen(PORT, (error) =>{
         // console.log(json);
         // var obj2 = JSON.parse(json);
         // firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
-        // firebaseService.searchVideo(firebaseService.videoCollection,"shahar").then(
+        // firebaseService.searchVideo(firebaseService.videoCollection,"shahar_test1").then(
         //     vids => console.log(JSON.stringify(vids))
         // );
     }
