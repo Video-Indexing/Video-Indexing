@@ -9,7 +9,7 @@ class Whisper_Model:
         self.audio_path = audio_path
         self.text_array = []
         
-    def Text_To_Speech(self):
+    def text_to_speech(self):
         for file_name in sorted(os.scandir(self.audio_path), key=lambda f: f.stat().st_ctime):
             file = os.path.join(self.audio_path, file_name)
             # send the mp3 file into whisper
@@ -21,17 +21,17 @@ class Whisper_Model:
         
         return self.text_array
             
-    def Print_Chunks(self):
+    def print_chunks(self):
         counter = 1    
         for text in self.text_array:
             print('Chunk number:',counter,' Text:',text)
             print('**'*20)
             counter += 1
             
-    def Print_Entire_Text(self):
+    def print_entire_text(self):
         for text in self.text_array:
             print(text)
             
-    def Print_Results(self):
-        self.Print_Chunks()
+    def print_results(self):
+        self.print_chunks()
         # self.Print_Entire_Text()
