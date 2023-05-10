@@ -1,8 +1,16 @@
 import React from "react";
 import "./Homepage.css";
 import Navbar from "../../../components/navbar/Navbar";
-// import sec1 from "../../../assets/backgrounds/sec1.jpg";
-// import sec2 from "../../../assets/backgrounds/sec2.jpg";
+
+// const footer = document.querySelector(".footer");
+
+// window.addEventListener("scroll", () => {
+//   if (window.pageYOffset > 100) {
+//     footer.classList.add("visible");
+//   } else {
+//     footer.classList.remove("visible");
+//   }
+// });
 function Homepage({ children, onStateChange }) {
   return (
     <>
@@ -20,7 +28,7 @@ function Homepage({ children, onStateChange }) {
         </div>
 
         <div className="section-2 section">
-          <p>
+          <p className="second-p">
             Our indexing system is lightning-fast, providing you with
             lightning-fast results and an intuitive user interface that is both
             user-friendly and visually stunning. Whether you're a student,
@@ -41,6 +49,11 @@ function Homepage({ children, onStateChange }) {
           <button className="get-started-button">Get Started!</button>
         </div>
       </div>
+      <footer className="footer">
+        <a className="contact-btn">contact us</a>
+        <a className="contact-btn">contact us2</a>
+        <a className="contact-btn">contact us3</a>
+      </footer>
     </>
   );
 }
