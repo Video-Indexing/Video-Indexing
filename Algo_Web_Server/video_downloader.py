@@ -1,4 +1,3 @@
-import math
 from pytube import YouTube
 
 
@@ -10,11 +9,13 @@ class Video_Downloader:
 
     def download_video(self):
         # Step 1: Create a YouTube object
-        yt = YouTube(self.link)
-        audio_lenght = yt.length
+        # yt = YouTube(self.link)
+        yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
+        video_lenght = yt.length
 
         # Step 2: Get all available streams
         streams = yt.streams.all()
+        # streams = yt.streams
 
         # Step 3: Filter streams to get only mp4 video streams
         mp4_streams = yt.streams.filter(file_extension='mp4', mime_type='video/mp4')
@@ -27,4 +28,21 @@ class Video_Downloader:
         
         print('Download finished')
 
-        return math.ceil(audio_lenght / 60)
+        return video_lenght
+
+        
+        
+# yt = YouTube("https://www.youtube.com/watch?v=0p0o5cmgLdE",use_oauth=True,allow_oauth_cache=True)
+# # yt = YouTube("https://www.youtube.com/watch?v=0p0o5cmgLdE")
+# # print(yt._title)
+# streams = yt.streams
+# mp4_streams = yt.streams.filter(file_extension='mp4', mime_type='video/mp4')
+# stream = mp4_streams.first()
+# stream.download(filename = 'video.mp4')
+
+# # video = yt.streams.get_highest_resolution()
+# # video.download(filename=video.default_filename)
+
+
+# print('Download finished')
+

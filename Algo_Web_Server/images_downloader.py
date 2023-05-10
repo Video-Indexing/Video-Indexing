@@ -9,7 +9,8 @@ class Image_Downloader:
         self.images_path = images_path
         self.seconds = seconds
     
-    def Download_Images(self):
+    def download_images(self):
+        os.chdir(self.main_path)
         clip = VideoFileClip(self.file_name)
         for t in range(0, int(clip.duration), self.seconds):
             # Get the frame at time t
@@ -29,7 +30,7 @@ class Image_Downloader:
         
         print('Images Downloaded')
         
-    def Delete_Images(self):
+    def delete_images(self):
         # set the directory path
         dir_path = self.images_path
 
