@@ -12,6 +12,8 @@ require('dotenv').config()
 // console.log(process.env)
 // const path = require('path')
 const app = express();
+app.use(cors())
+// app.options('*', cors()) 
 const PORT = 5050;
 app.use(express.json());
 app.use(bodyParser.json());
@@ -69,6 +71,20 @@ app.get("/videoStatus", (req, res) => {
 
 app.get("/video",(req,res) => {
     res.send(getAllVideos());
+});
+
+app.get("/searchVideoByName",(req,res) => {
+    // console.log(req);
+    const name = req.query.name;
+    firebaseService.searchVideo(firebaseService.videoCollection,name).then( (r) =>
+    {
+        const json = JSON.stringify(r)
+        console.log(json);
+        if(json == "{}")
+            res.send(200);
+        else
+            res.send(json);    
+    });
 });
 
 function handleUplaodVideo(body, res){

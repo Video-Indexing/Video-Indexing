@@ -14,8 +14,8 @@ function VideoItem({ video }) {
         <ItemTitle>{video.title}</ItemTitle>
         <ItemChapters>
           <ItemP>chapters:</ItemP>
-          {video.chapters.map((c) => (
-            <p>{c}</p>
+          {video.chapters.map((c,i) => (
+            <p key={i}>{c}</p>
           ))}
         </ItemChapters>
         <ItemP>duration: {video.duration}</ItemP>
