@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   NavContainer,
   NavLink,
@@ -14,22 +14,22 @@ function Navbar() {
   return (
     <NavContentContainer>
       <NavContainer>
-        <NavLinkContainer className='nav-left'>
-          <img className='nav-logo' src={Logo} alt='logo' height={45} />
-          <Pages pages={['home', 'search', 'upload']} />
+        <NavLinkContainer className="nav-left">
+          <img className="nav-logo" src={Logo} alt="logo" height={45} />
+          <Pages pages={["home", "search", "upload"]} />
         </NavLinkContainer>
-        <div className='nav-right'>
+        <div className="nav-right">
           <img
-            className='nav-profile'
+            className="nav-profile"
             src={Profile}
-            alt='profile'
+            alt="profile"
             width={35}
             height={35}
           />
           <img
-            className='nav-gear'
+            className="nav-gear"
             src={Gear}
-            alt='profile'
+            alt="profile"
             width={35}
             height={35}
           />

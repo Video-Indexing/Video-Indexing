@@ -6,6 +6,7 @@ import Search from './pages/search/Search.jsx';
 import MyVideoPlayer from './components/videoplayer/MyVideoPlayer.jsx';
 import { useState } from 'react';
 import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
+import Homepage from './pages/upload/home/Homepage.jsx';
 
 function App() {
   return (
