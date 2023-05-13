@@ -7,7 +7,6 @@ var httpService = require('./httpService');
 const cors = require('cors');
 const firebaseService = require('./firebaseConfig');
 const bodyParser = require('body-parser');
-const http = require('http');
 const { json } = require('stream/consumers');
 const axios = require('axios');
 
