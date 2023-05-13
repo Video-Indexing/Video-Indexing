@@ -151,7 +151,6 @@ def recognize_images():
     return prediction
 
 
-
 def final_indexing(audio_results, images_results):
     class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network',
                      'Support-Vector-Machines', 'K-nearest-neighbors']
@@ -163,7 +162,8 @@ def final_indexing(audio_results, images_results):
     final_time_slice = list(final_dict.keys())[-1]
     new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
     final_dict[new_final_time_slice] = final_dict[final_time_slice]
-    final_dict.pop(final_time_slice, None)
+    if new_final_time_slice != final_time_slice:
+        final_dict.pop(final_time_slice, None)
     final_dict = convert_final_indexing(final_dict)
     return final_dict
 
