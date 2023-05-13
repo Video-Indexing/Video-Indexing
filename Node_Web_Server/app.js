@@ -36,9 +36,9 @@ app.listen(PORT, (error) =>{
         // console.log(json);
         // var obj2 = JSON.parse(json);
         // firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
-        // firebaseService.searchVideo(firebaseService.videoCollection,"shahar_test1").then(
-        //     vids => console.log(JSON.stringify(vids))
-        // );
+//         firebaseService.searchVideo(firebaseService.videoCollection,"test_req_pro_2").then(
+//             vids => console.log(JSON.stringify(vids))
+//         );
     }
     else 
         console.log("Error occurred, server can't start", error);
@@ -59,6 +59,7 @@ app.post("/uploadVideo",(req, res) => {
 app.post("/uploadVideoAlgo",(req, res) => {
     const data = JSON.stringify(req.body); // Get JSON data from request body
     const obj = JSON.parse(data);
+    console.log(obj)
     firebaseService.createVideo(firebaseService.videoCollection, obj);
     res.status(200).send();
 });
