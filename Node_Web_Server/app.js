@@ -13,8 +13,6 @@ const PORT = 5050;
 app.use(express.json());
 app.use(bodyParser.json());
 
-const path = require('path');
-
 algoServerIP = '';
 algoPort = '';
 if(process.env.STATUS == "production"){
@@ -30,8 +28,6 @@ else{
 app.listen(PORT, (error) =>{
     if(!error){
         console.log(`Server is Successfully Running in ${process.env.STATUS} mode, and App is listening on port ` + PORT);
-        // console.log(__filename); // prints the absolute path of the current module
-        // console.log(path.basename(__filename));
     }
     else 
         console.log("Error occurred, server can't start", error);
