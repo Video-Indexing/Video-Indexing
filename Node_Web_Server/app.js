@@ -7,6 +7,9 @@ var httpService = require('./httpService');
 const cors = require('cors');
 const firebaseService = require('./firebaseConfig');
 const bodyParser = require('body-parser');
+const http = require('http');
+const { json } = require('stream/consumers');
+const axios = require('axios');
 
 require('dotenv').config()
 // console.log(process.env)
@@ -36,9 +39,9 @@ app.listen(PORT, (error) =>{
         // console.log(json);
         // var obj2 = JSON.parse(json);
         // firebaseService.createVideo(firebaseService.videoCollection,obj2).then(x => console.log( x ));
-//         firebaseService.searchVideo(firebaseService.videoCollection,"test_req_pro_2").then(
-//             vids => console.log(JSON.stringify(vids))
-//         );
+        // firebaseService.searchVideo(firebaseService.videoCollection,"test_req_pro_2").then(
+        //     vids => console.log(JSON.stringify(vids))
+        // );
     }
     else 
         console.log("Error occurred, server can't start", error);
@@ -51,8 +54,8 @@ app.post("/user", (req, res) => {
 });
 
 //request from front to algo
-app.post("/uploadVideo",(req, res) => {
-    httpPostAsyncResponse(algoServerIP+":"+algoPort+"/uploadVideo" , req.body, handleUplaodVideo, res);
+app.post("/uploadVideo", (req, res) => {
+    sendToAlgoServer(algoServerIP + ":" + algoPort , JSON.stringify(req.body));
 });
 
 //algo response
@@ -72,6 +75,16 @@ app.get("/video",(req,res) => {
     res.send(getAllVideos());
 });
 
-function handleUplaodVideo(body, res){
-    res.send(body);
-}
+// function handleUplaodVideo(body, res){
+//     res.send(body);
+// }
+
+async function sendToAlgoServer(url, data) {
+    axios.post(url, data)
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+  }
