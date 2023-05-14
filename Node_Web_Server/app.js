@@ -61,7 +61,8 @@ app.post("/uploadVideoAlgo",(req, res) => {
         console.log(obj)
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
-        // mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
+        mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
+        console.log("sent mail from /uploadVideoAlgo post")
         console.log("finished upload")
       }
 });
