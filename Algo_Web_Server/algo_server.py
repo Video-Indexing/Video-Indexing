@@ -1,6 +1,7 @@
 import http.server
 import socketserver
-import urllib.parse
+import threading
+import queue
 from functions import index_video
 import json
 import requests
@@ -18,21 +19,52 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         data_dict = json.loads(post_data.decode('utf-8'))
         response_data = {'message': 'Received data successfully', 'data': data_dict}
-        my_url = data_dict['link']
-        vid_name = data_dict['name']
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.send_results_to_web_server(my_url,vid_name)
-
-    def send_results_to_web_server(self,url,name):
-        indexing = index_video(url)
-        params = {"url": url, "name": name, "indexing": indexing}
-        headers = {'Content-type': 'application/json'}
-        response = requests.post(WEB_SERVER_FULL_URL, data=json.dumps(params), headers=headers)
-        print(f"response from Web Server: \n {str(response)}")
+        queue.put(data_dict)
 
 
-with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
-    print("serving at port", PORT)
-    httpd.serve_forever()
+class RequestProcessor(threading.Thread):
+    def __init__(self, queue, process_func, lock):
+        super().__init__()
+        self.queue = queue
+        self.process_func = process_func
+        self.lock = lock
+
+    def run(self):
+        while True:
+            data = self.queue.get()
+            # Process the request data with the provided function
+            with self.lock:
+                self.process_func(data)
+            self.queue.task_done()
+
+
+def start_server(port, process_func):
+    global queue
+    queue = queue.Queue()
+
+    # Start the request processor thread
+    lock = threading.Lock()
+    processor = RequestProcessor(queue, process_func, lock)
+    processor.daemon = True
+    processor.start()
+
+    # Start the HTTP server
+    with socketserver.TCPServer(("", port), MyHandler) as httpd:
+        print("serving at port", PORT)
+        httpd.serve_forever()
+
+
+def send_results_to_web_server(data):
+    url = data["link"]
+    name = data["name"]
+    indexing = index_video(url)
+    params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
+    headers = {'Content-type': 'application/json'}
+    response = requests.post(WEB_SERVER_FULL_URL, data=json.dumps(params), headers=headers)
+    print(f"response from Web Server: \n {str(response)}")
+
+
+start_server(PORT, send_results_to_web_server)
