@@ -15,9 +15,10 @@ function App() {
         <Navbar/>
 
         <Routes>
-            <Route index element={<Upload />} />
+            <Route index element={<Homepage />} />
             <Route path="upload" element={<Upload />} />
             <Route path="search" element={<Search />} />
+            <Route path="playVideo" element={<MyVideoPlayer />} />
             {/* <Route path="*" element={<NoPage />} /> */}
         </Routes>
       </BrowserRouter>

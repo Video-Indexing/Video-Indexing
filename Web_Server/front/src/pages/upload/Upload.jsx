@@ -10,6 +10,7 @@ import {
 } from '../../utils/Form.styled';
 import FormDropDownList from './components/FormDropDownList';
 import FormCheckbox from './components/FormCheckbox';
+import { UploadVideo } from '../../services/UploadService';
 
 function Upload() {
   const options = [
@@ -21,9 +22,10 @@ function Upload() {
   const [link, setLink] = useState();
   const [useOriginalTitle, setUseOriginalTitle] = useState(false);
   function onSubmit() {
-    console.log(
-      `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
-    );
+    UploadVideo(titleName,link);
+    // console.log(
+    //   `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
+    // );
   }
   const changeSubject = (value) => setSubjectName(value);
   const ytTitle = (value) => {
