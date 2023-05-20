@@ -9,6 +9,8 @@ const axios = require('axios');
 
 require('dotenv').config()
 const app = express();
+app.use(cors())
+// app.options('*', cors()) 
 const PORT = 5050;
 app.use(express.json());
 app.use(bodyParser.json());
@@ -60,6 +62,7 @@ app.post("/uploadVideoAlgo",(req, res) => {
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
         mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
+        console.log("sent mail from /uploadVideoAlgo post")
         console.log("finished upload")
       }
 });
@@ -79,6 +82,20 @@ app.get("/videosByTag",(req,res) => {
           res.json(searchResults); // Return search results as JSON response
         }
       });
+
+  
+app.get("/searchVideoByName",(req,res) => {
+    // console.log(req);
+    const name = req.query.name;
+    firebaseService.searchVideo(firebaseService.videoCollection,name).then( (r) =>
+    {
+        const json = JSON.stringify(r)
+        console.log(json);
+        if(json == "{}")
+            res.send(200);
+        else
+            res.send(json);    
+    });
 });
 
 async function sendToAlgoServer(url, data) {

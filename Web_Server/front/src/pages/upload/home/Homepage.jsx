@@ -6,7 +6,6 @@ import Navbar from "../../../components/navbar/Navbar";
 function Homepage({ children, onStateChange }) {
   return (
     <>
-      <Navbar />
       <div className="page-container">
         <div className="section-1 section">
           <h1>What we're all about?</h1>
