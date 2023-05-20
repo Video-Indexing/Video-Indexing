@@ -15,7 +15,7 @@ async function sendMailToClient(clientMail, userName, vidName){
   let info = await transporter .sendMail({
     from: process.env.VIP_MAIL_USR,
     to: clientMail,
-    subject: "Testing, testing, 123",
+    subject: "Your video is been uploaded!",
     text: `Hi ${userName},\n\nYour upload of ${vidName} is finished\n\nThank you,\n\nVIP team`, // plain text body
   });
 

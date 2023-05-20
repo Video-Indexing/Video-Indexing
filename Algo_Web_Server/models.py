@@ -34,8 +34,12 @@ class SVM_Text_Model:
         
         # Algo_Web_Server
         if platform == "win32":
-            svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
-            tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
+            # svm_path = os.getcwd() + "/Model_dir/svm_clean_model.pkl"
+            # tfidf_path = os.getcwd() + "/Model_dir/tfidf_clean_vectorizer.pkl"
+            svm_path = os.getcwd() + "/Model_dir/geometry_svm_model.pkl"
+            tfidf_path = os.getcwd() + "/Model_dir/geometry_vectorizer_model.pkl"
+            # svm_path = "Algo_Web_Server\Model_dir\geometry_svm_model.pkl"
+            # tfidf_path = "Algo_Web_Server\Model_dir\geometry_vectorizer_model.pkl"
             # svm_path = "Algo_Web_Server\Model_dir\svm_clean_model.pkl"
             # tfidf_path = "Algo_Web_Server\Model_dir\\tfidf_clean_vectorizer.pkl"
         else:
@@ -55,8 +59,10 @@ class SVM_Text_Model:
         self.classes = self.svm.classes_
 
     def svm_single_pred(self, text):
-        multiplier = 1.2
-        size = 3
+        multiplier = 1
+        # multiplier = 1.2
+        size = 1
+        # size = 3
         labels = self.classes
 
         new_text_transformed = self.vectorizer.transform([text])
