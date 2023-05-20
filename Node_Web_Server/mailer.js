@@ -1,4 +1,3 @@
-
 const nodemailer = require('nodemailer');
 
 async function sendMailToClient(clientMail, userName, vidName){

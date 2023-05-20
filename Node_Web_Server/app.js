@@ -71,6 +71,19 @@ app.get("/video",(req,res) => {
     res.send(getAllVideos());
 });
 
+app.get("/videosByTag",(req,res) => {
+    let data = JSON.stringify(req.body); // Get JSON data from request body
+    let obj = JSON.parse(data);
+    let tag = obj.tag
+    firebaseService.searchVideosByTags(firebaseService.videoCollection,tag, (error, searchResults) => {
+        if (error) {
+          res.status(500).send('Internal Server Error'); // Handle error response
+        } else {
+          res.json(searchResults); // Return search results as JSON response
+        }
+      });
+
+  
 app.get("/searchVideoByName",(req,res) => {
     // console.log(req);
     const name = req.query.name;
