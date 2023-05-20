@@ -2,7 +2,10 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    // host: 'smtp.mail.yahoo.com',
+    // port: 465,
+    service: 'Yahoo',
+    secure: false,
     auth: {
       user: process.env.VIP_MAIL_USR, 
       pass: process.env.VIP_MAIL_PSW 

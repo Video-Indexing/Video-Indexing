@@ -59,13 +59,26 @@ app.post("/uploadVideoAlgo",(req, res) => {
         console.log(obj)
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
-        // mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
+        mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
         console.log("finished upload")
       }
 });
 
 app.get("/video",(req,res) => {
     res.send(getAllVideos());
+});
+
+app.get("/videosByTag",(req,res) => {
+    let data = JSON.stringify(req.body); // Get JSON data from request body
+    let obj = JSON.parse(data);
+    let tag = obj.tag
+    firebaseService.searchVideosByTags(firebaseService.videoCollection,tag, (error, searchResults) => {
+        if (error) {
+          res.status(500).send('Internal Server Error'); // Handle error response
+        } else {
+          res.json(searchResults); // Return search results as JSON response
+        }
+      });
 });
 
 async function sendToAlgoServer(url, data) {
