@@ -1,30 +1,25 @@
-
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
+async function sendMailToClient(clientMail, userName, vidName){
+  const transporter  = nodemailer.createTransport({
+    host: "smtp.gmail.com", // SMTP server address (usually mail.your-domain.com)
+    port: 465, // Port for SMTP (usually 465)
+    secure: true, // Usually true if connecting to port 465
     auth: {
       user: process.env.VIP_MAIL_USR, 
       pass: process.env.VIP_MAIL_PSW 
-    }
+      // ⚠️ For better security, use environment variables set on the server for these values when deploying
+    },
   });
 
-function sendMailToClient(clientMail, userName, vidName){
-    let mailOptions = {
-        from: process.env.VIP_MAIL_USR, 
-        to: clientMail, 
-        subject: 'Upload mail finished', // Subject line
-        text: `Hi ${userName},\n\nYour upload of ${vidName} is finished\n\nThank you,\n\nVIP team`, // plain text body
-      };
-    
-    transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        console.error(error);
-        console.log('error: An error occurred while sending the email');
-    } else {
-        console.log('Message sent: %s', info.messageId);
-    }
-    });
+  let info = await transporter .sendMail({
+    from: process.env.VIP_MAIL_USR,
+    to: clientMail,
+    subject: "Your video is been uploaded!",
+    text: `Hi ${userName},\n\nYour upload of ${vidName} is finished\n\nThank you,\n\nVIP team`, // plain text body
+  });
+
+  console.log('Email sent')
 }
 
-module.exports = { sendMailToClient };
+module.exports = { sendMailToClient};

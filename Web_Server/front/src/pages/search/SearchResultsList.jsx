@@ -8,7 +8,7 @@ function SearchResultsList({ results }) {
     <>
       <FormSubTitle>search results:</FormSubTitle>
       <Searchul>
-        {results && results.map((r) => <VideoItem key={r.id} video={r} />)}
+        {results && Array.isArray(results) && results.map((r,i) => <VideoItem key={i} video={r} />)}
       </Searchul>
     </>
   );

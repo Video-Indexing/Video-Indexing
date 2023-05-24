@@ -4,10 +4,11 @@ import {
   NavLink,
   NavLinkContainer,
   NavContentContainer,
-} from "./Navbar.styled";
-import Gear from "../../assets/icons/settings.png";
-import Profile from "../../assets/icons/profile.png";
-import Logo from "../../assets/icons/logo.png";
+} from './Navbar.styled';
+import Gear from '../../assets/icons/settings.png';
+import Profile from '../../assets/icons/profile.png';
+import Logo from '../../assets/icons/logo.png';
+import { Outlet, Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -43,11 +44,14 @@ function Pages({ pages }) {
     <>
       {pages.map((page, index) => {
         return (
-          <NavLink href={"/#"} key={page + index}>
-            {page}
+          <NavLink key={index}>
+            <Link to={page} key={page + index}>
+              {page}
+            </Link>
           </NavLink>
         );
       })}
+      <Outlet/>
     </>
   );
 }

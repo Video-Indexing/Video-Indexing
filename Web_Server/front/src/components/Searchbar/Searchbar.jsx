@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Bar, SearchInput } from './Searchbar.styled';
 import Search from '../../assets/icons/search.png';
 import Cancel from '../../assets/icons/cancel.png';
+import { SearchVideoByName } from '../../services/SearchService';
 
 function Searchbar({ setResults }) {
   const [search, setSearch] = useState();
@@ -9,11 +10,14 @@ function Searchbar({ setResults }) {
     document.getElementById('search').value = '';
     setSearch(null);
   };
-  const query = (e) => {
+  const query = async (e) => {
+    
     const searchQuery = document.getElementById('search').value;
-    console.log(`query: ${searchQuery}\nkey words: ${searchQuery.split(' ')}`);
-    const searchResults = searchQuery.split(' '); // make firebase fetch request
-    setResults(searchResults);
+    await SearchVideoByName(searchQuery).then(  
+      (d)=>  setResults(d)
+    )
+    // console.log(`query: ${searchQuery}\nkey words: ${searchQuery.split(' ')}`);
+    // const searchResults = ;
   };
   return (
     <>
