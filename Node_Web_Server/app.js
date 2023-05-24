@@ -84,6 +84,18 @@ app.get("/videosByTag",(req,res) => {
       });
     });
 
+app.get("/videoById",async (req,res) => {
+    let data = JSON.stringify(req.body); // Get JSON data from request body
+    let obj = JSON.parse(data);
+    let id = obj.id
+    try {
+        const documentData = await firebaseService.searchVideosById(firebaseService.videoCollection, id);
+        res.status(200).json(documentData);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      };
+});
+
   
 app.get("/searchVideoByName",(req,res) => {
     // console.log(req);
