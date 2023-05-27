@@ -19,11 +19,12 @@ import FullScreen from "@mui/icons-material/Fullscreen";
 import Popover from "@mui/material/Popover";
 import screenful from "screenfull";
 import Controls from "./components/Controls";
+import { SearchVideoByID } from "../../services/SearchService";
 
 const useStyles = makeStyles((theme) => ({
     playerWrapper: {
       width: "100%",
-  
+      height: "100%",
       position: "relative",
       // "&:hover": {
       //   "& $controlsWrapper": {
@@ -31,7 +32,9 @@ const useStyles = makeStyles((theme) => ({
       //   },
       // },
     },
-  
+    reactPlayer:{
+        height: '100%',
+      },
     controlsWrapper: {
       visibility: "hidden",
       position: "absolute",
@@ -125,6 +128,12 @@ const useStyles = makeStyles((theme) => ({
     },
   })(Slider);
   
+  const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+  console.log("Video id: "+ videoID);
+  let videoDataRes;
+//   await SearchVideoByID(videoID).then(
+//     (res) => videoDataRes = res
+//     );
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
   
@@ -150,10 +159,19 @@ const useStyles = makeStyles((theme) => ({
   };
   
   let count = 0;
-    
 function MyVideoPlayer() {
+
     const classes = useStyles();
     const [showControls, setShowControls] = useState(false);
+    useEffect(() => {
+        // code to run after render goes here
+        setTimeout(() => {
+            document.querySelectorAll('iframe').forEach((element,index,array) => {
+                        element.style.minHeight = '400px';
+                    });
+        }, 500);
+    }, []);
+
     // const [count, setCount] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
@@ -217,7 +235,7 @@ function MyVideoPlayer() {
     };
   
     const handleSeekChange = (e, newValue) => {
-      console.log({ newValue });
+    //   console.log({ newValue });
       setState({ ...state, played: parseFloat(newValue / 100) });
     };
   
@@ -226,7 +244,7 @@ function MyVideoPlayer() {
     };
   
     const handleSeekMouseUp = (e, newValue) => {
-      console.log({ value: e.target });
+    //   console.log({ value: e.target });
       setState({ ...state, seeking: false });
       // console.log(sliderRef.current.value)
       playerRef.current.seekTo(newValue / 100, "fraction");
@@ -253,7 +271,7 @@ function MyVideoPlayer() {
     };
   
     const handleMouseMove = () => {
-      console.log("mousemove");
+    //   console.log("mousemove");
       controlsRef.current.style.visibility = "visible";
       count = 0;
     };
@@ -315,7 +333,7 @@ function MyVideoPlayer() {
         : `-${format(duration - currentTime)}`;
   
     const totalDuration = format(duration);
-  
+
     return (
       <>
         {/* <AppBar position="fixed">
@@ -335,7 +353,7 @@ function MyVideoPlayer() {
               ref={playerRef}
               width="100%"
               height="100%"
-              url="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+              url="https://www.youtube.com/watch?v=bFPdvCFxyeE"
               pip={pip}
               playing={playing}
               controls={false}
@@ -346,6 +364,11 @@ function MyVideoPlayer() {
               muted={muted}
               onProgress={handleProgress}
               config={{
+                youtube: {
+                    playerVars: { modestbranding: 1 },
+                    preload: true,
+
+                  },
                 file: {
                   attributes: {
                     crossorigin: "anonymous",
@@ -378,33 +401,11 @@ function MyVideoPlayer() {
               volume={volume}
               onBookmark={addBookmark}
             />
-          </div>
-  
-          <Grid container style={{ marginTop: 20 }} spacing={3}>
-            {bookmarks.map((bookmark, index) => (
-              <Grid key={index} item>
-                <Paper
-                  onClick={() => {
-                    playerRef.current.seekTo(bookmark.time);
-                    controlsRef.current.style.visibility = "visible";
-  
-                    setTimeout(() => {
-                      controlsRef.current.style.visibility = "hidden";
-                    }, 1000);
-                  }}
-                  elevation={3}
-                >
-                  <img crossOrigin="anonymous" src={bookmark.image} />
-                  <Typography variant="body2" align="center">
-                    bookmark at {bookmark.display}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-          <canvas ref={canvasRef} />
+          </div>  
+          {/* <canvas ref={canvasRef} /> */}
         </Container>
       </>
+      
     );
   }
   export default MyVideoPlayer;

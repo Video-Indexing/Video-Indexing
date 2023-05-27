@@ -12,4 +12,17 @@ const SearchVideoByName = async (name) => {
     return res.data;
 };
 
-export {SearchVideoByName};
+const SearchVideoByID = async (id) =>{
+    let res;
+    await axios.get("http://127.0.0.1:5050/searchVideoByID?id=" + id).then(
+        (r) => {
+            console.log(r.data);
+            res= r;    
+        }
+    );
+    // if()
+    return res.data;
+
+};
+
+export {SearchVideoByName,SearchVideoByID};
