@@ -37,6 +37,23 @@ async function searchVideosByTags(videoCollection,queryText, callback){
     });
 }
 
+async function searchVideosById(videoCollection,id){
+  try {
+    let documentRef = await videoCollection.doc(id)
+    const documentSnapshot = await documentRef.get();
+    
+    if (documentSnapshot.exists) {
+      const documentData = documentSnapshot.data();
+      return documentData;
+    } else {
+      throw new Error('Document does not exist');
+    }
+  } catch (error) {
+    throw new Error(`Error retrieving document: ${error.message}`);
+  }
+   
+}
+
 
 async function searchVideo(videoCollection,queryText){
   var newRef = videoCollection.where('name', '>=', queryText).where('name', '<=', queryText+ '\uf8ff');
@@ -72,3 +89,4 @@ module.exports.getCollectionData = getCollectionData;
 module.exports.createVideo = createVideo;
 module.exports.searchVideo = searchVideo;
 module.exports.searchVideosByTags = searchVideosByTags;
+module.exports.searchVideosById = searchVideosById;
