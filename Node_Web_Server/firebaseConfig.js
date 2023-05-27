@@ -24,17 +24,48 @@ async function getCollectionData(collection) {
 
     return mainDocs;
 }
-async function searchVideo(videoCollection,queryText){
-    var newRef = videoCollection.where('name', '>=', queryText).where('name', '<=', queryText+ '\uf8ff');
-    // var newSmallerRef = videoCollection.where("name", "<=", videoName);
 
-    const mainDocs = [];
-
-    var docs = await newRef.get();
-
-    docs.forEach(async (doc) => {
-      mainDocs.push({ ...doc.data(), _id: doc.id });
+async function searchVideosByTags(videoCollection,queryText, callback){
+  videoCollection.where('tags', 'array-contains', queryText)
+    .get().then((querySnapshot) => {
+      const searchResults = querySnapshot.docs.map((doc) => doc.data());
+      callback(null, searchResults); // Pass the search results to the callback function
+    })
+    .catch((error) => {
+      console.log('Error getting documents: ', error);
+      callback(error, null); // Pass the error to the callback function
     });
+}
+
+async function searchVideosById(videoCollection,id){
+  try {
+    let documentRef = await videoCollection.doc(id)
+    const documentSnapshot = await documentRef.get();
+    
+    if (documentSnapshot.exists) {
+      const documentData = documentSnapshot.data();
+      return documentData;
+    } else {
+      throw new Error('Document does not exist');
+    }
+  } catch (error) {
+    throw new Error(`Error retrieving document: ${error.message}`);
+  }
+   
+}
+
+
+async function searchVideo(videoCollection,queryText){
+  var newRef = videoCollection.where('name', '>=', queryText).where('name', '<=', queryText+ '\uf8ff');
+  // var newSmallerRef = videoCollection.where("name", "<=", videoName);
+
+  const mainDocs = [];
+
+  var docs = await newRef.get();
+
+  docs.forEach(async (doc) => {
+    mainDocs.push({ ...doc.data(), _id: doc.id });
+  });
 
     // docs = await newSmallerRef.get();
     // docs.forEach(async (doc) => {
@@ -57,3 +88,5 @@ module.exports.bookCollection = bookCollection;
 module.exports.getCollectionData = getCollectionData;
 module.exports.createVideo = createVideo;
 module.exports.searchVideo = searchVideo;
+module.exports.searchVideosByTags = searchVideosByTags;
+module.exports.searchVideosById = searchVideosById;

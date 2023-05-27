@@ -27,7 +27,7 @@ else:
     video_path = content_path + '/video.mp4'
 
 vid_name = 'video.mp4'
-seconds = 120
+seconds = 30
 image_taker_pace = 15
 
 if not os.path.exists(images_path):
