@@ -62,6 +62,7 @@ def send_results_to_web_server(data):
     name = data["name"]
     indexing = index_video(url)
     params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
+    print(params)
     headers = {'Content-type': 'application/json'}
     response = requests.post(WEB_SERVER_FULL_URL, data=json.dumps(params), headers=headers)
     print(f"response from Web Server: \n {str(response)}")

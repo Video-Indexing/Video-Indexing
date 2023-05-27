@@ -28,7 +28,7 @@ else:
     video_path = content_path + '/video.mp4'
 
 vid_name = 'video.mp4'
-seconds = 30
+seconds = 45
 image_taker_pace = 15
 
 if not os.path.exists(images_path):
@@ -41,11 +41,15 @@ if not os.path.exists(audios_path):
 #                 'Gradient descent - general', 'Network’s hyper-parameters', 'Overfitting and regularization',
 #                 'Perceptrons', 'Sigmoid', 'Softmax', 'Stochastic gradient descent',
 #                 'The architecture of neural networks', 'The vanishing gradient problem', 'Weight initialization', 'KNN']
+# "Introduction", "Summary",
 
-my_subject_list = ["Introduction","Conclusion","Points", "Lines", "Planes" ,"Midpoint", "Distance Formulas",
-
-  "Classify Angles" , "Classify Polygons", "Perimeter", "Circumference", "Area", " Conditional Statements","Pairs of Lines", "Pairs of Angles", "Parallel Lines", "Transversals","Triangle Sum Properties", "Congruent by SSS", "Congruent by SAS", "Congruent by ASA",
-  "Congruent by AAS", "Equilateral Triangles","Perpendicular Bisectors", "Angle Bisectors of Triangles", "Medians", "Altitudes","Similar Polygons", "Triangles Similar by AA", "Triangles Similar by SSS", "Triangles Similar by SAS","Sine Ratio", "Cosine Ratio", "Tangent Ratio"]
+my_subject_list = ["Points", "Lines", "Planes","Midpoint", "Distance Formulas",
+                   "Classify Angles", "Classify Polygons", "Perimeter", "Circumference", "Area",
+                   " Conditional Statements", "Pairs of Lines", "Pairs of Angles", "Parallel Lines", "Transversals",
+                   "Triangle Sum Properties", "Congruent by SSS", "Congruent by SAS", "Congruent by ASA",
+                   "Congruent by AAS", "Equilateral Triangles","Perpendicular Bisectors",
+                   "Angle Bisectors of Triangles", "Medians", "Altitudes","Similar Polygons", "Triangles Similar by AA",
+                   "Triangles Similar by SSS", "Triangles Similar by SAS","Sine Ratio", "Cosine Ratio", "Tangent Ratio"]
 
 
 
@@ -60,7 +64,7 @@ def index_video(link):
     split_audio()
     results = whisper_results()
     # audio_results, classes = model_results(results)
-    audio_results = gpt_index_video(results,my_subject_list)
+    audio_results = gpt_index_video(results, my_subject_list)
     
     # print(audio_results)
     # images_results = recognize_images()
@@ -177,8 +181,18 @@ def final_indexing(audio_results, images_results):
     final_dict = convert_final_indexing(final_dict)
     return final_dict
 
+
 def gpt_final_indexing(audio_results):
-    final_dict = connect_time_slices(audio_results)
+    split_time = seconds
+    audio_res_time_slices = {}
+    start_time = 0
+    end_time = start_time + split_time
+    for i in audio_results:
+        audio_res_time_slices[f"{start_time}-{end_time}"] = audio_results[i]
+        start_time += split_time
+        end_time += split_time
+    updated_audio_results = update_dict(audio_res_time_slices, split_time)
+    final_dict = connect_time_slices(updated_audio_results)
     final_time_slice = list(final_dict.keys())[-1]
     new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
     final_dict[new_final_time_slice] = final_dict[final_time_slice]
@@ -187,7 +201,6 @@ def gpt_final_indexing(audio_results):
     final_dict = convert_final_indexing(final_dict)
     return final_dict
     
-
 
 def update_dict(original_dict, time_slice_duration):
     new_dict = {}
@@ -265,6 +278,7 @@ def convert_seconds_to_minutes(seconds):
     minutes = seconds // 60
     remaining_seconds = seconds % 60
     return f"{minutes}:{remaining_seconds:02d}"
+
 
 def convert_final_indexing(final_indexing):
     keys = list(final_indexing.keys())
