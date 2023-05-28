@@ -90,35 +90,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PrettoSlider = withStyles({
-  root: {
-    height: 8,
-  },
-  thumb: {
-    // height: 24,
-    // width: 24,
-    // backgroundColor: "#fff",
-    // border: "2px solid currentColor",
-    // marginTop: -8,
-    // marginLeft: -12,
-    // width: "100%",
-    "&:focus, &:hover, &$active": {
-      boxShadow: "inherit",
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: "calc(-50% + 4px)",
-  },
-  track: {
-    height: 8,
-    borderRadius: 4,
-  },
-  rail: {
-    height: 8,
-    borderRadius: 4,
-  },
-})(Slider);
+// const PrettoSlider = withStyles({
+//   root: {
+//     height: 8,
+//   },
+//   thumb: {
+//     // height: 24,
+//     // width: 24,
+//     // backgroundColor: "#fff",
+//     // border: "2px solid currentColor",
+//     // marginTop: -8,
+//     // marginLeft: -12,
+//     // width: "100%",
+//     "&:focus, &:hover, &$active": {
+//       boxShadow: "inherit",
+//     },
+//   },
+//   active: {},
+//   valueLabel: {
+//     left: "calc(-50% + 4px)",
+//   },
+//   track: {
+//     height: 8,
+//     borderRadius: 4,
+//   },
+//   rail: {
+//     height: 8,
+//     borderRadius: 4,
+//   },
+// })(Slider);
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -129,68 +129,49 @@ function ValueLabelComponent(props) {
     </Tooltip>
   );
 }
-const marks = [
-    {
-      value: 0,
-      myLabel: 'SVM',
-      labelPos: 3.082,
-    },
-    {
-      value: 6.164,
-      myLabel: 'Linear-Regression',
-      labelPos: 21.548,
-    },
-    {
-      value: 34.932,
-      myLabel: 'SVM',
-      labelPos: 36.9865,
-    },
-    {
-      value: 39.041,
-      myLabel: 'Logistic-Regression',
-      labelPos: 44.178,
-    },
-    {
-       value: 49.315,
-       myLabel: 'Linear-Regression',
-       labelPos: 54.452,
-    },
-    {
-        value: 59.589,
-        myLabel: 'Logistic-Regression',
-        labelPos: 62.671,
-    },
-    {
-        value: 65.753,
-        myLabel: 'Linear-Regression',
-        labelPos: 82.8765,
-    },
+// let marks = [
+//     {
+//       value: 0,
+//       myLabel: 'SVM',
+//       labelPos: 3.082,
+//     },
+//     {
+//       value: 6.164,
+//       myLabel: 'Linear-Regression',
+//       labelPos: 21.548,
+//     },
+//     {
+//       value: 34.932,
+//       myLabel: 'SVM',
+//       labelPos: 36.9865,
+//     },
+//     {
+//       value: 39.041,
+//       myLabel: 'Logistic-Regression',
+//       labelPos: 44.178,
+//     },
+//     {
+//        value: 49.315,
+//        myLabel: 'Linear-Regression',
+//        labelPos: 54.452,
+//     },
+//     {
+//         value: 59.589,
+//         myLabel: 'Logistic-Regression',
+//         labelPos: 62.671,
+//     },
+//     {
+//         value: 65.753,
+//         myLabel: 'Linear-Regression',
+//         labelPos: 82.8765,
+//     },
 
-  ];
-  function findClosestMark(value){
-    let closestMark = marks[0];
-    let smallestDist = 100;
-    for (let i = 0; i < marks.length; i++) {
-        if(smallestDist > Math.abs(marks[i].value - value)){
-            smallestDist = Math.abs(marks[i].value - value);
-            closestMark = marks[i];
-        }
-    }
-    return closestMark;
-  }
-  console.log(marks);
-  function valuetext(value) {
-    // console.log(value);
-    return `${value}`;
-  }
-  
-  function valueLabelFormat(value) {
-    return findClosestMark(value).myLabel;
-  }
+//   ];
 
 const Controls = forwardRef(
   (
-    {
+    {   
+      marks,
       onSeek,
       onSeekMouseDown,
       onSeekMouseUp,
@@ -215,6 +196,28 @@ const Controls = forwardRef(
     },
     ref
   ) => {
+
+    function findClosestMark(value){
+        let closestMark = marks[0];
+        let smallestDist = 100;
+        for (let i = 0; i < marks.length; i++) {
+            if(smallestDist > Math.abs(marks[i].value - value) && marks[i].value <= value){
+                smallestDist = Math.abs(marks[i].value - value);
+                closestMark = marks[i];
+            }
+        }
+        return closestMark;
+      }
+    //   console.log(marks);
+      function valuetext(value) {
+        // console.log(value);
+        return `${value}`;
+      }
+      
+      function valueLabelFormat(value) {
+        return findClosestMark(value).myLabel;
+      }
+    
     const classes = useStyles();
     // useEffect(() => {
     //     // code to run after render goes here
@@ -250,8 +253,7 @@ const Controls = forwardRef(
                 alignItems="flex-end"
                 style={{ paddingRight: 16, paddingLeft: 16 , width : "100%"}}
             >
-                {/* <Grid item xs={12}> */}
-                <PrettoSlider
+                <Slider
                     min={0}
                     max={100}
                     valueLabelFormat={valueLabelFormat}
@@ -259,9 +261,6 @@ const Controls = forwardRef(
                     valueLabelDisplay="auto"
                     track={false}
                     marks={marks}
-                    // ValueLabelComponent={(props) => (
-                    // <ValueLabelComponent {...props} value={elapsedTime} />
-                    // )}
                     aria-label="custom thumb label"
                     value={played * 100}
                     onChange={onSeek}

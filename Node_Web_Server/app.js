@@ -72,9 +72,7 @@ app.get("/video",(req,res) => {
 });
 
 app.get("/videosByTag",(req,res) => {
-    let data = JSON.stringify(req.body); // Get JSON data from request body
-    let obj = JSON.parse(data);
-    let tag = obj.tag
+    let tag = req.query.tag;
     firebaseService.searchVideosByTags(firebaseService.videoCollection,tag, (error, searchResults) => {
         if (error) {
           res.status(500).send('Internal Server Error'); // Handle error response
@@ -85,9 +83,7 @@ app.get("/videosByTag",(req,res) => {
     });
 
 app.get("/videoById",async (req,res) => {
-    let data = JSON.stringify(req.body); // Get JSON data from request body
-    let obj = JSON.parse(data);
-    let id = obj.id
+    const id = req.query.id;
     try {
         const documentData = await firebaseService.searchVideosById(firebaseService.videoCollection, id);
         res.status(200).json(documentData);
