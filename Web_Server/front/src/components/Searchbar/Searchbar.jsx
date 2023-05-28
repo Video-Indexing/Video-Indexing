@@ -11,16 +11,12 @@ function Searchbar({ setResults }) {
     setSearch(null);
   };
   const query = async (e) => {
-    
+    e.preventDefault();
     const searchQuery = document.getElementById('search').value;
-    await SearchVideoByName(searchQuery).then(  
-      (d)=>  setResults(d)
-    )
-    // console.log(`query: ${searchQuery}\nkey words: ${searchQuery.split(' ')}`);
-    // const searchResults = ;
+    await SearchVideoByName(searchQuery).then((d) => setResults(d));
   };
   return (
-    <>
+    <form onSubmit={query}>
       <Bar>
         <img className='action' src={Search} height={18} onClick={query} />
         <SearchInput
@@ -33,7 +29,7 @@ function Searchbar({ setResults }) {
           <img className='action' src={Cancel} height={20} onClick={clear} />
         )}
       </Bar>
-    </>
+    </form>
   );
 }
 
