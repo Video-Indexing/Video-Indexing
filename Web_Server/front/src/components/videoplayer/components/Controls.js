@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState ,useEffect} from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import { makeStyles, withStyles } from '@mui/styles';
@@ -17,7 +17,17 @@ import VolumeDown from "@mui/icons-material/VolumeDown";
 import VolumeMute from "@mui/icons-material/VolumeMute";
 import FullScreen from "@mui/icons-material/Fullscreen";
 import Popover from "@mui/material/Popover";
-
+// import { createTheme } from '@mui/material/styles';
+// let theme = createTheme({
+//     palette: {
+//       primary: {
+//         main: '#0052cc',
+//       },
+//       secondary: {
+//         main: '#edf2ff',
+//       },
+//     },
+//   });
 const useStyles = makeStyles((theme) => ({
   controlsWrapper: {
     visibility: "hidden",
@@ -78,41 +88,37 @@ const useStyles = makeStyles((theme) => ({
     padding: "16px"
     
   },
-  mark: {
-    color: "red",
-    padding: 10
-  },
 }));
 
-const PrettoSlider = withStyles({
-  root: {
-    height: 8,
-  },
-  thumb: {
-    // height: 24,
-    // width: 24,
-    // backgroundColor: "#fff",
-    // border: "2px solid currentColor",
-    // marginTop: -8,
-    // marginLeft: -12,
-    // width: "100%",
-    "&:focus, &:hover, &$active": {
-      boxShadow: "inherit",
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: "calc(-50% + 4px)",
-  },
-  track: {
-    height: 8,
-    borderRadius: 4,
-  },
-  rail: {
-    height: 8,
-    borderRadius: 4,
-  },
-})(Slider);
+// const PrettoSlider = withStyles({
+//   root: {
+//     height: 8,
+//   },
+//   thumb: {
+//     // height: 24,
+//     // width: 24,
+//     // backgroundColor: "#fff",
+//     // border: "2px solid currentColor",
+//     // marginTop: -8,
+//     // marginLeft: -12,
+//     // width: "100%",
+//     "&:focus, &:hover, &$active": {
+//       boxShadow: "inherit",
+//     },
+//   },
+//   active: {},
+//   valueLabel: {
+//     left: "calc(-50% + 4px)",
+//   },
+//   track: {
+//     height: 8,
+//     borderRadius: 4,
+//   },
+//   rail: {
+//     height: 8,
+//     borderRadius: 4,
+//   },
+// })(Slider);
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -123,36 +129,49 @@ function ValueLabelComponent(props) {
     </Tooltip>
   );
 }
-const marks = [
-    {
-      value: 0,
-      label: 'KNN',
-    },
-    {
-      value: 20,
-      label: 'Test1',
-    },
-    {
-      value: 37,
-      label: 'Test2',
-    },
-    {
-      value: 100,
-      label: 'Test3',
-    },
-  ];
-  
-  function valuetext(value) {
-    return `${value}°C`;
-  }
-  
-  function valueLabelFormat(value) {
-    return marks.findIndex((mark) => mark.value === value) + 1;
-  }
+// let marks = [
+//     {
+//       value: 0,
+//       myLabel: 'SVM',
+//       labelPos: 3.082,
+//     },
+//     {
+//       value: 6.164,
+//       myLabel: 'Linear-Regression',
+//       labelPos: 21.548,
+//     },
+//     {
+//       value: 34.932,
+//       myLabel: 'SVM',
+//       labelPos: 36.9865,
+//     },
+//     {
+//       value: 39.041,
+//       myLabel: 'Logistic-Regression',
+//       labelPos: 44.178,
+//     },
+//     {
+//        value: 49.315,
+//        myLabel: 'Linear-Regression',
+//        labelPos: 54.452,
+//     },
+//     {
+//         value: 59.589,
+//         myLabel: 'Logistic-Regression',
+//         labelPos: 62.671,
+//     },
+//     {
+//         value: 65.753,
+//         myLabel: 'Linear-Regression',
+//         labelPos: 82.8765,
+//     },
+
+//   ];
 
 const Controls = forwardRef(
   (
-    {
+    {   
+      marks,
       onSeek,
       onSeekMouseDown,
       onSeekMouseUp,
@@ -177,7 +196,35 @@ const Controls = forwardRef(
     },
     ref
   ) => {
+
+    function findClosestMark(value){
+        let closestMark = marks[0];
+        let smallestDist = 100;
+        for (let i = 0; i < marks.length; i++) {
+            if(smallestDist > Math.abs(marks[i].value - value) && marks[i].value <= value){
+                smallestDist = Math.abs(marks[i].value - value);
+                closestMark = marks[i];
+            }
+        }
+        return closestMark;
+      }
+    //   console.log(marks);
+      function valuetext(value) {
+        // console.log(value);
+        return `${value}`;
+      }
+      
+      function valueLabelFormat(value) {
+        return findClosestMark(value).myLabel;
+      }
+    
     const classes = useStyles();
+    // useEffect(() => {
+    //     // code to run after render goes here
+    //     setTimeout(() => {
+    //         moveLabels();
+    //     }, 5000);
+    //   }, []);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -194,7 +241,7 @@ const Controls = forwardRef(
       <div ref={ref} className={classes.controlsWrapper}>
         <div className={classes.top}>
             <div className={classes.title}>
-                VideoTitle
+            {/* vid 4 */}
             </div>
         </div>
         <div className={classes.bottom}>
@@ -206,8 +253,7 @@ const Controls = forwardRef(
                 alignItems="flex-end"
                 style={{ paddingRight: 16, paddingLeft: 16 , width : "100%"}}
             >
-                <Grid item xs={12}>
-                <PrettoSlider
+                <Slider
                     min={0}
                     max={100}
                     valueLabelFormat={valueLabelFormat}
@@ -215,20 +261,29 @@ const Controls = forwardRef(
                     valueLabelDisplay="auto"
                     track={false}
                     marks={marks}
-                    // ValueLabelComponent={(props) => (
-                    // <ValueLabelComponent {...props} value={elapsedTime} />
-                    // )}
                     aria-label="custom thumb label"
                     value={played * 100}
                     onChange={onSeek}
                     onMouseDown={onSeekMouseDown}
                     onChangeCommitted={onSeekMouseUp}
                     onDuration={onDuration}
-                    // sx={{markLabel: classes.mark }}
+                    // markLabel={color:"white"}
+                    // sx={{markLabel:{ color: "white" }}}
                     // classes={{ markLabel: classes.mark }}
-                    
+                    sx={{
+                        // '& .MuiSlider-valueLabelOpen': {
+                        //     backgroundColor: "#1976d2",
+                        //     top: -15,
+                        // },
+                        '& .MuiSlider-valueLabel': {
+                            left: "auto",
+                            backgroundColor: "#1976d2",
+                            top: -15,
+
+                          }
+                        }}
                 />
-                </Grid>
+                {/* </Grid> */}
             </Grid>
             <Grid  
                 container
@@ -362,6 +417,19 @@ const Controls = forwardRef(
     );
   }
 );
+// const allWithClass = Array.from(
+//     document.querySelectorAll('span.MuiSlider-markLabel')
+//   );
+// function moveLabels() {
+//     console.log(allWithClass);
+//     allWithClass.forEach((element,index,array) => {
+//         element.style.left = marks[index].labelPos + '%';
+//       });
+// }
+//     setTimeout(() => {
+//         moveLabels();
+//         document.querySelectorAll('span.MuiSlider-markLabel')
+//     }, 10000);
 
 Controls.propTypes = {
   onSeek: PropTypes.func,

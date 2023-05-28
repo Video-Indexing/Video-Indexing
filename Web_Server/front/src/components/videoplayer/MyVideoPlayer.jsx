@@ -19,11 +19,13 @@ import FullScreen from "@mui/icons-material/Fullscreen";
 import Popover from "@mui/material/Popover";
 import screenful from "screenfull";
 import Controls from "./components/Controls";
+import { SearchVideoByID } from "../../services/SearchService";
+import { json } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     playerWrapper: {
       width: "100%",
-  
+      height: "100%",
       position: "relative",
       // "&:hover": {
       //   "& $controlsWrapper": {
@@ -31,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
       //   },
       // },
     },
-  
+    reactPlayer:{
+        height: '100%',
+      },
     controlsWrapper: {
       visibility: "hidden",
       position: "absolute",
@@ -125,6 +129,11 @@ const useStyles = makeStyles((theme) => ({
     },
   })(Slider);
   
+//   console.log("Video id: "+ videoID);
+  let videoDataRes;
+//   await SearchVideoByID(videoID).then(
+//     (res) => videoDataRes = res
+//     );
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
   
@@ -150,10 +159,57 @@ const useStyles = makeStyles((theme) => ({
   };
   
   let count = 0;
-    
+
 function MyVideoPlayer() {
+
+    function hmsToSecondsOnly(str) {
+        var p = str.split(':'),
+            s = 0, m = 1;
+    
+        while (p.length > 0) {
+            s += m * parseInt(p.pop(), 10);
+            m *= 60;
+        }
+    
+        return s;
+    }
+    function ReformatIndexing(indexing){
+        const marks = [];
+        let total = 0;
+        for(const[key,myVal] of Object.entries(indexing)){
+            const start = hmsToSecondsOnly(key.split("-")[0]);
+            if(start > total){
+                total = start
+            }
+        }
+        for(const[key,myVal] of Object.entries(indexing)){
+            const start = hmsToSecondsOnly(key.split("-")[0]);
+            const value = start / total * 100;
+            const myLabel = myVal;
+            marks.push({value,myLabel});
+        }
+        return marks;
+    }
     const classes = useStyles();
     const [showControls, setShowControls] = useState(false);
+    const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    const [url,setUrl] = useState();
+    const [indexing, setIndexing] = useState();
+    useEffect(() => {
+        // code to run after render goes here
+        SearchVideoByID(videoID).then(res => {
+            console.log(res);
+            let testMarks = ReformatIndexing(res.indexing);
+            // console.log(testMarks);
+            setIndexing(testMarks);
+            setUrl(res.url);
+        });
+        setTimeout(() => {
+            document.querySelectorAll('iframe').forEach((element,index,array) => {
+                        element.style.minHeight = '400px';
+                    });
+        }, 1000);
+    }, []);
     // const [count, setCount] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
@@ -217,7 +273,7 @@ function MyVideoPlayer() {
     };
   
     const handleSeekChange = (e, newValue) => {
-      console.log({ newValue });
+    //   console.log({ newValue });
       setState({ ...state, played: parseFloat(newValue / 100) });
     };
   
@@ -226,7 +282,7 @@ function MyVideoPlayer() {
     };
   
     const handleSeekMouseUp = (e, newValue) => {
-      console.log({ value: e.target });
+    //   console.log({ value: e.target });
       setState({ ...state, seeking: false });
       // console.log(sliderRef.current.value)
       playerRef.current.seekTo(newValue / 100, "fraction");
@@ -253,7 +309,7 @@ function MyVideoPlayer() {
     };
   
     const handleMouseMove = () => {
-      console.log("mousemove");
+    //   console.log("mousemove");
       controlsRef.current.style.visibility = "visible";
       count = 0;
     };
@@ -277,30 +333,30 @@ function MyVideoPlayer() {
       setState({ ...state, muted: !state.muted });
     };
   
-    const addBookmark = () => {
-      const canvas = canvasRef.current;
-      canvas.width = 160;
-      canvas.height = 90;
-      const ctx = canvas.getContext("2d");
+    // const addBookmark = () => {
+    //   const canvas = canvasRef.current;
+    //   canvas.width = 160;
+    //   canvas.height = 90;
+    //   const ctx = canvas.getContext("2d");
   
-      ctx.drawImage(
-        playerRef.current.getInternalPlayer(),
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-      const dataUri = canvas.toDataURL();
-      canvas.width = 0;
-      canvas.height = 0;
-      const bookmarksCopy = [...bookmarks];
-      bookmarksCopy.push({
-        time: playerRef.current.getCurrentTime(),
-        display: format(playerRef.current.getCurrentTime()),
-        image: dataUri,
-      });
-      setBookmarks(bookmarksCopy);
-    };
+    //   ctx.drawImage(
+    //     playerRef.current.getInternalPlayer(),
+    //     0,
+    //     0,
+    //     canvas.width,
+    //     canvas.height
+    //   );
+    //   const dataUri = canvas.toDataURL();
+    //   canvas.width = 0;
+    //   canvas.height = 0;
+    //   const bookmarksCopy = [...bookmarks];
+    //   bookmarksCopy.push({
+    //     time: playerRef.current.getCurrentTime(),
+    //     display: format(playerRef.current.getCurrentTime()),
+    //     image: dataUri,
+    //   });
+    //   setBookmarks(bookmarksCopy);
+    // };
   
     const currentTime =
       playerRef && playerRef.current
@@ -315,7 +371,7 @@ function MyVideoPlayer() {
         : `-${format(duration - currentTime)}`;
   
     const totalDuration = format(duration);
-  
+
     return (
       <>
         {/* <AppBar position="fixed">
@@ -331,11 +387,12 @@ function MyVideoPlayer() {
             ref={playerContainerRef}
             className={classes.playerWrapper}
           >
+            {url && <>
             <ReactPlayer
               ref={playerRef}
               width="100%"
               height="100%"
-              url="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+              url={url}
               pip={pip}
               playing={playing}
               controls={false}
@@ -344,8 +401,14 @@ function MyVideoPlayer() {
               playbackRate={playbackRate}
               volume={volume}
               muted={muted}
+            //   onBuffer={console.log("Ready")}
               onProgress={handleProgress}
               config={{
+                youtube: {
+                    playerVars: { modestbranding: 1 },
+                    preload: true,
+
+                  },
                 file: {
                   attributes: {
                     crossorigin: "anonymous",
@@ -353,58 +416,38 @@ function MyVideoPlayer() {
                 },
               }}
             />
-  
             <Controls
-              ref={controlsRef}
-              onSeek={handleSeekChange}
-              onSeekMouseDown={handleSeekMouseDown}
-              onSeekMouseUp={handleSeekMouseUp}
-              onDuration={handleDuration}
-              onRewind={handleRewind}
-              onPlayPause={handlePlayPause}
-              onFastForward={handleFastForward}
-              playing={playing}
-              played={played}
-              elapsedTime={elapsedTime}
-              totalDuration={totalDuration}
-              onMute={hanldeMute}
-              muted={muted}
-              onVolumeChange={handleVolumeChange}
-              onVolumeSeekDown={handleVolumeSeekDown}
-              onChangeDispayFormat={handleDisplayFormat}
-              playbackRate={playbackRate}
-              onPlaybackRateChange={handlePlaybackRate}
-              onToggleFullScreen={toggleFullScreen}
-              volume={volume}
-              onBookmark={addBookmark}
-            />
-          </div>
-  
-          <Grid container style={{ marginTop: 20 }} spacing={3}>
-            {bookmarks.map((bookmark, index) => (
-              <Grid key={index} item>
-                <Paper
-                  onClick={() => {
-                    playerRef.current.seekTo(bookmark.time);
-                    controlsRef.current.style.visibility = "visible";
-  
-                    setTimeout(() => {
-                      controlsRef.current.style.visibility = "hidden";
-                    }, 1000);
-                  }}
-                  elevation={3}
-                >
-                  <img crossOrigin="anonymous" src={bookmark.image} />
-                  <Typography variant="body2" align="center">
-                    bookmark at {bookmark.display}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-          <canvas ref={canvasRef} />
+            ref={controlsRef}
+            marks = {indexing}sx
+            onSeek={handleSeekChange}
+            onSeekMouseDown={handleSeekMouseDown}
+            onSeekMouseUp={handleSeekMouseUp}
+            onDuration={handleDuration}
+            onRewind={handleRewind}
+            onPlayPause={handlePlayPause}
+            onFastForward={handleFastForward}
+            playing={playing}
+            played={played}
+            elapsedTime={elapsedTime}
+            totalDuration={totalDuration}
+            onMute={hanldeMute}
+            muted={muted}
+            onVolumeChange={handleVolumeChange}
+            onVolumeSeekDown={handleVolumeSeekDown}
+            onChangeDispayFormat={handleDisplayFormat}
+            playbackRate={playbackRate}
+            onPlaybackRateChange={handlePlaybackRate}
+            onToggleFullScreen={toggleFullScreen}
+            volume={volume}
+            // onBookmark={addBookmark}
+          />
+        </>
+  }
+          </div>  
+          {/* <canvas ref={canvasRef} /> */}
         </Container>
       </>
+      
     );
   }
   export default MyVideoPlayer;
