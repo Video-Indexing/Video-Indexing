@@ -19,13 +19,14 @@ import FullScreen from "@mui/icons-material/Fullscreen";
 import Popover from "@mui/material/Popover";
 import screenful from "screenfull";
 import Controls from "./components/Controls";
-import { SearchVideoByID } from "../../services/SearchService";
-import { json } from "react-router";
+import { SearchVideoByID, SearchVideosByTag } from "../../services/SearchService";
+
 
 const useStyles = makeStyles((theme) => ({
     playerWrapper: {
       width: "100%",
-      height: "100%",
+      minHeight:'400px',
+      height: "40vh",
       position: "relative",
       // "&:hover": {
       //   "& $controlsWrapper": {
@@ -160,7 +161,7 @@ const useStyles = makeStyles((theme) => ({
   
   let count = 0;
 
-function MyVideoPlayer() {
+function MyVideoPlayer({setTopicVideos}) {
 
     function hmsToSecondsOnly(str) {
         var p = str.split(':'),
@@ -190,20 +191,29 @@ function MyVideoPlayer() {
         }
         return marks;
     }
+    const setCurrentTopicHandler = (topic) => {
+        setCurrentTopic(topic);
+    }
+
     const classes = useStyles();
     const [showControls, setShowControls] = useState(false);
     const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
     const [url,setUrl] = useState();
+    const [currentTopic, setCurrentTopic] = useState();
     const [indexing, setIndexing] = useState();
+
     useEffect(() => {
         // code to run after render goes here
         SearchVideoByID(videoID).then(res => {
             console.log(res);
             let testMarks = ReformatIndexing(res.indexing);
+            const myURL = res.url.replace('https://','http://');
             // console.log(testMarks);
             setIndexing(testMarks);
-            setUrl(res.url);
+            setUrl(myURL);
+            console.log(myURL)
         });
+        // SearchVideosByTag("Points").then(res => console.log(res));
         setTimeout(() => {
             document.querySelectorAll('iframe').forEach((element,index,array) => {
                         element.style.minHeight = '400px';
@@ -213,7 +223,7 @@ function MyVideoPlayer() {
     // const [count, setCount] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
-    const [bookmarks, setBookmarks] = useState([]);
+    // const [bookmarks, setBookmarks] = useState([]);
     const [state, setState] = useState({
       pip: false,
       playing: true,
@@ -246,9 +256,16 @@ function MyVideoPlayer() {
       seeking,
       volume,
     } = state;
-  
+
+
     const handlePlayPause = () => {
-      setState({ ...state, playing: !state.playing });
+        if(state.playing){
+            SearchVideosByTag(currentTopic).then(res => 
+            {
+                setTopicVideos(res);
+            });
+        }
+        setState({ ...state, playing: !state.playing });
     };
   
     const handleRewind = () => {
@@ -315,8 +332,10 @@ function MyVideoPlayer() {
     };
   
     const hanldeMouseLeave = () => {
-      controlsRef.current.style.visibility = "hidden";
-      count = 0;
+      if(state.playing){
+        controlsRef.current.style.visibility = "hidden";
+        count = 0;  
+      }
     };
   
     const handleDisplayFormat = () => {
@@ -401,6 +420,8 @@ function MyVideoPlayer() {
               playbackRate={playbackRate}
               volume={volume}
               muted={muted}
+              onPlay={() => setState({...state, playing: true})}
+              onPause={() => setState({...state, playing: false})}
             //   onBuffer={console.log("Ready")}
               onProgress={handleProgress}
               config={{
@@ -418,7 +439,9 @@ function MyVideoPlayer() {
             />
             <Controls
             ref={controlsRef}
-            marks = {indexing}sx
+            // currentTopic = {currentTopic}
+            setCurrentTopic = {setCurrentTopic}
+            marks = {indexing}
             onSeek={handleSeekChange}
             onSeekMouseDown={handleSeekMouseDown}
             onSeekMouseUp={handleSeekMouseUp}
