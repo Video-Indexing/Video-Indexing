@@ -4,21 +4,36 @@ import {
   ItemContainer,
   ItemTitle,
   VideoDescription,
-  ItemP,
+  Section,
+  Chapter,
+  VideoImage,
+  ImageContainer,
 } from './VideoItem.styled';
+import PlayButton from '../../../assets/icons/video.png';
+import { useNavigate } from 'react-router-dom';
+
+const route = 'localhost:3000/';
 function VideoItem({ video }) {
+  const nav = useNavigate();
   return (
-    <ItemContainer>
-      <img src={video.image} height={75} />
+    <ItemContainer
+      onClick={() => window.location.replace(`playVideo/${video._id}`)}
+    >
+      <ImageContainer>
+        <VideoImage src={video.image} height={75} className='vid-img' />
+        <div className='middle'>
+          <img src={PlayButton} id='play' alt='play-btn' />
+        </div>
+      </ImageContainer>
       <VideoDescription>
-        <ItemTitle>{video.title}</ItemTitle>
+        <ItemTitle>{video.name}</ItemTitle>
+        <Section>duration: {video.duration}</Section>
         <ItemChapters>
-          <ItemP>chapters:</ItemP>
-          {video.chapters.map((c,i) => (
-            <p key={i}>{c}</p>
-          ))}
+          chapters:
+          <br />
+          {video.indexing &&
+            video.tags.map((c, i) => <Chapter key={i}>{c}</Chapter>)}
         </ItemChapters>
-        <ItemP>duration: {video.duration}</ItemP>
       </VideoDescription>
     </ItemContainer>
   );
