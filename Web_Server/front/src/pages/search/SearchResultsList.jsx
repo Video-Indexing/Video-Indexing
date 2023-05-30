@@ -8,8 +8,7 @@ function SearchResultsList({ results, ignore, focusTopic }) {
     <>
       {ignore || <FormSubTitle>search results:</FormSubTitle>}
       <Searchul>
-      {/* {results && results.map((r, i) => r._id !== ignore ?? <VideoItem key={i} video={r} />)} */}
-      {results && results.map((r, i) => <VideoItem key={i} video={r} focusTopic={focusTopic}/>)}
+      {results && results.map((r, i) => r._id !== ignore ?? <VideoItem key={i} video={r} focusTopic={focusTopic}/>)}
       </Searchul>
     </>
   );
