@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 const ItemContainer = styled.div`
   display: flex;
   padding: 0.5rem 0.5rem;
@@ -73,7 +73,11 @@ const Chapter = styled.span`
   font-size: 0.8rem;
   border: 1px grey solid;
   border-radius: 5px;
-  &:hover {
+  &.active{
+    background: rgba(102, 171, 255, 0.8);
+    color: white;
+  }
+  &:hover{
     background: rgba(102, 171, 255, 0.8);
     color: white;
     transform: translateY(-3px);

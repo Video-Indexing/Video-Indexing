@@ -161,7 +161,7 @@ const useStyles = makeStyles((theme) => ({
   
   let count = 0;
 
-function MyVideoPlayer({setTopicVideos}) {
+function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
 
     function hmsToSecondsOnly(str) {
         var p = str.split(':'),
@@ -264,6 +264,7 @@ function MyVideoPlayer({setTopicVideos}) {
             {
                 setTopicVideos(res);
             });
+            setTopicFocus(currentTopic);
         }
         setState({ ...state, playing: !state.playing });
     };
@@ -470,7 +471,7 @@ function MyVideoPlayer({setTopicVideos}) {
           {/* <canvas ref={canvasRef} /> */}
         </Container>
       </>
-      
+      // <Subjects indexing={vide}/>
     );
   }
   export default MyVideoPlayer;
