@@ -64,6 +64,7 @@ def index_video(link):
     split_audio()
     results = whisper_results()
     # audio_results, classes = model_results(results)
+
     audio_results = gpt_index_video(results, my_subject_list)
     
     # print(audio_results)
