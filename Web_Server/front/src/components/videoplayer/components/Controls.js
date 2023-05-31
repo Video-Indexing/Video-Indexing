@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     bottom: 0,
     height: "100%",
-    background: "rgba(0,0,0,0.6)",
+    background: "rgba(0,0,0,0.3)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -170,7 +170,9 @@ function ValueLabelComponent(props) {
 
 const Controls = forwardRef(
   (
-    {   
+    {
+    //   currentTopic,
+      setCurrentTopic,     
       marks,
       onSeek,
       onSeekMouseDown,
@@ -206,6 +208,7 @@ const Controls = forwardRef(
                 closestMark = marks[i];
             }
         }
+        setCurrentTopic(closestMark.myLabel);
         return closestMark;
       }
     //   console.log(marks);
@@ -236,9 +239,17 @@ const Controls = forwardRef(
 
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
+    const HandlePlay = event => {
+        let name = event.target.className;
+        if(typeof name === 'string'){
+            if(name.includes('makeStyles-bottom') || name.includes('makeStyles-top'))
+            onPlayPause();
+        }
+        // console.log(name);
+    };
 
     return (
-      <div ref={ref} className={classes.controlsWrapper}>
+      <div ref={ref} className={classes.controlsWrapper} onClick={HandlePlay}>
         <div className={classes.top}>
             <div className={classes.title}>
             {/* vid 4 */}
@@ -266,7 +277,7 @@ const Controls = forwardRef(
                     onChange={onSeek}
                     onMouseDown={onSeekMouseDown}
                     onChangeCommitted={onSeekMouseUp}
-                    onDuration={onDuration}
+                    // onDuration={onDuration}
                     // markLabel={color:"white"}
                     // sx={{markLabel:{ color: "white" }}}
                     // classes={{ markLabel: classes.mark }}
@@ -432,6 +443,7 @@ const Controls = forwardRef(
 //     }, 10000);
 
 Controls.propTypes = {
+  setCurrentTopic: PropTypes.func,
   onSeek: PropTypes.func,
   onSeekMouseDown: PropTypes.func,
   onSeekMouseUp: PropTypes.func,

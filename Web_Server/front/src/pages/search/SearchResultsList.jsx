@@ -3,12 +3,12 @@ import { Searchul, Searchli } from './SearchResults.styled';
 import { FormSubTitle } from '../../utils/Form.styled';
 import VideoItem from './components/VideoItem';
 
-function SearchResultsList({ results }) {
+function SearchResultsList({ results, ignore, focusTopic }) {
   return (
     <>
-      <FormSubTitle>search results:</FormSubTitle>
+      {ignore || <FormSubTitle>search results:</FormSubTitle>}
       <Searchul>
-        {results && Array.isArray(results) && results.map((r,i) => <VideoItem key={i} video={r} />)}
+      {results && results.map((r, i) => r._id !== ignore ?? <VideoItem key={i} video={r} focusTopic={focusTopic}/>)}
       </Searchul>
     </>
   );
