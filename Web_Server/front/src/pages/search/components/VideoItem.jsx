@@ -11,6 +11,7 @@ import {
 } from './VideoItem.styled';
 import PlayButton from '../../../assets/icons/video.png';
 import { useNavigate } from 'react-router-dom';
+import ImageFromVideo from '../../../components/imagefromvideo/ImageFromVideo';
 
 const route = 'localhost:3000/';
 function VideoItem({ video, focusTopic }) {
@@ -37,7 +38,10 @@ function VideoItem({ video, focusTopic }) {
       onClick={() => window.location.replace(`playVideo/${video._id}`)}
     >
       <ImageContainer>
-        <VideoImage src={video.image} height={75} className='vid-img' />
+        {/* <VideoImage src={video.image} height={75} className='vid-img'>
+        </VideoImage> */}
+        <ImageFromVideo videoLink={video.url}/>
+
         <div className='middle'>
           <img src={PlayButton} id='play' alt='play-btn' />
         </div>
