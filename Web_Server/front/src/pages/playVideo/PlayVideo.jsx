@@ -3,6 +3,7 @@ import MyVideoPlayer from '../../components/videoplayer/MyVideoPlayer';
 import { FormContainer} from '../../utils/Form.styled';
 import SearchResultsList from '../search/SearchResultsList'
 import Subjects from './components/Subjects';
+import ImageFromVideo from '../../components/imagefromvideo/ImageFromVideo';
 function PlayVideo(){
     const [topicVideos, setTopicVideos] = useState([]);
     const[topic, setTopic] = useState();
@@ -28,7 +29,6 @@ function PlayVideo(){
             {topic && <Subjects currentTopic={topic}/>}
             {topicVideos && 
             <SearchResultsList results={topicVideos} ignore={() => getVideoID} focusTopic={topic}/>}
-
         </FormContainer>
     );
 }

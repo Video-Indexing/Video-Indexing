@@ -217,6 +217,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
         setTimeout(() => {
             document.querySelectorAll('iframe').forEach((element,index,array) => {
                         element.style.minHeight = '400px';
+                        element.style.pointerEvents = 'none';
                     });
         }, 1000);
     }, []);
