@@ -33,9 +33,24 @@ function VideoItem({ video, focusTopic }) {
     }
     return new Date(total * 1000).toISOString().slice(11, 19);
   }
+  function getTopicTime(indexing){
+    for(const key of Object.keys(indexing)){
+      if(indexing[key]== focusTopic){
+        return hmsToSecondsOnly(key.split("-")[0]);
+      }
+    }
+  }
   return (
     <ItemContainer
-      onClick={() => window.location.replace(`playVideo/${video._id}`)}
+      onClick={() => {
+        if(focusTopic){
+          let timeInSec = getTopicTime(video.indexing);
+          window.location.replace(`?seekTo=${timeInSec}`);
+        }
+        else
+          window.location.replace(`playVideo/${video._id}`);
+        }
+      }
     >
       <ImageContainer>
         {/* <VideoImage src={video.image} height={75} className='vid-img'>
