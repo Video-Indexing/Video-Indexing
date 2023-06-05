@@ -198,7 +198,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
     const classes = useStyles();
     const [showControls, setShowControls] = useState(false);
     const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split('?')[0];
-    const videoSeekTo = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split('?')[1].split("=")[1];
+    const seekToSentence = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split('?')[1];
     const [url,setUrl] = useState();
     const [currentTopic, setCurrentTopic] = useState();
     const [indexing, setIndexing] = useState();
@@ -213,9 +213,11 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
             setIndexing(testMarks);
             setUrl(myURL);
             console.log(myURL)
-            console.log(videoSeekTo);
-            if(videoSeekTo)
+            // console.log(videoSeekTo);
+            if(seekToSentence){
+                const videoSeekTo = seekToSentence.split("=")[1];
                 playerRef.current.seekTo(videoSeekTo);
+            }
         });
         // SearchVideosByTag("Points").then(res => console.log(res));
         setTimeout(() => {
