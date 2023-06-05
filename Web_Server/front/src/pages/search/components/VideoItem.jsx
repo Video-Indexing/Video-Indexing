@@ -43,12 +43,15 @@ function VideoItem({ video, focusTopic }) {
   return (
     <ItemContainer
       onClick={() => {
-        if(focusTopic){
-          let timeInSec = getTopicTime(video.indexing);
-          window.location.replace(`?seekTo=${timeInSec}`);
-        }
-        else
-          window.location.replace(`playVideo/${video._id}`);
+          if(focusTopic){
+            let timeInSec = getTopicTime(video.indexing);
+            console.log(video);
+            const url = window.location.origin + `/playVideo/${video._id}?seekTo=${timeInSec}`;
+            window.location.href = url;
+          }
+          else{
+            window.location.replace(`playVideo/${video._id}`);
+          }
         }
       }
     >
