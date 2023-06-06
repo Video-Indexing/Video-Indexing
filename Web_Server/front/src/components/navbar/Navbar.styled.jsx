@@ -72,7 +72,7 @@ const NavLink = styled.button`
   }
   &.current {
     color: white;
-    background-color: #bad6fda2;
+    background-color: #94b6e66d;
   }
   &.current:hover a {
     color: white;
