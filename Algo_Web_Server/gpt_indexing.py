@@ -61,7 +61,8 @@ def send_prompt(subjects,chunks,api_key):
         else:
             json_result[i] = results[i]
             
-    json_result = remove_unknown(json_result)
+    # json_result = remove_unknown(json_result)
+    json_result = error_fixing(json_result,subjects)
 
     return json_result
 
@@ -103,6 +104,27 @@ def remove_unknown(results: dict):
             new_results[key] = new_results[str(int(key)-1)]
             
     return new_results
+
+
+def error_fixing(results: dict,subjects_list: list):
+    new_results = results.copy()
+    keys = list(results.keys())
+    index = 1
+    # Fix if the first result in not found
+    if new_results[keys[index-1]] not in subjects_list:
+        while new_results[keys[index-1]] not in subjects_list:
+            if index == len(results):
+                raise Exception("Not found a true subject in the JSON.")
+            index += 1
+        new_results[keys[0]] = results[keys[index-1]]
+        
+    for key in keys:
+        index = keys.index(key)
+        if new_results[key] not in subjects_list:
+            new_results[key] = new_results[keys[index-1]]
+        
+    return new_results
+
 
             
 
