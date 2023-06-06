@@ -7,7 +7,7 @@ import {
 } from './Navbar.styled';
 import Gear from '../../assets/icons/settings.png';
 import Profile from '../../assets/icons/profile.png';
-import Logo from '../../assets/icons/logo.png';
+import Logo from '../../assets/images/logo.png';
 import { Outlet, Link } from 'react-router-dom';
 
 function Navbar() {
@@ -43,7 +43,9 @@ function Navbar() {
             className='nav-logo'
             src={Logo}
             alt='logo'
-            height={45}
+            width={50}
+            height={48}
+            style={{ margin: '0 0.75rem' }}
             onClick={() => window.location.replace(`home`)}
           />
           <Pages pages={['home', 'search', 'upload']} />

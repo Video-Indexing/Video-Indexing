@@ -22,8 +22,26 @@ const NavContainer = styled.div`
   & .nav-gear:hover {
     transform: scale(1.1) rotate(90deg);
   }
-  & .nav-logo {
-    margin: 0.25rem;
+  & .nav-logo:hover {
+    animation: tilt-shaking 1s;
+  }
+
+  @keyframes tilt-shaking {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(5deg);
+    }
+    50% {
+      transform: rotate(0eg);
+    }
+    75% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 `;
 
