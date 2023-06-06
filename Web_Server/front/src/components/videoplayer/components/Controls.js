@@ -172,7 +172,7 @@ const Controls = forwardRef(
   (
     {
     //   currentTopic,
-      setCurrentTopic,     
+    //   setCurrentTopic,     
       marks,
       onSeek,
       onSeekMouseDown,
@@ -208,7 +208,7 @@ const Controls = forwardRef(
                 closestMark = marks[i];
             }
         }
-        setCurrentTopic(closestMark.myLabel);
+        // setCurrentTopic(closestMark.myLabel);
         return closestMark;
       }
     //   console.log(marks);
