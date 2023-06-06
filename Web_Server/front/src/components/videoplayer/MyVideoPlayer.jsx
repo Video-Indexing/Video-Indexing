@@ -178,9 +178,9 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
         const marks = [];
         let total = 0;
         for(const[key,myVal] of Object.entries(indexing)){
-            const start = hmsToSecondsOnly(key.split("-")[0]);
-            if(start > total){
-                total = start
+            const end = hmsToSecondsOnly(key.split("-")[1]);
+            if(end > total){
+                total = end;
             }
         }
         for(const[key,myVal] of Object.entries(indexing)){
@@ -192,12 +192,14 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
         return marks;
     }
     const setCurrentTopicHandler = (topic) => {
+        // console.log("Updating topic");
         setCurrentTopic(topic);
     }
 
     const classes = useStyles();
     const [showControls, setShowControls] = useState(false);
-    const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    const videoID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split('?')[0];
+    const seekToSentence = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split('?')[1];
     const [url,setUrl] = useState();
     const [currentTopic, setCurrentTopic] = useState();
     const [indexing, setIndexing] = useState();
@@ -212,6 +214,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
             setIndexing(testMarks);
             setUrl(myURL);
             console.log(myURL)
+            // console.log(videoSeekTo);
         });
         // SearchVideosByTag("Points").then(res => console.log(res));
         setTimeout(() => {
@@ -219,6 +222,11 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
                         element.style.minHeight = '400px';
                         element.style.pointerEvents = 'none';
                     });
+                    if(seekToSentence){
+                        const videoSeekTo = seekToSentence.split("=")[1];
+                        playerRef.current.seekTo(videoSeekTo);
+                    }
+        
         }, 1000);
     }, []);
     // const [count, setCount] = useState(0);
@@ -278,7 +286,22 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
       playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
     };
   
+    function SetClosestTopic(value,marks){
+        let closestMark = marks[0];
+        let smallestDist = 100;
+        for (let i = 0; i < marks.length; i++) {
+            if(smallestDist > Math.abs(marks[i].value - value) && marks[i].value <= value){
+                smallestDist = Math.abs(marks[i].value - value);
+                closestMark = marks[i];
+            }
+        }
+        // console.log(closestMark.myLabel);
+        setCurrentTopic(closestMark.myLabel);
+      }
+
     const handleProgress = (changeState) => {
+        // console.log("Progress");
+      SetClosestTopic(state.played * 100,indexing);
       if (count > 3) {
         controlsRef.current.style.visibility = "hidden";
         count = 0;
@@ -293,6 +316,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
   
     const handleSeekChange = (e, newValue) => {
     //   console.log({ newValue });
+    
       setState({ ...state, played: parseFloat(newValue / 100) });
     };
   
@@ -442,7 +466,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
             <Controls
             ref={controlsRef}
             // currentTopic = {currentTopic}
-            setCurrentTopic = {setCurrentTopic}
+            // setCurrentTopic = {setCurrentTopicHandler}
             marks = {indexing}
             onSeek={handleSeekChange}
             onSeekMouseDown={handleSeekMouseDown}
