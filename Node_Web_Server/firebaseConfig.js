@@ -77,10 +77,21 @@ async function searchVideo(videoCollection,queryText){
 }
 
 
-async function createVideo(videoCollection,videoObj){
-  return await videoCollection.doc()
-    .set(videoObj);
+// async function createVideo(videoCollection,videoObj){
+//   return await videoCollection.doc()
+//     .set(videoObj);
+// }
+
+async function createVideo(videoCollection, videoObj) {
+  const docRef = videoCollection.doc();
+  const videoId = docRef.id;
+  
+  // Add the ID field to the video object
+  const videoWithId = { ...videoObj, id: videoId };
+  
+  await docRef.set(videoWithId);
 }
+
 // module.exports = book;
 // module.exports = db;
 module.exports.videoCollection = videoCollection;
