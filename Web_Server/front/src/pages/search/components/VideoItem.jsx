@@ -27,9 +27,9 @@ function VideoItem({ video, focusTopic }) {
   function getDuration(indexing){
     let total = 0;
     for(const key of Object.keys(indexing)){
-        const start = hmsToSecondsOnly(key.split("-")[0]);
-        if(start > total)
-            total = start;
+        const end = hmsToSecondsOnly(key.split("-")[1]);
+        if(end > total)
+            total = end;
     }
     return new Date(total * 1000).toISOString().slice(11, 19);
   }
