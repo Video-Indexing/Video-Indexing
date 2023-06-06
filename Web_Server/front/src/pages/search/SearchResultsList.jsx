@@ -4,17 +4,16 @@ import { FormSubTitle } from '../../utils/Form.styled';
 import VideoItem from './components/VideoItem';
 
 function SearchResultsList({ results, ignore, focusTopic }) {
+  console.log(ignore);
   return (
     <>
-      {ignore || <FormSubTitle>search results:</FormSubTitle>}
+      <FormSubTitle>{`${ignore ? '' : 'search results:'}`}</FormSubTitle>
       <Searchul>
-        {results &&
-          results.map(
-            (r, i) =>
-              r._id !== ignore && (
-                <VideoItem key={i} video={r} focusTopic={focusTopic} />
-              )
-          )}
+        {results?.map((r, i) =>
+          r.id !== ignore ? (
+            <VideoItem key={i} video={r} focusTopic={focusTopic} />
+          ) : null
+        )}
       </Searchul>
     </>
   );
