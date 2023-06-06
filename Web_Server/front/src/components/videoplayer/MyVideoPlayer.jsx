@@ -192,6 +192,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
         return marks;
     }
     const setCurrentTopicHandler = (topic) => {
+        // console.log("Updating topic");
         setCurrentTopic(topic);
     }
 
@@ -214,10 +215,6 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
             setUrl(myURL);
             console.log(myURL)
             // console.log(videoSeekTo);
-            if(seekToSentence){
-                const videoSeekTo = seekToSentence.split("=")[1];
-                playerRef.current.seekTo(videoSeekTo);
-            }
         });
         // SearchVideosByTag("Points").then(res => console.log(res));
         setTimeout(() => {
@@ -225,6 +222,11 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
                         element.style.minHeight = '400px';
                         element.style.pointerEvents = 'none';
                     });
+                    if(seekToSentence){
+                        const videoSeekTo = seekToSentence.split("=")[1];
+                        playerRef.current.seekTo(videoSeekTo);
+                    }
+        
         }, 1000);
     }, []);
     // const [count, setCount] = useState(0);
@@ -284,7 +286,22 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
       playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
     };
   
+    function SetClosestTopic(value,marks){
+        let closestMark = marks[0];
+        let smallestDist = 100;
+        for (let i = 0; i < marks.length; i++) {
+            if(smallestDist > Math.abs(marks[i].value - value) && marks[i].value <= value){
+                smallestDist = Math.abs(marks[i].value - value);
+                closestMark = marks[i];
+            }
+        }
+        // console.log(closestMark.myLabel);
+        setCurrentTopic(closestMark.myLabel);
+      }
+
     const handleProgress = (changeState) => {
+        // console.log("Progress");
+      SetClosestTopic(state.played * 100,indexing);
       if (count > 3) {
         controlsRef.current.style.visibility = "hidden";
         count = 0;
@@ -299,6 +316,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
   
     const handleSeekChange = (e, newValue) => {
     //   console.log({ newValue });
+    
       setState({ ...state, played: parseFloat(newValue / 100) });
     };
   
@@ -448,7 +466,7 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
             <Controls
             ref={controlsRef}
             // currentTopic = {currentTopic}
-            setCurrentTopic = {setCurrentTopic}
+            // setCurrentTopic = {setCurrentTopicHandler}
             marks = {indexing}
             onSeek={handleSeekChange}
             onSeekMouseDown={handleSeekMouseDown}
