@@ -33,12 +33,33 @@ const NavContentContainer = styled.div`
   border-bottom: 5px solid #d0dae8;
 `;
 
-const NavLink = styled.p`
-  padding: 0 5px;
-  color: #838383;
+const NavLink = styled.button`
+  text-transform: capitalize;
+  padding: 5px 7px;
+  border: none;
+  border-radius: 5px;
   &:hover {
-    text-decoration: underline;
+    background-color: #e6e6e697;
+    transform: translateY(-5px) scale(1.05);
   }
+  & a,
+  a:visited {
+    font-family: 'Roboto Slab';
+    color: inherit;
+    text-decoration: none;
+  }
+  &:hover a,
+  &:hover a:visited {
+    color: #94b6e6;
+  }
+  &.current {
+    color: white;
+    background-color: #bad6fda2;
+  }
+  &.current:hover a {
+    color: white;
+  }
+  transition: 0.25s ease-in-out;
 `;
 
 const NavLinkContainer = styled.div`

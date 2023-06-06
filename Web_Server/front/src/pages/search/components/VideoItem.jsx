@@ -73,14 +73,20 @@ function VideoItem({ video, focusTopic }) {
           chapters:
           <br />
           {video.indexing &&
-            video.tags.map((c, i) => (
-              <Chapter
-                className={`${focusTopic === c ? 'active' : ''}`}
-                key={i}
-              >
-                {c}
-              </Chapter>
-            ))}
+            video.tags.map(
+              (c, i) =>
+                c !== undefined &&
+                c !== null &&
+                c !== 'N/A' &&
+                c !== '' && (
+                  <Chapter
+                    className={`${focusTopic === c ? 'active' : ''}`}
+                    key={i}
+                  >
+                    {c}
+                  </Chapter>
+                )
+            )}
         </ItemChapters>
       </VideoDescription>
     </ItemContainer>

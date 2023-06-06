@@ -11,6 +11,30 @@ import Logo from '../../assets/icons/logo.png';
 import { Outlet, Link } from 'react-router-dom';
 
 function Navbar() {
+  const selected = () => {
+    const split = window.location.href.split('/');
+    return split[split.length - 1];
+  };
+  const [page, setPage] = React.useState(selected());
+  function Pages({ pages }) {
+    return (
+      <>
+        {pages.map((p, index) => {
+          return (
+            <NavLink
+              key={index}
+              className={`${p === page && 'current'} shrink-border`}
+            >
+              <Link to={p} key={p + index} onClick={() => setPage(p)}>
+                {p}
+              </Link>
+            </NavLink>
+          );
+        })}
+        <Outlet />
+      </>
+    );
+  }
   return (
     <NavContentContainer>
       <NavContainer>
@@ -45,20 +69,4 @@ function Navbar() {
   );
 }
 
-function Pages({ pages }) {
-  return (
-    <>
-      {pages.map((page, index) => {
-        return (
-          <NavLink key={index}>
-            <Link to={page} key={page + index}>
-              {page}
-            </Link>
-          </NavLink>
-        );
-      })}
-      <Outlet />
-    </>
-  );
-}
 export default Navbar;
