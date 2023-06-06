@@ -17,19 +17,20 @@ const route = 'localhost:3000/';
 function VideoItem({ video, focusTopic }) {
   const nav = useNavigate();
   function hmsToSecondsOnly(str) {
-    let p = str.split(':'), s = 0, m = 1;
+    let p = str.split(':'),
+      s = 0,
+      m = 1;
     while (p.length > 0) {
-        s += m * parseInt(p.pop(), 10);
-        m *= 60;
+      s += m * parseInt(p.pop(), 10);
+      m *= 60;
     }
     return s;
   }
-  function getDuration(indexing){
+  function getDuration(indexing) {
     let total = 0;
-    for(const key of Object.keys(indexing)){
-        const start = hmsToSecondsOnly(key.split("-")[0]);
-        if(start > total)
-            total = start;
+    for (const key of Object.keys(indexing)) {
+      const start = hmsToSecondsOnly(key.split('-')[0]);
+      if (start > total) total = start;
     }
     return new Date(total * 1000).toISOString().slice(11, 19);
   }
@@ -40,7 +41,7 @@ function VideoItem({ video, focusTopic }) {
       <ImageContainer>
         {/* <VideoImage src={video.image} height={75} className='vid-img'>
         </VideoImage> */}
-        <ImageFromVideo videoLink={video.url}/>
+        <ImageFromVideo videoLink={video.url} />
 
         <div className='middle'>
           <img src={PlayButton} id='play' alt='play-btn' />
@@ -53,7 +54,14 @@ function VideoItem({ video, focusTopic }) {
           chapters:
           <br />
           {video.indexing &&
-            video.tags.map((c, i) => <Chapter className={`${focusTopic===c ? "active" : ""}`} key={i}>{c}</Chapter>)}
+            video.tags.map((c, i) => (
+              <Chapter
+                className={`${focusTopic === c ? 'active' : ''}`}
+                key={i}
+              >
+                {c}
+              </Chapter>
+            ))}
         </ItemChapters>
       </VideoDescription>
     </ItemContainer>

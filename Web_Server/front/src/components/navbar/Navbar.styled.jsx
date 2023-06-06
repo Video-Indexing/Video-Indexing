@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const NavContainer = styled.div`
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,15 +28,14 @@ const NavContainer = styled.div`
 `;
 
 const NavContentContainer = styled.div`
-  width: 100vw;
-
-  border-bottom: 1px solid #434343;
+  width: 100%;
+  height: 75px;
+  border-bottom: 5px solid #d0dae8;
 `;
 
 const NavLink = styled.p`
   padding: 0 5px;
   color: #838383;
-
   &:hover {
     text-decoration: underline;
   }
