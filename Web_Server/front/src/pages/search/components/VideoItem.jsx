@@ -17,49 +17,50 @@ const route = 'localhost:3000/';
 function VideoItem({ video, focusTopic }) {
   const nav = useNavigate();
   function hmsToSecondsOnly(str) {
-    let p = str.split(':'), s = 0, m = 1;
+    let p = str.split(':'),
+      s = 0,
+      m = 1;
     while (p.length > 0) {
-        s += m * parseInt(p.pop(), 10);
-        m *= 60;
+      s += m * parseInt(p.pop(), 10);
+      m *= 60;
     }
     return s;
   }
-  function getDuration(indexing){
+  function getDuration(indexing) {
     let total = 0;
-    for(const key of Object.keys(indexing)){
-        const end = hmsToSecondsOnly(key.split("-")[1]);
-        if(end > total)
-            total = end;
+    for (const key of Object.keys(indexing)) {
+      const end = hmsToSecondsOnly(key.split('-')[1]);
+      if (end > total) total = end;
     }
     return new Date(total * 1000).toISOString().slice(11, 19);
   }
-  function getTopicTime(indexing){
-    for(const key of Object.keys(indexing)){
-      if(indexing[key]== focusTopic){
-        return hmsToSecondsOnly(key.split("-")[0]);
+  function getTopicTime(indexing) {
+    for (const key of Object.keys(indexing)) {
+      if (indexing[key] == focusTopic) {
+        return hmsToSecondsOnly(key.split('-')[0]);
       }
     }
   }
   return (
     <ItemContainer
       onClick={() => {
-          if(focusTopic){
-            let timeInSec = getTopicTime(video.indexing);
-            // console.log(timeInSec);
-            // console.log(video);
-            const url = window.location.origin + `/playVideo/${video.id}?seekTo=${timeInSec}`;
-            window.location.href = url;
-          }
-          else{
-            window.location.replace(`playVideo/${video.id}`);
-          }
+        if (focusTopic) {
+          let timeInSec = getTopicTime(video.indexing);
+          // console.log(timeInSec);
+          // console.log(video);
+          const url =
+            window.location.origin +
+            `/playVideo/${video.id}?seekTo=${timeInSec}`;
+          window.location.href = url;
+        } else {
+          window.location.replace(`playVideo/${video.id}`);
         }
-      }
+      }}
     >
       <ImageContainer>
         {/* <VideoImage src={video.image} height={75} className='vid-img'>
         </VideoImage> */}
-        <ImageFromVideo videoLink={video.url}/>
+        <ImageFromVideo videoLink={video.url} />
 
         <div className='middle'>
           <img src={PlayButton} id='play' alt='play-btn' />
@@ -72,7 +73,14 @@ function VideoItem({ video, focusTopic }) {
           chapters:
           <br />
           {video.indexing &&
-            video.tags.map((c, i) => <Chapter className={`${focusTopic===c ? "active" : ""}`} key={i}>{c}</Chapter>)}
+            video.tags.map((c, i) => (
+              <Chapter
+                className={`${focusTopic === c ? 'active' : ''}`}
+                key={i}
+              >
+                {c}
+              </Chapter>
+            ))}
         </ItemChapters>
       </VideoDescription>
     </ItemContainer>
