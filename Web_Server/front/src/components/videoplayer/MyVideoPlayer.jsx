@@ -178,9 +178,9 @@ function MyVideoPlayer({setTopicVideos, setTopicFocus}) {
         const marks = [];
         let total = 0;
         for(const[key,myVal] of Object.entries(indexing)){
-            const start = hmsToSecondsOnly(key.split("-")[0]);
-            if(start > total){
-                total = start
+            const end = hmsToSecondsOnly(key.split("-")[1]);
+            if(end > total){
+                total = end;
             }
         }
         for(const[key,myVal] of Object.entries(indexing)){

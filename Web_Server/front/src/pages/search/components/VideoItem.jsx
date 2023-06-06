@@ -45,12 +45,13 @@ function VideoItem({ video, focusTopic }) {
       onClick={() => {
           if(focusTopic){
             let timeInSec = getTopicTime(video.indexing);
-            console.log(video);
-            const url = window.location.origin + `/playVideo/${video._id}?seekTo=${timeInSec}`;
+            // console.log(timeInSec);
+            // console.log(video);
+            const url = window.location.origin + `/playVideo/${video.id}?seekTo=${timeInSec}`;
             window.location.href = url;
           }
           else{
-            window.location.replace(`playVideo/${video._id}`);
+            window.location.replace(`playVideo/${video.id}`);
           }
         }
       }
