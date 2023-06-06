@@ -116,3 +116,4 @@ async function sendToAlgoServer(url, data) {
         console.error(error);
     });
   }
+
