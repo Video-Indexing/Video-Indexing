@@ -7,6 +7,7 @@ import os
 from sys import platform
 from images_reco import recognize_new_image, mse
 from gpt_indexing import gpt_index_video
+import configparser
 
 content_path = os.getcwd()
 
@@ -37,11 +38,6 @@ if not os.path.exists(images_path):
 if not os.path.exists(audios_path):
     os.makedirs(audios_path)
 
-# subject_list = ['Backpropagation', 'Convolutional networks', 'Cross-entropy', 'Extension beyond sigmoid neurons',
-#                 'Gradient descent - general', 'Network’s hyper-parameters', 'Overfitting and regularization',
-#                 'Perceptrons', 'Sigmoid', 'Softmax', 'Stochastic gradient descent',
-#                 'The architecture of neural networks', 'The vanishing gradient problem', 'Weight initialization', 'KNN']
-# "Introduction", "Summary",
 
 my_subject_list = ["Points", "Lines", "Planes","Midpoint", "Distance Formulas",
                    "Classify Angles", "Classify Polygons", "Perimeter", "Circumference", "Area",
@@ -59,13 +55,22 @@ def download_vid(link):
     video_len = VideoDownloader.download_video()
 
 
-def index_video(link):
+def index_video(link,topic = "Geometry"):
+    #############################################
+    topic = 'Biology'
+    #############################################
+    
+    # auto = auto_from_function
     download_vid(link)
     split_audio()
     results = whisper_results()
     # audio_results, classes = model_results(results)
+    
 
-    audio_results = gpt_index_video(results, my_subject_list)
+    # audio_results = gpt_index_video(results, my_subject_list,auto)
+    # my_subject_list = get_topic_from_config(topic) 
+    # audio_results = gpt_index_video(results, my_subject_list)
+    audio_results = gpt_index_video(results,topic)
     
     # print(audio_results)
     # images_results = recognize_images()
@@ -294,3 +299,8 @@ def convert_final_indexing(final_indexing):
         # del final_indexing[key]
         
     return final_indexing
+
+
+    
+    
+    
