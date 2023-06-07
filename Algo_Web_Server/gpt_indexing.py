@@ -25,7 +25,7 @@ chunkk = "And we know it looks something like this, but when you identify a line
 
 
 def send_prompt(subjects,chunks,api_key,topic):
-    # new_subject = True
+    ## new_subject = True
     # main_subject = 'Biology'
     
     # new_subject_list = None
