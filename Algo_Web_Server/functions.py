@@ -57,7 +57,7 @@ def download_vid(link):
 
 def index_video(link,topic = "Geometry"):
     #############################################
-    topic = 'Biology'
+    # topic = 'Biology'
     #############################################
     
     # auto = auto_from_function
@@ -70,14 +70,17 @@ def index_video(link,topic = "Geometry"):
     # audio_results = gpt_index_video(results, my_subject_list,auto)
     # my_subject_list = get_topic_from_config(topic) 
     # audio_results = gpt_index_video(results, my_subject_list)
-    audio_results = gpt_index_video(results,topic)
+    audio_results, is_new_topic = gpt_index_video(results,topic)
     
     # print(audio_results)
     # images_results = recognize_images()
     # final_index = final_indexing(audio_results, images_results)
     final_gpt_indexing = gpt_final_indexing(audio_results)
     os.remove(video_path)
-    return final_gpt_indexing
+    topic_list = None
+    if is_new_topic:
+        topic_list = get_topics_list_from_config()
+    return final_gpt_indexing, topic_list
 
 
 def split_audio():
@@ -301,6 +304,18 @@ def convert_final_indexing(final_indexing):
     return final_indexing
 
 
-    
+def get_topics_list_from_config():
+    path = "subjects_config.ini"
+    content_path = os.getcwd()
+    config_file_name = ""
+    if platform == "win32":
+        config_file_name = content_path + f"\Algo_Web_Server\{path}"
+    else:
+        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+    config_file_name = os.path.normpath(config_file_name)
+    config = configparser.ConfigParser()
+    config.read(config_file_name)
+    sections = config.sections()
+    return sections
     
     

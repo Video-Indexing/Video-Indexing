@@ -114,18 +114,19 @@ def send_prompt(subjects,chunks,api_key,topic):
 
 
 
+
 def gpt_index_video(chunks:list,topic:str):
     subjects = None
     main_subject = topic
-    
-    if does_subject_exist(main_subject) == False:
-        print('The subject does NOT exist')
+    is_new_subject = does_topic_exist(main_subject)
+    if is_new_subject == False:
+        print('The topic does NOT exist')
         subjects = get_new_subject_list(main_subject)
         subjects = extract_inner_subjects(subjects)
         write_new_subject(main_subject,subjects,'subjects_config.ini')
         time.sleep(70)
     else:
-        print('The subject does exist')
+        print('The topic does exist')
         subjects = get_topic_from_config(main_subject)
             
     dict_list = []
@@ -151,8 +152,7 @@ def gpt_index_video(chunks:list,topic:str):
         api_counter += 1
     print(results_dict)
         
-    return results_dict
-
+    return results_dict, is_new_subject
 
 
 def remove_unknown(results: dict):
@@ -243,8 +243,9 @@ def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'
     # Write the updated configuration to the INI file
     with open(config_file_name, 'w') as configfile:
         config.write(configfile)
-        
-def does_subject_exist(topic: str,path='subjects_config.ini'):
+
+
+def does_topic_exist(topic: str,path='subjects_config.ini'):
     topic = topic.lower()
     content_path = os.getcwd()
     config_file_name = ""
@@ -252,6 +253,7 @@ def does_subject_exist(topic: str,path='subjects_config.ini'):
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
         config_file_name = content_path + f"/Algo_Web_Server/{path}"
+    config_file_name = os.path.normpath(config_file_name)
     config = configparser.ConfigParser()
 
     config.read(config_file_name)
@@ -268,7 +270,7 @@ def get_topic_from_config(topic:str):
         config_file_name = content_path + "\Algo_Web_Server\subjects_config.ini"
     else:
         config_file_name = content_path + "/Algo_Web_Server/subjects_config.ini"
-    
+    config_file_name = os.path.normpath(config_file_name)
     config_file = open(config_file_name, "r")
     cp = configparser.ConfigParser()
     cp.read_file(config_file)
@@ -300,4 +302,4 @@ def clean_json_string(json_str):
         print(f"Error parsing JSON: {str(e)}")
         return None
 
-
+write_new_subject("ckndsnjk", [])

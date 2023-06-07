@@ -60,10 +60,14 @@ def start_server(port, process_func):
 def send_results_to_web_server(data):
     url = data["link"]
     name = data["name"]
-    # topic = data["topic"]
-    # indexing = index_video(url,topic)
-    indexing = index_video(url)
-    params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
+    topic = data["topic"]
+    indexing, topic_list = index_video(url, topic)
+    params = None
+    if topic_list is None:
+        params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
+    else:
+        params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values())),
+                  "topics": topic_list}
     print(params)
     headers = {'Content-type': 'application/json'}
     response = requests.post(WEB_SERVER_FULL_URL, data=json.dumps(params), headers=headers)
