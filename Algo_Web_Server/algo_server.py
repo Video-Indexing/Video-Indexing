@@ -60,6 +60,8 @@ def start_server(port, process_func):
 def send_results_to_web_server(data):
     url = data["link"]
     name = data["name"]
+    # topic = data["topic"]
+    # indexing = index_video(url,topic)
     indexing = index_video(url)
     params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
     print(params)

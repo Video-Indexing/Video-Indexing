@@ -10,3 +10,4 @@ tensorflow
 Keras-Applications
 Keras-Preprocessing
 openai
+configparser
