@@ -1,52 +1,114 @@
 import React from 'react';
-import { Section, SectionsContainer } from './Home.styled';
-import Section1BG from '../../assets/backgrounds/section-1.jpg';
-import Section2BG from '../../assets/backgrounds/section-2.jpg';
+import {
+  Section,
+  SectionsContainer,
+  Paragraph,
+  TextContainer,
+} from './Home.styled';
+import Section11BG from '../../assets/backgrounds/section1.jpg';
+import Section22BG from '../../assets/backgrounds/section2.jpg';
 import Statistics1 from '../../assets/backgrounds/statistics1.svg';
 import Statistics2 from '../../assets/backgrounds/statistics2.svg';
 import Statistics3 from '../../assets/backgrounds/statistics3.svg';
-import Footer from '../../components/footer/Footer';
+import GoSearchButton from './components/GoSearchButton';
+import './Home.css';
 
 function Home() {
+  window.addEventListener('scroll', reveal);
+  function reveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    for (let i = 0; i < reveals.length; i++) {
+      const windowHeight = window.innerHeight;
+      const elementTop = reveals[i].getBoundingClientRect().top;
+      const elementVisible = 150;
+
+      if (elementTop < windowHeight - elementVisible) {
+        reveals[i].classList.add('active');
+      }
+    }
+    return reveals;
+  }
+  React.useEffect(() => {
+    const reveals = reveal();
+    reveals[0].classList.add('active');
+  });
   return (
     <>
       <SectionsContainer>
-        <Section bg={'#F284FF'}>
-          <div className='text'>
-            <p>hello</p>
-          </div>
-          <img src={Section1BG} />
+        <Section bg={'#FF8C22'}>
+          <TextContainer className='text reveal'>
+            <h1>What we're all about?</h1>
+            <Paragraph>
+              Introducing our cutting-edge video indexing service designed to
+              revolutionize your learning experience! <br /> With our advanced
+              technology, you can easily search and access relevant video
+              content in mere seconds, allowing you to focus on what truly
+              matters - learning and expanding your knowledge.
+            </Paragraph>
+          </TextContainer>
+          <img src={Section11BG} className='image-section' />
         </Section>
-        <Seperator primary={'#F284FF'} secondary={'#ed4bff'} />
+        <Seperator primary={'#FF8C22'} secondary={'#e67a40'} />
         <Section
           bg={'#F2F2F2'}
           style={{ padding: '5%', transform: 'translateY(-10%)', zIndex: '-1' }}
         >
-          <Statistics />
-          <div className='text'>
-            <p>hello</p>
+          <div
+            className='reveal reveal1'
+            style={{ minWidth: '500px', minHeight: '350px' }}
+          >
+            <Statistics />
           </div>
+          <Paragraph className='text reveal black'>
+            Our indexing system is lightning-fast, providing you with fast
+            <br />
+            results and an intuitive user interface that is both user-friendly
+            <br />
+            and visually stunning. Whether you're a student, teacher, or
+            <br />
+            lifelong learner <br /> our video indexing service is the ultimate
+            tool for unlocking <br />
+            the full potential of online video content.
+          </Paragraph>
         </Section>
         <div style={{ transform: 'rotate(180deg)' }}>
-          <Seperator primary={'#DEEAFA'} secondary={'#d0dae8'} />
+          <Seperator primary={'#84CEC5'} secondary={'#7fbcc1'} />
         </div>
-        <Section bg={'#DEEAFA'}>
-          <img src={Section2BG} width={750} height={350} />
-          <div className='text'>
-            <p>hello</p>
-          </div>
+        <Section bg={'#84CEC5'}>
+          <TextContainer className='text reveal'>
+            <h1>Our Search Enging</h1>
+            <Paragraph>
+              Discover a world of limitless knowledge with our search engine.
+              <br />
+              Click the button below to start exploring.
+              <br /> It's easy and simple, you'll be prompted with other videos
+              that you might like or find interesting according to your current
+              subject
+            </Paragraph>
+            <div className='reveal reveal2'>
+              <GoSearchButton>Start Searching</GoSearchButton>
+            </div>
+          </TextContainer>
+          <img className='image-section' src={Section22BG} />
         </Section>
-        <Seperator primary={'#DEEAFA'} secondary={'#d0dae8'} />
+        <Seperator primary={'#84CEC5'} secondary={'#7fbcc1'} />
         <Section
           bg={'#F2F2F2'}
           style={{ padding: '5%', transform: 'translateY(-10%)', zIndex: '-1' }}
         >
-          <div className='text'>
-            <p>hello</p>
-          </div>
+          <Paragraph className='text reveal black'>
+            Our indexing system is lightning-fast, providing you with fast
+            <br />
+            results and an intuitive user interface that is both user-friendly
+            <br />
+            and visually stunning. Whether you're a student, teacher, or
+            <br />
+            lifelong learner <br /> our video indexing service is the ultimate
+            tool for unlocking <br />
+            the full potential of online video content.
+          </Paragraph>
         </Section>
       </SectionsContainer>
-      <Footer />
     </>
   );
 }
@@ -55,7 +117,7 @@ function Seperator({ primary, secondary }) {
   return (
     <svg
       style={{ transform: 'translateY(-1%)' }}
-      class='separator'
+      className='separator'
       width='100%'
       height='120'
       viewBox='0.1 0.1 180 40'

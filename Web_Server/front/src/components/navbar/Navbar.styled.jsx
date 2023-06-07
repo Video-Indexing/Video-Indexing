@@ -6,8 +6,9 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   & * {
-    margin: 0 0.25rem;
+    margin: 0 0.5rem;
     cursor: pointer;
   }
   & .nav-profile {
@@ -22,8 +23,26 @@ const NavContainer = styled.div`
   & .nav-gear:hover {
     transform: scale(1.1) rotate(90deg);
   }
-  & .nav-logo {
-    margin: 0.25rem;
+  & .nav-logo:hover {
+    animation: tilt-shaking 1s;
+  }
+
+  @keyframes tilt-shaking {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(5deg);
+    }
+    50% {
+      transform: rotate(0eg);
+    }
+    75% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 `;
 
@@ -33,12 +52,33 @@ const NavContentContainer = styled.div`
   border-bottom: 5px solid #d0dae8;
 `;
 
-const NavLink = styled.p`
-  padding: 0 5px;
-  color: #838383;
+const NavLink = styled.button`
+  text-transform: capitalize;
+  padding: 0.75em 1.25em;
+  border: none;
+  border-radius: 5px;
   &:hover {
-    text-decoration: underline;
+    background-color: #e6e6e697;
+    transform: translateY(-5px) scale(1.05);
   }
+  & a,
+  a:visited {
+    font-family: 'Roboto Slab';
+    color: inherit;
+    text-decoration: none;
+  }
+  &:hover a,
+  &:hover a:visited {
+    color: #94b6e6;
+  }
+  &.current {
+    color: white;
+    background-color: #94b6e6d8;
+  }
+  &.current:hover a {
+    color: white;
+  }
+  transition: 0.25s ease-in-out;
 `;
 
 const NavLinkContainer = styled.div`
