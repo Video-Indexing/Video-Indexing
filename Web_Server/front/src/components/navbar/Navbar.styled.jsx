@@ -6,8 +6,9 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   & * {
-    margin: 0 0.25rem;
+    margin: 0 0.5rem;
     cursor: pointer;
   }
   & .nav-profile {
@@ -53,7 +54,7 @@ const NavContentContainer = styled.div`
 
 const NavLink = styled.button`
   text-transform: capitalize;
-  padding: 5px 7px;
+  padding: 0.75em 1.25em;
   border: none;
   border-radius: 5px;
   &:hover {
@@ -72,7 +73,7 @@ const NavLink = styled.button`
   }
   &.current {
     color: white;
-    background-color: #94b6e66d;
+    background-color: #94b6e6d8;
   }
   &.current:hover a {
     color: white;

@@ -5,7 +5,6 @@ import Signup from './pages/signup/Signup.jsx';
 import Search from './pages/search/Search.jsx';
 import { useState } from 'react';
 import { Routes, Route, BrowserRouter, Link } from 'react-router-dom';
-import Homepage from './pages/upload/home/Homepage.jsx';
 import PlayVideo from './pages/playVideo/PlayVideo.jsx';
 import Home from './pages/home/Home.jsx';
 import styled from 'styled-components';
