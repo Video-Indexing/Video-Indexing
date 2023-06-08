@@ -6,6 +6,7 @@ const firebaseService = require('./firebaseConfig');
 const bodyParser = require('body-parser');
 const { json } = require('stream/consumers');
 const axios = require('axios');
+const { topic } = require('firebase-functions/v1/pubsub');
 
 require('dotenv').config()
 const app = express();
@@ -52,13 +53,29 @@ app.post("/uploadVideo", (req, res) => {
 });
 
 //algo response
-app.post("/uploadVideoAlgo",(req, res) => {
+app.post("/uploadVideoAlgo",async (req, res) => {
     if (Object.keys(req.body).length === 0) {
         res.status(400).json({ error: 'Request body cannot be empty' });
       } else {
         const data = JSON.stringify(req.body); // Get JSON data from request body
         const obj = JSON.parse(data);
         console.log(obj)
+        topics = obj.topics
+        if(topics != undefined){
+            // new subject
+            let documentRef = await firebaseService.topicsCollection.doc('our_topics_list')
+            documentRef.update({
+                'topics': topics
+              })
+              .then(function() {
+                console.log("Document successfully updated!");
+                delete obj.topics
+              })
+              .catch(function(error) {
+                console.error("Error updating document: ", error);
+              });
+        }
+        
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
         mailer.sendMailToClient("obn2468@gmail.com","or", obj.name)
@@ -69,6 +86,15 @@ app.post("/uploadVideoAlgo",(req, res) => {
 
 app.get("/video",(req,res) => {
     res.send(getAllVideos());
+});
+
+app.get("/getAllTopics",async (req,res) => {
+    try {
+        const documentData = await firebaseService.getAllTopics(firebaseService.topicsCollection);
+        res.status(200).json(documentData);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      };
 });
 
 app.get("/videosByTag",(req,res) => {
