@@ -56,9 +56,9 @@ def download_vid(link):
 
 
 def index_video(link,topic = "Geometry"):
-    #############################################
+    ############################################
     # topic = 'Biology'
-    #############################################
+    ############################################
     
     # auto = auto_from_function
     download_vid(link)
@@ -78,7 +78,7 @@ def index_video(link,topic = "Geometry"):
     final_gpt_indexing = gpt_final_indexing(audio_results)
     os.remove(video_path)
     topic_list = None
-    if is_new_topic:
+    if not is_new_topic:
         topic_list = get_topics_list_from_config()
     return final_gpt_indexing, topic_list
 

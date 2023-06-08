@@ -9,6 +9,7 @@ import time
 import re
 import configparser
 from sys import platform
+import random
 
 
 # openai.api_key = ak
@@ -108,7 +109,7 @@ def send_prompt(subjects,chunks,api_key,topic):
             
     # json_result = remove_unknown(json_result)
     if auto == False:
-        json_result = error_fixing(json_result,subjects)
+        json_result = handle_unknown_subjects(json_result,subjects,topic)
 
     return json_result
 
@@ -165,15 +166,24 @@ def remove_unknown(results: dict):
     return new_results
 
 
-def error_fixing(results: dict,subjects_list: list):
+def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
     new_results = results.copy()
     keys = list(results.keys())
     index = 1
+    flag = False
     # Fix if the first result in not found
+    for i,subject in new_results.items():
+        if subject not in subjects_list and subject != 'none' and subject != 'None':
+            flag = True
+            subjects_list.append(subject)
+    
     if new_results[keys[index-1]] not in subjects_list:
         while new_results[keys[index-1]] not in subjects_list:
+            subjects_list.append(new_results[keys[index-1]])
+            
             if index == len(results):
-                raise Exception("Not found a true subject in the JSON.")
+                new_results[keys[0]] = random.choice(subjects_list)
+                # raise Exception("Not found a true subject in the JSON.")
             index += 1
         new_results[keys[0]] = results[keys[index-1]]
         
@@ -181,6 +191,10 @@ def error_fixing(results: dict,subjects_list: list):
         index = keys.index(key)
         if new_results[key] not in subjects_list:
             new_results[key] = new_results[keys[index-1]]
+            
+    if flag == True:
+        subjects_list = list(set(subjects_list))
+        write_new_subject(topic,subjects_list)
         
     return new_results
 
@@ -192,7 +206,7 @@ def get_new_subject_list(topic):
     final_prompt = f"""
     Please provide the topic "{topic}" for which you would like me to generate a hierarchical list of relevant keywords. 
     The hierarchy will include subcategories and consist of only the most commonly used or fundamental keywords. 
-    The entire output must be in JSON format with the subject as the key and the keywords as the corresponding values. 
+    The entire output must be in JSON format with the subject as the key and the keywords as the corresponding values, and the subcategories will be enclosed in curly brackets and the keywords will be enclosed in square brackets.
     The generated list will not contain any null or missing values.
     """
     
@@ -209,6 +223,7 @@ def get_new_subject_list(topic):
     results = json.loads(response)
     return results
 
+
     
     # inner_subjects = extract_inner_subjects(results)
     
@@ -216,14 +231,27 @@ def get_new_subject_list(topic):
     # upper_level = find_upper_level(results, test_topic)
 
     
+# def extract_inner_subjects(data):
+#     subjects = []
+#     for key, value in data.items():
+#         if isinstance(value, dict):
+#             subjects.extend(extract_inner_subjects(value))
+#         else:
+#             if value == None:
+#                 subjects.append(key)
+#     return subjects
+
 def extract_inner_subjects(data):
     subjects = []
     for key, value in data.items():
         if isinstance(value, dict):
             subjects.extend(extract_inner_subjects(value))
-        else:
-            if value == None:
-                subjects.append(key)
+        elif isinstance(value, list):
+            for val in value:
+                subjects.append(val)
+        # else:
+        #     if value == None:
+        #         subjects.append(key)
     return subjects
 
 def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'):
@@ -234,11 +262,18 @@ def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
         config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        
     config = configparser.ConfigParser()
     config.read(config_file_name)
     if not config.has_section(topic):
         config.add_section(topic)
-    config.set(topic, 'subjects', ', '.join(new_subject_list))
+    else:
+        existing_subject_list = config.get(topic,'subjects').split(',')
+        new_subject_list = new_subject_list + existing_subject_list
+        new_subject_list = list(set(new_subject_list))
+    config.set(topic, 'subjects', ','.join(new_subject_list))
+
+
 
     # Write the updated configuration to the INI file
     with open(config_file_name, 'w') as configfile:
@@ -281,6 +316,9 @@ def get_topic_from_config(topic:str):
        
     return subjects
 
+# res = get_topic_from_config('math')
+# print(res)
+
 def find_upper_level(data, sub_subject):
     for key, value in data.items():
         if sub_subject in value:
@@ -302,4 +340,3 @@ def clean_json_string(json_str):
         print(f"Error parsing JSON: {str(e)}")
         return None
 
-write_new_subject("ckndsnjk", [])
