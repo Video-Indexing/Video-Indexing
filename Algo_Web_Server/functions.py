@@ -56,9 +56,9 @@ def download_vid(link):
 
 
 def index_video(link,topic = "Geometry"):
-    #############################################
+    ############################################
     # topic = 'Biology'
-    #############################################
+    ############################################
     
     # auto = auto_from_function
     download_vid(link)
