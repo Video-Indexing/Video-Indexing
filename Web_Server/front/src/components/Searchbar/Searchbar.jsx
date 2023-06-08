@@ -16,7 +16,7 @@ function Searchbar({ setResults }) {
     await SearchVideoByName(searchQuery).then((d) => setResults(d));
   };
   return (
-    <form autocomplete='off' onSubmit={query}>
+    <form onSubmit={query}>
       <Bar>
         <img className='action' src={Search} height={18} onClick={query} />
         <SearchInput

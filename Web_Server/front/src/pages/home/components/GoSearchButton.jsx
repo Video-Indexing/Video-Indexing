@@ -2,7 +2,15 @@ import React from 'react';
 import './GoSearch.css';
 function GoSearchButton({ children }) {
   return (
-    <div className='wrapper' style={{ marginTop: '2.5rem' }}>
+    <div
+      className='wrapper'
+      style={{ marginTop: '2.5rem' }}
+      onClick={() => {
+        const url = window.location.origin + '/search';
+        console.log(url);
+        window.location.href = url;
+      }}
+    >
       <a className='cta' href='#'>
         <span className='cta-span'>{children}</span>
         <span className='cta-span'>

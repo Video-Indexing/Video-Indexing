@@ -69,11 +69,11 @@ const NavLink = styled.button`
   }
   &:hover a,
   &:hover a:visited {
-    color: #94b6e6;
+    color: rgba(102, 171, 255, 0.8);
   }
   &.current {
     color: white;
-    background-color: #94b6e6d8;
+    background-color: rgba(102, 171, 255, 0.8);
   }
   &.current:hover a {
     color: white;
