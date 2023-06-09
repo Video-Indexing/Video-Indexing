@@ -69,12 +69,12 @@ app.post("/uploadVideoAlgo",async (req, res) => {
               })
               .then(function() {
                 console.log("Document successfully updated!");
-                delete obj.topics
               })
               .catch(function(error) {
                 console.error("Error updating document: ", error);
               });
         }
+        delete obj.topics
         
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
