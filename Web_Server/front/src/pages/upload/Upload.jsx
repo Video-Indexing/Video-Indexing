@@ -14,7 +14,7 @@ import { UploadVideo, getVideoSubjects } from '../../services/UploadService';
 
 function Upload() {
   const [options, setOptions] = useState();
-  const [titleName, setTitleName] = useState();
+  const [titleName, setTitleName] = useState('');
   const [subjectName, setSubjectName] = useState();
   const [link, setLink] = useState();
   const [useOriginalTitle, setUseOriginalTitle] = useState(false);
