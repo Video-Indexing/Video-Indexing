@@ -1,6 +1,5 @@
 import React from 'react';
-import { FormSelect } from '../../../utils/Form.styled';
-import { FormInput } from '../../../utils/Form.styled';
+import { FormSelect, FormInput } from '../../../utils/Form.styled';
 import Cancel from '../../../assets/icons/cancel.png';
 
 function FormDropDownList({ options, onOptionChange }) {
@@ -29,8 +28,8 @@ function FormDropDownList({ options, onOptionChange }) {
         </div>
       ) : (
         <FormSelect value={value} onChange={handleChange}>
-          {options.map((o, index) => (
-            <option value={o} key={index + 1}>
+          {options.map((o, i) => (
+            <option value={o} key={i}>
               {o}
             </option>
           ))}

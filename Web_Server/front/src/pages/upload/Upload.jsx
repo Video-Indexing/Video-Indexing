@@ -14,6 +14,11 @@ import { UploadVideo, getVideoSubjects } from '../../services/UploadService';
 
 function Upload() {
   const [options, setOptions] = useState();
+  const [titleName, setTitleName] = useState();
+  const [subjectName, setSubjectName] = useState();
+  const [link, setLink] = useState();
+  const [useOriginalTitle, setUseOriginalTitle] = useState(false);
+
   React.useEffect(() => {
     const dataFetch = async () => {
       const data = await getVideoSubjects();
@@ -25,20 +30,14 @@ function Upload() {
     dataFetch();
   }, []);
 
-  const [titleName, setTitleName] = useState();
-  const [subjectName, setSubjectName] = useState();
-  const [link, setLink] = useState();
-  const [useOriginalTitle, setUseOriginalTitle] = useState(false);
   function onSubmit() {
-    UploadVideo(titleName, link, subjectName);
+    UploadVideo(titleName, link, subjectName, useOriginalTitle);
     console.log(
       `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
     );
   }
   const changeSubject = (value) => setSubjectName(value);
-  const ytTitle = (value) => {
-    setUseOriginalTitle(value);
-  };
+  const ytTitle = (value) => setUseOriginalTitle(value);
 
   return (
     <>
@@ -51,7 +50,10 @@ function Upload() {
           <FormDropDownList options={options} onOptionChange={changeSubject} />
         )}
         <FormLabel>Title</FormLabel>
-        <FormInput onChange={(e) => setTitleName(e.target.value)} />
+        <FormInput
+          onChange={(e) => setTitleName(e.target.value)}
+          disabled={useOriginalTitle}
+        />
         <FormCheckbox onStateChange={ytTitle}>
           use youtube link title
         </FormCheckbox>
