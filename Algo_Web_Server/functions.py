@@ -52,7 +52,8 @@ my_subject_list = ["Points", "Lines", "Planes","Midpoint", "Distance Formulas",
 def download_vid(link):
     global video_len
     VideoDownloader = Video_Downloader(link, content_path, vid_name)
-    video_len = VideoDownloader.download_video()
+    video_len,title = VideoDownloader.download_video()
+    return title
 
 
 def index_video(link,topic = "Geometry"):
@@ -61,7 +62,7 @@ def index_video(link,topic = "Geometry"):
     ############################################
     
     # auto = auto_from_function
-    download_vid(link)
+    title = download_vid(link)
     split_audio()
     results = whisper_results()
     # audio_results, classes = model_results(results)
@@ -80,7 +81,7 @@ def index_video(link,topic = "Geometry"):
     topic_list = None
     if not is_new_topic:
         topic_list = get_topics_list_from_config()
-    return final_gpt_indexing, topic_list
+    return final_gpt_indexing, topic_list,title
 
 
 def split_audio():

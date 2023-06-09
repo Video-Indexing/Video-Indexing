@@ -61,7 +61,10 @@ def send_results_to_web_server(data):
     url = data["link"]
     name = data["name"]
     topic = data["topic"]
-    indexing, topic_list = index_video(url, topic)
+    ytTitle = data["ytTitle"]
+    indexing, topic_list, title = index_video(url, topic)
+    if ytTitle == True:
+        name = title
     params = None
     if topic_list is None:
         params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
