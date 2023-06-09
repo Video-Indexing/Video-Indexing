@@ -1,35 +1,39 @@
-var admin = require("firebase-admin");
-const { getFirestore,CollectionReference,DocumentReference } = require('firebase-admin/firestore');
+var admin = require('firebase-admin');
+const {
+  getFirestore,
+  CollectionReference,
+  DocumentReference,
+} = require('firebase-admin/firestore');
 require('dotenv').config();
 
-const serviceAccount = require("./serviceAccount.json");
+const serviceAccount = require('./serviceAccount.json');
 
 const fireBaseApp = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.DATABASE_URL
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: process.env.DATABASE_URL,
 });
 const db = getFirestore(fireBaseApp);
 const videoCollection = db.collection('videos');
-const bookCollection = db.collection('neuralnetworksanddeeplearning')
+const bookCollection = db.collection('neuralnetworksanddeeplearning');
 const topicsCollection = db.collection('topics');
 
-
 async function getCollectionData(collection) {
-    const docsRef = collection;
-    const mainDocs = [];
+  const docsRef = collection;
+  const mainDocs = [];
 
-    const docs = await docsRef.get();
-    docs.forEach(async (doc) => {
-      mainDocs.push({ ...doc.data(), _id: doc.id });
-    });
+  const docs = await docsRef.get();
+  docs.forEach(async (doc) => {
+    mainDocs.push({ ...doc.data(), _id: doc.id });
+  });
 
-    return mainDocs;
+  return mainDocs;
 }
 
-
-async function searchVideosByTags(videoCollection,queryText, callback){
-  videoCollection.where('tags', 'array-contains', queryText)
-    .get().then((querySnapshot) => {
+async function searchVideosByTags(videoCollection, queryText, callback) {
+  videoCollection
+    .where('tags', 'array-contains', queryText)
+    .get()
+    .then((querySnapshot) => {
       const searchResults = querySnapshot.docs.map((doc) => doc.data());
       callback(null, searchResults); // Pass the search results to the callback function
     })
@@ -39,11 +43,11 @@ async function searchVideosByTags(videoCollection,queryText, callback){
     });
 }
 
-async function searchVideosById(videoCollection,id){
+async function searchVideosById(videoCollection, id) {
   try {
-    let documentRef = await videoCollection.doc(id)
+    let documentRef = await videoCollection.doc(id);
     const documentSnapshot = await documentRef.get();
-    
+
     if (documentSnapshot.exists) {
       const documentData = documentSnapshot.data();
       return documentData;
@@ -53,12 +57,12 @@ async function searchVideosById(videoCollection,id){
   } catch (error) {
     throw new Error(`Error retrieving document: ${error.message}`);
   }
-   
 }
 
-
-async function searchVideo(videoCollection,queryText){
-  var newRef = videoCollection.where('name', '>=', queryText).where('name', '<=', queryText+ '\uf8ff');
+async function searchVideo(videoCollection, queryText) {
+  var newRef = videoCollection
+    .where('name', '>=', queryText)
+    .where('name', '<=', queryText + '\uf8ff');
   // var newSmallerRef = videoCollection.where("name", "<=", videoName);
 
   const mainDocs = [];
@@ -69,15 +73,13 @@ async function searchVideo(videoCollection,queryText){
     mainDocs.push({ ...doc.data(), _id: doc.id });
   });
 
-    // docs = await newSmallerRef.get();
-    // docs.forEach(async (doc) => {
-    //     mainDocs.push({ ...doc.data(), _id: doc.id });
-    //   });
-  
+  // docs = await newSmallerRef.get();
+  // docs.forEach(async (doc) => {
+  //     mainDocs.push({ ...doc.data(), _id: doc.id });
+  //   });
 
-    return mainDocs;
+  return mainDocs;
 }
-
 
 // async function createVideo(videoCollection,videoObj){
 //   return await videoCollection.doc()
@@ -87,18 +89,18 @@ async function searchVideo(videoCollection,queryText){
 async function createVideo(videoCollection, videoObj) {
   const docRef = videoCollection.doc();
   const videoId = docRef.id;
-  
+
   // Add the ID field to the video object
   const videoWithId = { ...videoObj, id: videoId };
-  
+
   await docRef.set(videoWithId);
 }
 
-async function getAllTopics(topicCollection){
+async function getAllTopics(topicCollection) {
   try {
-    let documentRef = await topicCollection.doc('our_topics_list')
+    let documentRef = await topicCollection.doc('our_topics_list');
     const documentSnapshot = await documentRef.get();
-    
+
     if (documentSnapshot.exists) {
       const documentData = documentSnapshot.data();
       return documentData;
@@ -108,7 +110,6 @@ async function getAllTopics(topicCollection){
   } catch (error) {
     throw new Error(`Error retrieving document: ${error.message}`);
   }
-   
 }
 
 // module.exports = book;
@@ -122,4 +123,3 @@ module.exports.searchVideo = searchVideo;
 module.exports.searchVideosByTags = searchVideosByTags;
 module.exports.searchVideosById = searchVideosById;
 module.exports.getAllTopics = getAllTopics;
-
