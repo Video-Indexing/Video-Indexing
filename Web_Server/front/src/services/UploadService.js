@@ -26,7 +26,6 @@ const UploadVideo = async (name, link, topic) => {
 const getVideoSubjects = async () => {
   let res;
   await axios.get('http://127.0.0.1:5050/getAllTopics').then((r) => {
-    console.log(r.data);
     res = r.data;
   });
   return res;

@@ -19,11 +19,8 @@ function FormDropDownList({ options, onOptionChange }) {
     <>
       {textMode ? (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <FormInput
-            onChange={(e) => onOptionChange(e.target.value)}
-          ></FormInput>
+          <FormInput onChange={(e) => onOptionChange(e.target.value)} />
           <img
-            className='action'
             src={Cancel}
             height={20}
             onClick={() => setTextMode(false)}

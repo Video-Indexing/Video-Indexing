@@ -30,7 +30,7 @@ function Upload() {
   const [link, setLink] = useState();
   const [useOriginalTitle, setUseOriginalTitle] = useState(false);
   function onSubmit() {
-    UploadVideo(titleName, link);
+    UploadVideo(titleName, link, subjectName);
     console.log(
       `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
     );
