@@ -40,10 +40,43 @@ const Paragraph = styled.p`
   font-size: 1.75rem;
   font-weight: 700;
   margin: auto;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &.black {
     color: black;
   }
 `;
 
-export { Section, SectionsContainer, Paragraph, TextContainer };
+const IconContainer = styled.div`
+  margin-bottom: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Icon = styled.div`
+  border: 2.5px rgba(102, 171, 255, 0.636) solid;
+  background-color: #f1f1f194;
+  box-shadow: rgba(69, 82, 201, 0.35) 0px 3px 5px;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    cursor: help;
+    transform: scale(1.1);
+  }
+  transition: 0.5s ease;
+`;
+
+export {
+  Section,
+  SectionsContainer,
+  Paragraph,
+  TextContainer,
+  IconContainer,
+  Icon,
+};

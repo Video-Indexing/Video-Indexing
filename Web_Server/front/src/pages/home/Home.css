@@ -21,3 +21,10 @@
 .reveal2.active {
   transform: translateY(0);
 }
+.reveal3 {
+  transform: translateY(-50px);
+  transition: 0.75s all ease-in;
+}
+.reveal3.active {
+  transform: translateY(0);
+}

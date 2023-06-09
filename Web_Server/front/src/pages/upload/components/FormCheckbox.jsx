@@ -5,6 +5,7 @@ function FormCheckbox({ children, onStateChange }) {
   const toggle = (e) => {
     onStateChange(e.target.checked);
   };
+
   return (
     <div className='checkbox-rect'>
       <input
