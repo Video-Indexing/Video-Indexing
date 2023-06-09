@@ -12,6 +12,7 @@ class Video_Downloader:
         # yt = YouTube(self.link)
         yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
         video_lenght = yt.length
+        title = yt.title
 
         # Step 2: Get all available streams
         streams = yt.streams.all()
@@ -28,7 +29,7 @@ class Video_Downloader:
         
         print('Download finished')
 
-        return video_lenght
+        return video_lenght,title
 
         
         
@@ -45,4 +46,5 @@ class Video_Downloader:
 
 
 # print('Download finished')
+
 
