@@ -6,16 +6,12 @@ import {
   VideoDescription,
   Section,
   Chapter,
-  VideoImage,
   ImageContainer,
 } from './VideoItem.styled';
 import PlayButton from '../../../assets/icons/video.png';
-import { useNavigate } from 'react-router-dom';
 import ImageFromVideo from '../../../components/imagefromvideo/ImageFromVideo';
 
-const route = 'localhost:3000/';
 function VideoItem({ video, focusTopic }) {
-  const nav = useNavigate();
   function hmsToSecondsOnly(str) {
     let p = str.split(':'),
       s = 0,
@@ -36,7 +32,7 @@ function VideoItem({ video, focusTopic }) {
   }
   function getTopicTime(indexing) {
     for (const key of Object.keys(indexing)) {
-      if (indexing[key] == focusTopic) {
+      if (indexing[key] === focusTopic) {
         return hmsToSecondsOnly(key.split('-')[0]);
       }
     }
@@ -78,6 +74,7 @@ function VideoItem({ video, focusTopic }) {
                 c !== undefined &&
                 c !== null &&
                 c !== 'N/A' &&
+                c !== 'unknown' &&
                 c !== '' && (
                   <Chapter
                     className={`${focusTopic === c ? 'active' : ''}`}

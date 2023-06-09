@@ -12,9 +12,9 @@ import axios from 'axios';
 //   // if()
 //   return res;
 // };
-const UploadVideo = async (name, link, topic) => {
+const UploadVideo = async (name, link, topic, ytTitle) => {
   let res;
-  let obj = { name, link, topic };
+  let obj = { name, link, topic, ytTitle };
   await axios.post('http://127.0.0.1:5050/uploadVideo', obj).then((r) => {
     // console.log(r.data);
     res = r;
