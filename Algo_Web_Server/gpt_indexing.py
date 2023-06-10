@@ -2,11 +2,11 @@ import openai
 from apikey import api_key as ak
 from apikey import api_key2 as ak2
 from apikey import api_key3 as ak3
-import ast
+# import ast
 import os
 import json
 import time
-import re
+# import re
 import configparser
 from sys import platform
 import random
