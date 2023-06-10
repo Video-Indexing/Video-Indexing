@@ -202,6 +202,9 @@ def gpt_final_indexing(audio_results):
         start_time += split_time
         end_time += split_time
     updated_audio_results = update_dict(audio_res_time_slices, split_time)
+    
+    updated_audio_results = fix_last_subject(audio_res_time_slices)
+    
     final_dict = connect_time_slices(updated_audio_results)
     final_time_slice = list(final_dict.keys())[-1]
     new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
@@ -319,4 +322,28 @@ def get_topics_list_from_config():
     sections = config.sections()
     return sections
     
+    
+    
+def fix_last_subject(results: dict):
+    bad_subject_list = ["unknown","uncategorized","unidentified","uncertain",
+                        "unspecified","not found","subject not recognized","subject not found"
+                        ,"unknown subject","null","null subject"]
+    keys = list(results.keys())
+    if len(keys) >= 2:
+        last_key = keys[-1]
+        one_before_last = keys[-2]
+        if calculate_time_difference(last_key) <= 15 or str(results[last_key]).lower() in bad_subject_list:
+           results[last_key] = results[one_before_last]
+           return results
+        else:
+            return results
+        
+        
+        
+def calculate_time_difference(time_steps):
+    start, end = time_steps.split("-")
+
+    time_difference = int(end) - int(start)
+    return time_difference
+
     
