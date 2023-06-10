@@ -1,8 +1,11 @@
 from video_downloader import Video_Downloader
 from audios_downloader import Audio_Downloader
 from whisper_model import Whisper_Model
+from images_downloader import Image_Downloader
+from models import *
 import os
 from sys import platform
+from images_reco import recognize_new_image, mse
 from gpt_indexing import gpt_index_video
 import configparser
 
@@ -96,6 +99,97 @@ def whisper_results():
     WhisperModel.print_results()
 
     return results
+
+
+def model_results(whisper_results):
+    dic_results = {}
+    # df = create_database(dataset,subject_list)
+    # SVM = SVM_Text_Model(df)
+    SVM = SVM_Text_Model()
+    i = 0
+    for chunk in whisper_results:
+        print('Chunk start from:', i, ' end in:', i + seconds)
+        result = SVM.svm_single_pred(chunk)
+        print("*" * 50)
+        key = f'{i}-{i + seconds}'
+        dic_results[key] = result
+        i += seconds
+
+    return dic_results, SVM.classes
+
+
+def recognize_images():
+    ImageDownloader = Image_Downloader(vid_name, content_path, images_path, image_taker_pace)
+    ImageDownloader.download_images()
+    prediction = {}
+    i = 0
+    if platform == "win32":
+        df_path = os.getcwd() + "\Model_dir\embedding_ConvNeXtBase_ex2.csv"
+    else:
+        df_path = os.getcwd() + "/Model_dir/embedding_ConvNeXtBase_ex2.csv"
+    df = pd.read_csv(df_path)
+
+    paths_list = []
+    threshold = 7
+
+    for image in os.listdir(images_path):
+        if platform == "win32":
+            img_path = images_path + f"\{image}"
+        else:
+            img_path = images_path + f"/{image}"
+        paths_list.append(img_path)
+
+    start_time = 0
+    end_time = image_taker_pace
+    if len(paths_list) == 1:
+        prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+    elif len(paths_list) == 2:
+        img1 = paths_list[0]
+        img2 = paths_list[1]
+        error, _ = mse(img1, img2)
+        if error < threshold:
+            end_time = image_taker_pace * 2
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+        else:
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[0])
+            end_time += image_taker_pace
+            start_time += image_taker_pace
+            prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, paths_list[1])
+    else:
+        for i in range(len(paths_list) - 1):
+            img1 = paths_list[i]
+            img2 = paths_list[i + 1]
+            error, _ = mse(img1, img2)
+            print("Image matching Error between the two images:", error)
+            if error < threshold:
+                end_time += image_taker_pace
+                if i == (len(paths_list) - 2):
+                    prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, img1)
+
+            else:
+                prediction[f"{start_time}-{end_time}"] = recognize_new_image(df, img1)
+                start_time = end_time
+                end_time += image_taker_pace
+
+    ImageDownloader.delete_images()
+    return prediction
+
+
+def final_indexing(audio_results, images_results):
+    class_renamed = ['Decision-Trees', 'Linear-Regression', 'Logistic-Regression', 'neural-network',
+                     'Support-Vector-Machines', 'K-nearest-neighbors']
+    split_time = min(image_taker_pace, seconds)
+    audio_results = update_dict(audio_results, split_time)
+    images_results = update_dict(images_results, split_time)
+    final_dict = calculate_new_results(audio_results, images_results, class_renamed)
+    final_dict = connect_time_slices(final_dict)
+    final_time_slice = list(final_dict.keys())[-1]
+    new_final_time_slice = f"{final_time_slice.split('-')[0]}-{video_len}"
+    final_dict[new_final_time_slice] = final_dict[final_time_slice]
+    if new_final_time_slice != final_time_slice:
+        final_dict.pop(final_time_slice, None)
+    final_dict = convert_final_indexing(final_dict)
+    return final_dict
 
 
 def gpt_final_indexing(audio_results):
