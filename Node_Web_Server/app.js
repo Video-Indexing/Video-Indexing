@@ -43,11 +43,13 @@ app.post("/user", (req, res) => {
 });
 
 //request from front to algo
-app.post("/uploadVideo", (req, res) => {
+app.post("/uploadVideo", async(req, res) => {
     if (Object.keys(req.body).length === 0) {
         res.status(400).json({ error: 'Request body cannot be empty' });
       } else {
         res.status(200).send();
+        const inner_topics = await firebaseService.getAllInnerTopics(firebaseService.innerTopicsCollection);
+        req.body.inner_topics = inner_topics.inner_topics
         sendToAlgoServer(algoServerIP + ":" + algoPort , JSON.stringify(req.body));
       }
 });
@@ -73,8 +75,11 @@ app.post("/uploadVideoAlgo",async (req, res) => {
               .catch(function(error) {
                 console.error("Error updating document: ", error);
               });
+
+              rewrite_inner_subjects(obj.inner_topics)
         }
         delete obj.topics
+        delete obj.inner_topics
         
         firebaseService.createVideo(firebaseService.videoCollection, obj);
         res.status(200).send();
@@ -142,4 +147,17 @@ async function sendToAlgoServer(url, data) {
         console.error(error);
     });
   }
+
+async function rewrite_inner_subjects(inner_topics){
+  let documentRef = await firebaseService.innerTopicsCollection.doc('our_inner_topics')
+  documentRef.update({
+      'inner_topics': inner_topics
+    })
+    .then(function() {
+      console.log("Document successfully updated!");
+    })
+    .catch(function(error) {
+      console.error("Error updating document: ", error);
+    });
+}
 

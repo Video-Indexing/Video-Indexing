@@ -53,7 +53,9 @@ def download_vid(link):
     return title
 
 
-def index_video(link,topic = "Geometry"):
+def index_video(link,inner_topics,topic = "Geometry"):
+    rewrite_inner_subjects(inner_topics)
+    
     ############################################
     # topic = 'Biology'
     ############################################
@@ -78,7 +80,9 @@ def index_video(link,topic = "Geometry"):
     topic_list = None
     if not is_new_topic:
         topic_list = get_topics_list_from_config()
-    return final_gpt_indexing, topic_list,title
+        
+    inner_subject_list = parse_ini_file()
+    return final_gpt_indexing, topic_list,title,inner_subject_list
 
 
 def split_audio():
@@ -253,3 +257,70 @@ def calculate_time_difference(time_steps):
     return time_difference
 
     
+    
+def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'):
+    topic = topic.lower()
+    content_path = os.getcwd()
+    config_file_name = ""
+    if platform == "win32":
+        config_file_name = content_path + f"\Algo_Web_Server\{path}"
+    else:
+        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        
+    config = configparser.ConfigParser()
+    config.read(config_file_name)
+    if not config.has_section(topic):
+        config.add_section(topic)
+    else:
+        existing_subject_list = config.get(topic,'subjects').split(',')
+        new_subject_list = new_subject_list + existing_subject_list
+        new_subject_list = list(set(new_subject_list))
+    config.set(topic, 'subjects', ','.join(new_subject_list))
+
+
+
+    # Write the updated configuration to the INI file
+    with open(config_file_name, 'w') as configfile:
+        config.write(configfile)
+        
+        
+def rewrite_inner_subjects(subject:dict):
+    for key,value in subject.items():
+        subject_list = str(value).split(",")
+        write_new_subject(key,subject_list)
+        
+        
+def parse_ini_file(file_path='subjects_config.ini'):
+    content_path = os.getcwd()
+    config_file_name = ""
+    if platform == "win32":
+        config_file_name = content_path + f"\Algo_Web_Server\{file_path}"
+    else:
+        config_file_name = content_path + f"/Algo_Web_Server/{file_path}"
+    result = {}
+    
+    with open(config_file_name, 'r') as file:
+        content = file.read()
+    
+    sections = content.split('\n\n')
+    
+    for section in sections:
+        lines = section.strip().split('\n')
+        
+        if len(lines) < 2:
+            continue
+        
+        section_name = lines[0].strip('[]')
+        subject_line = [line.strip() for line in lines if line.lower().startswith('subjects')]
+        
+        if not subject_line:
+            continue
+        
+        subject_line = subject_line[0]
+        subjects = subject_line.split('=')[1].strip()
+        keywords = [keyword.strip() for keyword in subjects.split(',')]
+        keywords = ','.join(keywords)
+        result[section_name] = keywords
+    
+    return result
+

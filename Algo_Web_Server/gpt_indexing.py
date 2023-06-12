@@ -171,9 +171,12 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
     keys = list(results.keys())
     index = 1
     flag = False
+    bad_subject_list = ["unknown","uncategorized","unidentified","uncertain",
+                    "unspecified","not found","subject not recognized","subject not found"
+                    ,"unknown subject","null","null subject", "none"]
     # Fix if the first result in not found
     for i,subject in new_results.items():
-        if subject not in subjects_list and subject != 'none' and subject != 'None':
+        if subject not in subjects_list and str(subject).lower() not in bad_subject_list:
             flag = True
             subjects_list.append(subject)
     
@@ -197,6 +200,7 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
         write_new_subject(topic,subjects_list)
         
     return new_results
+
 
 
 
@@ -339,4 +343,3 @@ def clean_json_string(json_str):
     except json.JSONDecodeError as e:
         print(f"Error parsing JSON: {str(e)}")
         return None
-
