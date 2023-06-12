@@ -16,6 +16,7 @@ const db = getFirestore(fireBaseApp);
 const videoCollection = db.collection('videos');
 const bookCollection = db.collection('neuralnetworksanddeeplearning');
 const topicsCollection = db.collection('topics');
+const innerTopicsCollection = db.collection('inner_topics');
 
 async function getCollectionData(collection) {
   const docsRef = collection;
@@ -63,7 +64,11 @@ async function searchVideo(videoCollection, queryText) {
   var newRef = videoCollection
     .where('name', '>=', queryText)
     .where('name', '<=', queryText + '\uf8ff');
+
+
   // var newSmallerRef = videoCollection.where("name", "<=", videoName);
+
+  
 
   const mainDocs = [];
 
@@ -112,14 +117,32 @@ async function getAllTopics(topicCollection) {
   }
 }
 
+async function getAllInnerTopics(topicCollection) {
+  try {
+    let documentRef = await topicCollection.doc('our_inner_topics');
+    const documentSnapshot = await documentRef.get();
+
+    if (documentSnapshot.exists) {
+      const documentData = documentSnapshot.data();
+      return documentData;
+    } else {
+      throw new Error('Document does not exist');
+    }
+  } catch (error) {
+    throw new Error(`Error retrieving document: ${error.message}`);
+  }
+}
+
 // module.exports = book;
 // module.exports = db;
 module.exports.videoCollection = videoCollection;
 module.exports.bookCollection = bookCollection;
 module.exports.topicsCollection = topicsCollection;
+module.exports.innerTopicsCollection = innerTopicsCollection;
 module.exports.getCollectionData = getCollectionData;
 module.exports.createVideo = createVideo;
 module.exports.searchVideo = searchVideo;
 module.exports.searchVideosByTags = searchVideosByTags;
 module.exports.searchVideosById = searchVideosById;
 module.exports.getAllTopics = getAllTopics;
+module.exports.getAllInnerTopics = getAllInnerTopics;

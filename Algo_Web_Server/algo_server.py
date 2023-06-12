@@ -62,15 +62,16 @@ def send_results_to_web_server(data):
     name = data["name"]
     topic = data["topic"]
     ytTitle = data["ytTitle"]
-    indexing, topic_list, title = index_video(url, topic)
+    inner_topics = data["inner_topics"]
+    indexing, topic_list, title,inner_topics_list = index_video(url,inner_topics,topic)
     if ytTitle == True:
         name = title
     params = None
     if topic_list is None:
-        params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values()))}
+        params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values())),"inner_topics":inner_topics_list}
     else:
         params = {"url": url, "name": name, "indexing": indexing, "tags": list(set(indexing.values())),
-                  "topics": topic_list}
+                  "topics": topic_list,"inner_topics":inner_topics_list}
     print(params)
     headers = {'Content-type': 'application/json'}
     response = requests.post(WEB_SERVER_FULL_URL, data=json.dumps(params), headers=headers)
