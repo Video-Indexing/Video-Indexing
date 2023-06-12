@@ -84,8 +84,9 @@ def send_prompt(subjects,chunks,api_key,topic):
     else:
         final_prompt = prompt
             
-    
-    
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    print('Final prompt lenght (45 seconds):',len(final_prompt))
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     output = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         temperature=0.3,
@@ -146,8 +147,10 @@ def gpt_index_video(chunks:list,topic:str):
     # results = send_prompt(subjects, chunk_dict)
     api_counter = 0
     results_dict = {}
+    api_key = ak
     for dic in dict_list:
-        api_key = api_key_list[api_counter//3]
+        if api_counter % 3 == 0 and api_counter != 0:
+            time.sleep(65)
         res = send_prompt(subjects, dic,api_key,topic)
         results_dict.update(res)
         api_counter += 1
