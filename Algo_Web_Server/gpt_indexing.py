@@ -174,7 +174,7 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
     keys = list(results.keys())
     index = 1
     flag = False
-    bad_subject_list = ["unknown","uncategorized","unidentified","uncertain",
+    bad_subject_list = ["N/A (unknown subject)","unknown","uncategorized","unidentified","uncertain",
                     "unspecified","not found","subject not recognized","subject not found"
                     ,"unknown subject","null","null subject", "none"]
     # Fix if the first result in not found
@@ -268,7 +268,7 @@ def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'
     if platform == "win32":
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
-        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        config_file_name = content_path + f"/{path}"
         
     config = configparser.ConfigParser()
     config.read(config_file_name)
@@ -294,7 +294,7 @@ def does_topic_exist(topic: str,path='subjects_config.ini'):
     if platform == "win32":
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
-        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        config_file_name = content_path + f"/{path}"
     config_file_name = os.path.normpath(config_file_name)
     config = configparser.ConfigParser()
 
@@ -311,7 +311,7 @@ def get_topic_from_config(topic:str):
     if platform == "win32":
         config_file_name = content_path + "\Algo_Web_Server\subjects_config.ini"
     else:
-        config_file_name = content_path + "/Algo_Web_Server/subjects_config.ini"
+        config_file_name = content_path + "/subjects_config.ini"
     config_file_name = os.path.normpath(config_file_name)
     config_file = open(config_file_name, "r")
     cp = configparser.ConfigParser()

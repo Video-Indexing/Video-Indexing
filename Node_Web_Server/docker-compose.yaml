@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  node:
+    container_name: node_server
+    build: .
+    ports:
+      - "5050:5050"
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.11

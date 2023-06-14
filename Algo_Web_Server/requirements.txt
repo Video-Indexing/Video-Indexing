@@ -1,5 +1,5 @@
 numpy==1.24.3
-whisper
+# openai-whisper
 moviepy
 pytube
 configparser

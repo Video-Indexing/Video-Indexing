@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  algo:
+    build: .
+    restart: always
+    container_name: algo_server
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.10
+networks:
+  customnetwork:
+    name: inner-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
