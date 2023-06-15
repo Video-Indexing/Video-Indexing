@@ -13,4 +13,4 @@ sudo systemctl enable docker.service
 sudo systemctl start docker.service
 cd Video-Indexing/Node_Web_Server
 chmod +x node_up.sh
-node_up.sh
+./node_up.sh
