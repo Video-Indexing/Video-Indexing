@@ -175,14 +175,29 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
     keys = list(results.keys())
     index = 1
     flag = False
-    bad_subject_list = ["N/A (unknown subject)","unknown","uncategorized","unidentified","uncertain",
+    bad_subject_list = ["n/a","n/a (unknown subject)","unknown","uncategorized","unidentified","uncertain",
                     "unspecified","not found","subject not recognized","subject not found"
                     ,"unknown subject","null","null subject", "none","n/a (not related to subject list)"]
     # Fix if the first result in not found
     for i,subject in new_results.items():
-        if subject not in subjects_list and str(subject).lower() not in bad_subject_list:
-            flag = True
-            subjects_list.append(subject)
+        if subject not in subjects_list:
+            bad_subject_flag = False
+            for bad_subject in bad_subject_list:
+                if str(subject).lower() in bad_subject_list:
+                    bad_subject_flag = True
+                    break
+                elif bad_subject in str(subject).lower():
+                    bad_subject_flag = True
+                    break
+                    
+            if bad_subject_flag == False:
+                flag = True
+                subjects_list.append(subject)
+                
+    # for i,subject in new_results.items():
+    #     if subject not in subjects_list and str(subject).lower() not in bad_subject_list:
+    #         flag = True
+    #         subjects_list.append(subject)
     
     if new_results[keys[index-1]] not in subjects_list:
         while new_results[keys[index-1]] not in subjects_list:
@@ -204,8 +219,6 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
         write_new_subject(topic,subjects_list)
         
     return new_results
-
-
 
 
 def get_new_subject_list(topic):
