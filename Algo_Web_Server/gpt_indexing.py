@@ -135,8 +135,9 @@ def gpt_index_video(chunks:list,topic:str):
     dict_counter = 0
     chunk_dict = {}
     counter = 1
+    splitter = 15
     for chunk in chunks:
-        if dict_counter % 15 == 0:
+        if dict_counter % splitter == 0:
             new_dict = {}
             dict_list.append(new_dict)
         # chunk_dict[counter] = chunk
@@ -176,7 +177,7 @@ def handle_unknown_subjects(results: dict,subjects_list: list,topic: str):
     flag = False
     bad_subject_list = ["unknown","uncategorized","unidentified","uncertain",
                     "unspecified","not found","subject not recognized","subject not found"
-                    ,"unknown subject","null","null subject", "none"]
+                    ,"unknown subject","null","null subject", "none","n/a (not related to subject list)"]
     # Fix if the first result in not found
     for i,subject in new_results.items():
         if subject not in subjects_list and str(subject).lower() not in bad_subject_list:
