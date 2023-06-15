@@ -1,27 +1,25 @@
-FROM alpine:3.17 as builder
-RUN apk add --no-cache gcc musl-dev
+FROM python:3.10-slim
 
-FROM python:3.8-alpine
-COPY --from=builder /usr/bin/gcc /usr/bin/
-COPY --from=builder /usr/lib/gcc /usr/lib/gcc
-RUN apk add --no-cache libstdc++ build-base python3-dev bash
+# install git
+RUN apt-get update && apt-get install git -y
 
-# #install python and pip
-# RUN apk add --no-cache python3 python3-dev py3-pip build-base libffi-dev openssl-dev
+# install openai-whisper
+RUN pip3 install "git+https://github.com/openai/whisper.git" 
+RUN apt-get install -y ffmpeg
 
-RUN apk add ffmpeg
+RUN pip3 install setuptools
+RUN pip3 install wheel
 
-RUN pip install -U pip setuptools
-RUN pip install wheel
-RUN pip install --upgrade pip
-
+# copy Algo_Web_Server into container
 COPY . /Algo_Web_Server
 
+# cd Algo_Web_Server
 WORKDIR /Algo_Web_Server
 
-RUN pip install --no-cache-dir -r requirements.txt
+# install requirements
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
 
 # ENTRYPOINT [ "/bin/bash" ]
-ENTRYPOINT [ "python", "-m", "./algo_server.py" ]
+ENTRYPOINT [ "python", "-m", "algo_server.py" ]

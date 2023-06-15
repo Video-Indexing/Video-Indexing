@@ -226,7 +226,7 @@ def get_topics_list_from_config():
     if platform == "win32":
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
-        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        config_file_name = content_path + f"/{path}"
     config_file_name = os.path.normpath(config_file_name)
     config = configparser.ConfigParser()
     config.read(config_file_name)
@@ -266,7 +266,7 @@ def write_new_subject(topic:str,new_subject_list:list,path='subjects_config.ini'
     if platform == "win32":
         config_file_name = content_path + f"\Algo_Web_Server\{path}"
     else:
-        config_file_name = content_path + f"/Algo_Web_Server/{path}"
+        config_file_name = content_path + f"/{path}"
         
     config = configparser.ConfigParser()
     config.read(config_file_name)
@@ -297,7 +297,7 @@ def parse_ini_file(file_path='subjects_config.ini'):
     if platform == "win32":
         config_file_name = content_path + f"\Algo_Web_Server\{file_path}"
     else:
-        config_file_name = content_path + f"/Algo_Web_Server/{file_path}"
+        config_file_name = content_path + f"/{file_path}"
     result = {}
     
     with open(config_file_name, 'r') as file:

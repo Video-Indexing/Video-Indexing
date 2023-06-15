@@ -51,6 +51,7 @@ app.post("/uploadVideo", async(req, res) => {
         const inner_topics = await firebaseService.getAllInnerTopics(firebaseService.innerTopicsCollection);
         req.body.inner_topics = inner_topics.inner_topics
         sendToAlgoServer(algoServerIP + ":" + algoPort , JSON.stringify(req.body));
+        console.log("uploadVideo -> request sent to algo server")
       }
 });
 

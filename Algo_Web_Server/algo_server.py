@@ -5,11 +5,12 @@ import queue
 from functions import index_video
 import json
 import requests
+import os
 
 PORT = 8080
 
 WEB_SERVER_PORT = 5050
-WEB_SERVER_IP = '127.0.0.1'
+WEB_SERVER_IP = os.getenv('NODE_IP') #'127.0.0.1' for running locally
 WEB_SERVER_FULL_URL = f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}/uploadVideoAlgo"
 
 
