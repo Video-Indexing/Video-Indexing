@@ -19,7 +19,5 @@ WORKDIR /Algo_Web_Server
 # install requirements
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-EXPOSE 8080
-
 # ENTRYPOINT [ "/bin/bash" ]
 ENTRYPOINT [ "python", "-m", "algo_server.py" ]

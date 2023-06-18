@@ -9,8 +9,8 @@ class Video_Downloader:
 
     def download_video(self):
         # Step 1: Create a YouTube object
-        # yt = YouTube(self.link)
-        yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
+        yt = YouTube(self.link)
+        # yt = YouTube(self.link,use_oauth=True,allow_oauth_cache=True)
         video_lenght = yt.length
         title = yt.title
 
