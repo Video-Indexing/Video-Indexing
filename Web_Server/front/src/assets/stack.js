@@ -15,7 +15,7 @@ const stack = [
   { text: 'tensorflow', icon: TF },
   { text: 'scikit-learn', icon: Scikit },
   { text: 'pandas', icon: Pandas },
-  { text: 'openapi', icon: OpenAPI },
+  { text: 'openai', icon: OpenAPI },
 ];
 
 export default stack;
