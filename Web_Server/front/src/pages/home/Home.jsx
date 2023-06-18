@@ -82,7 +82,7 @@ function Home() {
         </div>
         <Section bg={'#84CEC5'}>
           <TextContainer className='text reveal'>
-            <h1>Our Search Enging</h1>
+            <h1>Our Search Engine</h1>
             <Paragraph>
               Discover a world of limitless knowledge with our search engine.
               <br />

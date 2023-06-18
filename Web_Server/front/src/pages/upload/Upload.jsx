@@ -11,6 +11,11 @@ import {
 import FormDropDownList from './components/FormDropDownList';
 import FormCheckbox from './components/FormCheckbox';
 import { UploadVideo, getVideoSubjects } from '../../services/UploadService';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert } from '@mui/material';
 
 function Upload() {
   const [options, setOptions] = useState();
@@ -18,6 +23,7 @@ function Upload() {
   const [subjectName, setSubjectName] = useState();
   const [link, setLink] = useState();
   const [useOriginalTitle, setUseOriginalTitle] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     const dataFetch = async () => {
@@ -35,9 +41,12 @@ function Upload() {
     console.log(
       `title: ${titleName}\nsubject: ${subjectName}\nyt-link: ${link}\nytTitle: ${useOriginalTitle}`
     );
+    handleClick();
   }
   const changeSubject = (value) => setSubjectName(value);
   const ytTitle = (value) => setUseOriginalTitle(value);
+  const handleClick = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -63,6 +72,16 @@ function Upload() {
           onChange={(e) => setLink(e.target.value)}
         />
         <FormSubmit onClick={onSubmit}>Submit</FormSubmit>
+        <Snackbar
+          open={open}
+          autoHideDuration={2500}
+          onClose={handleClose}
+          style={{ marginBottom: '3.5rem' }}
+        >
+          <Alert severity='info' variant='standard'>
+            Your Video Is Being Uploaded
+          </Alert>
+        </Snackbar>
       </FormContainer>
     </>
   );

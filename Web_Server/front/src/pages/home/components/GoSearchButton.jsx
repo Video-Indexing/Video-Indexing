@@ -11,7 +11,7 @@ function GoSearchButton({ children }) {
         window.location.href = url;
       }}
     >
-      <a className='cta' href='#'>
+      <a className='cta' href='search'>
         <span className='cta-span'>{children}</span>
         <span className='cta-span'>
           <svg
