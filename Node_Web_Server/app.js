@@ -64,6 +64,7 @@ app.post("/uploadVideoAlgo",async (req, res) => {
         const obj = JSON.parse(data);
         console.log(obj)
         topics = obj.topics
+        obj.lowerName = obj.name.toLowerCase()
         if(topics != undefined){
             // new subject
             let documentRef = await firebaseService.topicsCollection.doc('our_topics_list')
