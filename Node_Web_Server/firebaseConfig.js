@@ -62,8 +62,8 @@ async function searchVideosById(videoCollection, id) {
 
 async function searchVideo(videoCollection, queryText) {
   var newRef = videoCollection
-    .where('name', '>=', queryText)
-    .where('name', '<=', queryText + '\uf8ff');
+    .where('lowerName', '>=', queryText.toLowerCase())
+    .where('lowerName', '<=', queryText.toLowerCase() + '\uf8ff');
 
 
   // var newSmallerRef = videoCollection.where("name", "<=", videoName);
