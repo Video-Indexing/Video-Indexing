@@ -7,6 +7,8 @@ COPY . node_server
 WORKDIR /node_server
 
 #install npm
+RUN npm install -g npm@9.7.1
+
 RUN npm i .
 
 EXPOSE 5050
