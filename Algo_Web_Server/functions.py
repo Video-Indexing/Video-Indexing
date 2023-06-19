@@ -236,9 +236,9 @@ def get_topics_list_from_config():
     
     
 def fix_last_subject(results: dict):
-    bad_subject_list = ["unknown","uncategorized","unidentified","uncertain",
-                        "unspecified","not found","subject not recognized","subject not found"
-                        ,"unknown subject","null","null subject"]
+    bad_subject_list = ["n/a","n/a (unknown subject)","unknown","uncategorized","unidentified","uncertain",
+                    "unspecified","not found","subject not recognized","subject not found"
+                    ,"unknown subject","null","null subject", "none","n/a (not related to subject list)"]
     keys = list(results.keys())
     if len(keys) >= 2:
         last_key = keys[-1]
