@@ -37,4 +37,4 @@ Website mockup: https://www.figma.com/file/GwpH6vcDA5baSgNtGLSjIp/Video-Indexing
 ## Instructions to run the app on windows:
 * Build - run the `build_images_windows.bat`
 * Run - run the `run_local_windows.bat`
-* Clean - run the `vlean_env_windows.bat`
+* Clean - run the `clean_env_windows.bat`
