@@ -31,10 +31,10 @@ Website mockup: https://www.figma.com/file/GwpH6vcDA5baSgNtGLSjIp/Video-Indexing
 ## Instructions to run the app on unix base systems:
 * Build - run the `build_images_unix.sh`
 * Run - run the `run_local_unix.sh`
-* Clean - run the `run_local_unix.sh`
+* Clean - run the `clean_env_unix.sh`
 * you may need to `chmod +x` to the above files before
 
 ## Instructions to run the app on windows:
 * Build - run the `build_images_windows.bat`
 * Run - run the `run_local_windows.bat`
-* Clean - run the `run_local_windows.bat`
+* Clean - run the `vlean_env_windows.bat`
